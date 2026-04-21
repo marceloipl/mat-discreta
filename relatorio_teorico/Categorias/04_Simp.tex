@@ -1,0 +1,13 @@
+\section{Simp (Categoria Simplicial)}
+
+Os objetos são conjuntos finitos linearmente ordenados e os morfismos são funções monótonas não decrescentes.
+
+\subsection{Objetos}
+O objeto $[n]$ representa o conjunto $\{0, 1, \dots, n\}$, modelado em MATLAB pelo inteiro $n$.
+
+\subsection{Morfismos}
+Morfismos $f: [n] \to [m]$ são vetores de comprimento $n + 1$ com valores de $0$ a $m$. A sequência deve ser rigorosamente ordenada.
+
+\begin{lstlisting}[caption={Validação Simplicial}]
+is_valid = issorted(f);
+\end{lstlisting}

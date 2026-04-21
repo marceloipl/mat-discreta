@@ -1,0 +1,72 @@
+% ============================================================
+\section{Funtor $F: \mathbf{Turing\ Machines} \to \mathbf{Struct}$ (Alínea 3.t)}
+\label{sec:functor-turing-struct}
+
+\subsection{Fundamentação Teórica}
+
+O funtor $F: \mathbf{Turing\ Machines} \to \mathbf{Struct}$ codifica uma máquina de Turing como um conjunto estruturado, capturando a dinâmica de transição de estados através de um endomapa e distinguindo os estados relevantes por meio de um mapa para os números complexos.
+
+\subsection{Funtor Covariante $F: \mathbf{Turing\ Machines} \to \mathbf{Struct}$}
+
+\begin{definition}[Funtor covariante $F: \mathbf{Turing\ Machines} \to \mathbf{Struct}$]
+Dada uma máquina de Turing $M = (Q, \Gamma, \delta, q_0, F_{\mathrm{acc}}, B)$ com $|Q| = m$, define-se o triplo $(d, \varphi, m)$:
+\begin{itemize}
+    \item $\varphi(q) = \delta(q, B)_1$ --- estado de transição ao ler o símbolo em branco, capturando a dinâmica sob um símbolo fixo;
+    \item $d(q) = \mathbf{1}_{q \in F_{\mathrm{acc}}} + \mathbf{i} \cdot \mathbf{1}_{q = q_0}$, distinguindo os quatro tipos de estados em $\{0,\,1,\,\mathbf{i},\,1{+}\mathbf{i}\}$.
+\end{itemize}
+Dado $(f_Q, f_\Gamma): M_1 \to M_2$, define-se $F(f_Q, f_\Gamma) = f_Q$.
+\end{definition}
+
+\begin{proposition}
+$F$ é covariante e bem definido: $f_\Gamma(B_1) = B_2$ implica $f_Q \circ \varphi_1 = \varphi_2 \circ f_Q$; a preservação de $q_0$ e $F_{\mathrm{acc}}$ garante $d_1 = d_2 \circ f_Q$.
+\end{proposition}
+
+\begin{lstlisting}[style=matlab, caption={Funtor covariante $F: \mathbf{Turing\ Machines} \to \mathbf{Struct}$}]
+function S = functor_TM_to_Struct(M)
+    S.n   = M.Q;
+    S.phi = M.delta(:, M.blank, 1)';  % phi(q) = delta(q, blank)_1
+    S.d   = zeros(1, M.Q, 'like', 1i);
+    for q = 1:M.Q
+        S.d(q) = double(ismember(q, M.F)) + 1i*double(q == M.q0);
+    end
+end
+
+function fS = functor_TM_to_Struct_morphism(fQ)
+    fS = fQ;
+end
+\end{lstlisting}
+
+\subsection{Funtor Contravariante --- Análise de Existência}
+
+\begin{proposition}[Inexistência de functor contravariante não trivial]
+Não existe functor contravariante canónico $G: \mathbf{Turing\ Machines} \to \mathbf{Struct}$. Um morfismo $(f_Q, f_\Gamma): M_1 \to M_2$ induziria $G(f_Q, f_\Gamma): G(M_2) \to G(M_1)$, ou seja, um morfismo de \textbf{Struct} com $g \circ \varphi_2 = \varphi_1 \circ g$ e $d_2 = d_1 \circ g$. A condição sobre $d$ requereria $g(q_0^{(2)}) = q_0^{(1)}$ e $g(F_2) \subseteq F_1$, que é exatamente uma condição de morfismo ``inverso'' em \textbf{TM}. Tal mapa $g$ só existe canonicamente quando $f_Q$ é invertível.
+\end{proposition}
+
+\begin{remark}
+Na subcategoria dos isomorfismos de \textbf{Turing\ Machines}, $G(f_Q, f_\Gamma) = F(f_Q^{-1}, f_\Gamma^{-1})$ define um functor contravariante. No caso geral, só existe o functor contravariante constante $G(M) = S_0$, $G(f) = \mathrm{id}_{S_0}$.
+\end{remark}
+
+\subsection{Transformações Naturais}
+
+Seja $G: \mathbf{Turing\ Machines} \to \mathbf{Struct}$ um segundo functor que usa um símbolo de referência diferente $a^{**} \neq a^*$ para definir o endomapa $\psi(q) = \delta(q, a^{**})_1$, mas o mesmo mapa $d$. Então existe uma transformação natural $\eta: F \Rightarrow G$ cujas componentes são:
+\[
+    \eta_M : F(M) \to G(M), \qquad \eta_M = \mathrm{id}_{\{1,\ldots,m\}},
+\]
+desde que $\varphi$ e $\psi$ coincidam (o que acontece se $\delta(q, a^*) = \delta(q, a^{**})$ para todo $q$). No caso geral, $\eta_M$ é a identidade mas deixa de ser morfismo de \textbf{Struct}, pelo que a transformação natural genuína requer que os dois functores partilhem o mesmo símbolo de referência.
+
+Uma transformação natural sempre definida é $\varepsilon: F \Rightarrow C_{S_0}$, onde $C_{S_0}$ é o functor constante no objeto trivial $S_0 = (0, \mathrm{id}, 1)$, com $\varepsilon_M$ o único morfismo de \textbf{Struct} para $S_0$.
+
+\begin{lstlisting}[style=matlab, caption={Transformação natural $\eta: F \Rightarrow G$ (mudança de símbolo de referência)}]
+function ok = check_natural_transformation_TM_Struct(M, sym1, sym2)
+    % Verifica se id_Q e morfismo de Struct entre F(M) usando sym1
+    % e G(M) usando sym2, i.e., se phi1 == phi2
+    phi1 = zeros(1, M.Q);
+    phi2 = zeros(1, M.Q);
+    for q = 1:M.Q
+        phi1(q) = M.delta(q, sym1, 1);
+        phi2(q) = M.delta(q, sym2, 1);
+    end
+    ok = isequal(phi1, phi2);
+    % Se ok=true, eta_M = identidade e transformacao natural existe
+end
+\end{lstlisting}

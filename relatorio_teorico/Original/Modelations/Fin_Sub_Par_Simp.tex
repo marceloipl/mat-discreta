@@ -1,0 +1,209 @@
+\documentclass[11pt,a4paper]{article}
+
+% Pacotes essenciais
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[portuguese]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{listings}
+
+% Configuração para código MATLAB/Octave
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{matlabstyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=Matlab
+}
+\lstset{style=matlabstyle}
+
+\title{\textbf{Modelação de Categorias em MATLAB/Octave}}
+\author{Report}
+\date{28/03/2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Este relatório descreve a modelação de quatro categorias matemáticas específicas ($\mathbf{Fin}$, $\mathbf{Sub}$, $\mathbf{Par}$, e $\mathbf{Simp}$) utilizando estruturas simplificadas na linguagem MATLAB ou Octave. Para cada categoria, são definidos os objetos, morfismos e as construções universais possíveis, culminando na apresentação de funtores e transformações naturais.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Categoria $\mathbf{Fin}$ (Conjuntos Finitos e Aplicações Totais)}
+
+Nesta categoria, os objetos são conjuntos finitos e os morfismos são funções totais, onde todas as entradas do domínio têm uma imagem definida no codomínio.
+
+\subsection{Modelação em MATLAB/Octave}
+\begin{itemize}
+    \item \textbf{Objetos:} Representados pela sua cardinalidade, um número inteiro não negativo \texttt{n}. O conjunto é implicitamente $\{1, 2, \dots, n\}$.
+    \item \textbf{Morfismos ($f: n \to m$):} Representados por um vetor linha (array) de comprimento $n$, onde cada elemento é um valor inteiro entre $1$ e $m$. Por exemplo, \texttt{f = [2, 1, 3]} significa $f(1)=2$, $f(2)=1$, $f(3)=3$.
+\end{itemize}
+
+\subsection{Construções Universais}
+\begin{itemize}
+    \item \textbf{Produto ($A \times B$):} Corresponde ao produto cartesiano.
+    \begin{itemize}
+        \item \textit{Objeto:} \texttt{n * m}
+        \item \textit{Morfismos (Projeções):} Obtidos usando \texttt{ndgrid}.
+\begin{lstlisting}
+[P1, P2] = ndgrid(1:n, 1:m);
+p_A = P1(:)'; % Projecao para A
+p_B = P2(:)'; % Projecao para B
+\end{lstlisting}
+    \end{itemize}
+    
+    \item \textbf{Coproduto ($A \sqcup B$):} É a união disjunta.
+    \begin{itemize}
+        \item \textit{Objeto:} \texttt{n + m}
+        \item \textit{Morfismos (Injeções):}
+\begin{lstlisting}
+ inj\_A = 1:n;
+ inj\_B = (n+1):(n+m);
+\end{lstlisting}
+    \end{itemize}
+    
+    \item \textbf{Equalizer:} O subconjunto do domínio onde dois morfismos paralelos $f$ e $g$ coincidem. O objeto é \texttt{sum(f == g)} e o morfismo de inclusão é \texttt{eq\_map = find(f == g);}.
+    
+    \item \textbf{Coequalizer:} O espaço quociente formado pela relação de equivalência gerada por $f(x) \sim g(x)$. Implementado um grafo com arestas entre \texttt{f(i)} e \texttt{g(i)}, calculando as componentes conexas.
+    
+    \item \textbf{Pullback:} O conjunto de pares $(x, y)$ tais que $f(x) = g(y)$. É o equalizador das projeções do produto.
+\begin{lstlisting}
+[X, Y] = ndgrid(1:length(dom_f), 1:length(dom_g));
+pb_indices = find(f(X) == g(Y));
+\end{lstlisting}
+
+    \item \textbf{Pushout:} O co-equalizador do coproduto, correspondendo à união disjunta dos codomínios quocientada pela relação gerada através do domínio comum.
+\begin{equation}
+P = (B \sqcup C) / {\sim}
+\end{equation}
+\end{itemize}
+\newpage
+
+\section{Categoria $\mathbf{Sub}$ (Conjuntos Finitos e Inclusões)}
+
+Como existe no máximo um morfismo entre quaisquer dois objetos (a inclusão), esta categoria forma um conjunto parcialmente ordenado (Poset). As construções reduzem-se a operações clássicas de conjuntos.
+
+\subsection{Modelação em MATLAB/Octave}
+\begin{itemize}
+    \item \textbf{Objetos:} Vetores de elementos únicos (e.g., \texttt{A = [1, 3, 5]}).
+    \item \textbf{Morfismos ($A \hookrightarrow B$):} Condição booleana de que $A$ é subconjunto de $B$.
+\begin{lstlisting}
+is_morphism = all(ismember(A, B));
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Construções Universais}
+\begin{itemize}
+    \item \textbf{Produto:} A intersecção de dois conjuntos (\texttt{intersect(A, B)}).
+\begin{lstlisting}
+[X, Y] = ndgrid(1:length(dom_f), 1:length(dom_g));
+pb_indices = find(f(X) == g(Y));
+\end{lstlisting}
+    \begin{itemize}
+        \item \textit{Exemplo:} Sejam \(A = \{1, 2, 3\}\) e \(B = \{2, 3, 4\}\). O produto categórico é \(A \cap B = \{2, 3\}\).
+    \end{itemize}
+    
+    \item \textbf{Coproduto:} A união de dois conjuntos (\texttt{union(A, B)}).
+    \begin{itemize}
+        \item \textit{Exemplo:} Sejam \(A = \{1, 2\}\) e \(B = \{3, 4\}\). O coproduto categórico é \(A \cup B = \{1, 2, 3, 4\}\).
+    \end{itemize}
+    
+    \item \textbf{Equalizer / Coequalizer:} Morfismos paralelos só existem se forem idênticos ($A = B$). O equalizador é o domínio $A$ e o co-equalizador é o codomínio $B$.
+    \begin{itemize}
+        \item \textit{Exemplo:} Dada a inclusão de \(A = \{1\}\) em \(B = \{1, 2\}\), o equalizador de duas setas paralelas (que são idênticas) é simplesmente o domínio \(A = \{1\}\), e o coequalizador é o codomínio \(B = \{1, 2\}\).
+    \end{itemize}
+    
+    \item \textbf{Pullback:} Dadas inclusões de $A$ e $B$ em $C$, é a intersecção (\texttt{intersect(A, B)}).
+    \begin{itemize}
+        \item \textit{Exemplo:} Dado \(C = \{1, 2, 3, 4, 5\}\) e as inclusões de \(A = \{1, 2, 3\}\) e \(B = \{3, 4, 5\}\) em \(C\), o pullback é o subconjunto comum máximo: \(A \cap B = \{3\}\).
+    \end{itemize}
+    
+    \item \textbf{Pushout:} Dadas inclusões de $C$ em $A$ e $B$, é a união (\texttt{union(A, B)}).
+    \begin{itemize}
+        \item \textit{Exemplo:} Dado o conjunto base \(C = \{2\}\) e as suas inclusões em \(A = \{1, 2\}\) e \(B = \{2, 3\}\), o pushout que cola ambos através de \(C\) resulta na união \(A \cup B = \{1, 2, 3\}\).
+    \end{itemize}
+\end{itemize}
+\newpage
+\section{Categoria $\mathbf{Par}$ (Aplicações Parciais)}
+
+Semelhante a $\mathbf{Fin}$, mas as funções podem não estar definidas para todos os elementos do domínio.
+
+\subsection{Modelação em MATLAB/Octave}
+\begin{itemize}
+    \item \textbf{Objetos:} A cardinalidade do conjunto, \texttt{n}.
+    \item \textbf{Morfismos ($f: n \to m$):} Vetores de comprimento $n$, usando \texttt{0} (ou \texttt{NaN}) para representar elementos onde a função não está definida.
+\end{itemize}
+
+\subsection{Construções Universais}
+\begin{itemize}
+    \item \textbf{Equalizador:} O subconjunto onde $f$ e $g$ estão ambos definidos e são iguais, ou estão ambos indefinidos.
+\begin{lstlisting}
+eq_map = find((f == g & f ~= 0) | (f == 0 & g == 0));
+eq_obj = length(eq_map);
+\end{lstlisting}
+    \item \textbf{Coproduto:} Idêntico à categoria $\mathbf{Fin}$ (união disjunta).
+    \item \textbf{Produto:} O produto categórico clássico falha. O verdadeiro produto é dado por $A \sqcup B \sqcup (A \times B)$, cujo objeto correspondente tem tamanho \texttt{n + m + (n * m)}.
+\end{itemize}
+\paragraph{}
+\paragraph{}
+
+\section{Categoria $\mathbf{Simp}$ (A Categoria Simplicial)}
+
+Os objetos são conjuntos finitos linearmente ordenados e os morfismos são funções monótonas não decrescentes.
+
+\subsection{Modelação em MATLAB/Octave}
+\begin{itemize}
+    \item \textbf{Objetos:} O conjunto $[n] = \{0, 1, \dots, n\}$, representado em MATLAB pelo inteiro $n$.
+    \item \textbf{Morfismos ($f: [n] \to [m]$):} Vetores de comprimento $n + 1$ com valores de $0$ a $m$. A sequência deve ser rigorosamente ordenada (\texttt{issorted(f)}).
+\end{itemize}
+
+\subsection{Construções Universais}
+\begin{itemize}
+    \item \textbf{Equalizador:} O subconjunto de $[n]$ onde $f$ e $g$ concordam, herdando a ordem linear.
+\begin{lstlisting}
+idx = find(f == g);     % Indices (base 1)
+k = length(idx) - 1;    % Novo objeto [k]
+eq_map = idx - 1;       % Morfismo mapeado (base 0)
+\end{lstlisting}
+    \item \textbf{Produto / Coproduto:} \textbf{Não existem em geral.} O produto cartesiano gera uma grelha e a união disjunta linear não cumpre a propriedade universal categórica do coproduto.
+    \item \textbf{Pullback / Pushout:} Inexistentes em geral, devido à ausência de produtos e coprodutos.
+\end{itemize}
+
+\section{Funtores e Transformações Naturais}
+
+\subsection{Funtores ($F: \mathcal{C} \to \mathcal{D}$)}
+\begin{itemize}
+    \item \textbf{Funtor de Esquecimento $U: \mathbf{Simp} \to \mathbf{Fin}$:} Esquece a ordem linear. Nos objetos, mapeia $[n]$ para $n + 1$. Nos morfismos, a restrição de ordenação (\texttt{issorted}) é abandonada, operando apenas como mapas totais.
+    \item \textbf{Funtor de Inclusão $I: \mathbf{Fin} \to \mathbf{Par}$:} A cardinalidade $n$ é preservada. Todo o mapa total é interpretado como um mapa parcial sem nenhum marcador nulo (\texttt{0}).
+\end{itemize}
+
+\subsection{Transformações Naturais ($\alpha: F \Rightarrow G$)}
+Considerem-se os funtores identidade $Id: \mathbf{Fin} \to \mathbf{Fin}$ e o funtor constante $K_1: \mathbf{Fin} \to \mathbf{Fin}$ (mapeia tudo para o objeto \texttt{1}). A transformação natural $\alpha: Id \Rightarrow K_1$ é formada pelas componentes $\alpha_n: n \to 1$.
+
+Em MATLAB, a componente $\alpha_n$ para um objeto \texttt{n} é construída por \texttt{alpha\_n = ones(1, n);}. O diagrama comutativo confirma-se pois aplicar qualquer $f$ e depois esmagar o resultado para $1$ é equivalente a comprimir logo o domínio inicial para $1$ e aplicar a restrição trivial.
+
+\end{document}

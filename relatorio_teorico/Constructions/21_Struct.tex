@@ -1,0 +1,126 @@
+\section{Struct (Conjuntos Estruturados)}
+\label{sec:const-struct}
+
+A categoria \textbf{Struct} permite modelar sistemas dinâmicos discretos onde cada elemento possui um valor associado e um ponteiro para um sucessor (endomapa). As construções universais nesta categoria garantem a preservação da coerência entre os dados armazenados e a estrutura de transição.
+
+\subsection{Fundamentação Teórica}
+
+\begin{itemize}
+    \item \textbf{Produto:} 
+    O produto de $(d_1, \varphi_1, n_1)$ e $(d_2, \varphi_2, n_2)$ é o triplo $(d, \varphi, n_1 \cdot n_2)$, onde os elementos são indexados por pares $(i,j)$. A estrutura e os dados são definidos por:
+    \[
+        \varphi(i,j) = (\varphi_1(i), \varphi_2(j)), \qquad d(i,j) = (d_1(i), d_2(j)).
+    \]
+
+    \item \textbf{Coproduto:} O coproduto $S_1 \sqcup S_2$ é a união disjunta dos conjuntos de elementos, mantendo as funções $\varphi$ e $d$ originais em cada componente. O número total de elementos é $n_1 + n_2$.
+
+    \item \textbf{Pullback:} Para um diagrama $S_1 \xrightarrow{f} S_3 \xleftarrow{g} S_2$, o pullback é o subobjeto do produto $S_1 \times S_2$ constituído pelos pares $(i,j)$ tais que $f(i) = g(j)$.
+
+    \item \textbf{Pushout:} O pushout de $S_1 \xleftarrow{f} S_0 \xrightarrow{g} S_2$ é o coproduto $S_1 \sqcup S_2$ submetido à menor relação de equivalência que identifica $f(k) \sim g(k)$ para todo $k \in S_0$, estendendo-se para manter a compatibilidade com os endomapas.
+
+    \item \textbf{Equalizador:} O equalizador de $f, g: S_1 \rightrightarrows S_2$ é o subobjeto de $S_1$ formado pelos elementos $i$ tais que $f(i) = g(i)$. Por definição de morfismo, este conjunto é automaticamente fechado para a aplicação de $\varphi_1$.
+
+    \item \textbf{Coequalizador:} O coequalizador de $f, g: S_1 \rightrightarrows S_2$ é o quociente de $S_2$ pela menor congruência compatível com $\varphi_2$ que identifica $f(i) \sim g(i)$ para todo $i \in S_1$.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+
+Abaixo apresenta-se a implementação em MATLAB, respeitando as estruturas e algoritmos de união-busca presentes no script original.
+
+\begin{lstlisting}[language=Matlab, caption={Produto e Coproduto em Struct}]
+function P = struct_product(S1, S2)
+    P.n   = S1.n * S2.n;
+    P.phi = zeros(1, P.n);
+    P.d   = zeros(1, P.n, 'like', 1i);
+    for i = 1:S1.n
+        for j = 1:S2.n
+            k = (i-1)*S2.n + j;
+            % phi(i,j) = (phi1(i), phi2(j))
+            P.phi(k) = (S1.phi(i)-1)*S2.n + S2.phi(j);
+            P.d(k)   = S1.d(i) + S2.d(j); 
+        end
+    end
+end
+
+function C = struct_coproduct(S1, S2)
+    C.n   = S1.n + S2.n;
+    C.phi = [S1.phi, S2.phi + S1.n];
+    C.d   = [S1.d, S2.d];
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=Matlab, caption={Equalizador e Pullback em Struct}]
+function [E, inc] = struct_equalizer(S1, f, g)
+    E_idx = find(f == g);
+    E.n   = numel(E_idx);
+    inc   = E_idx;
+    E.d   = S1.d(E_idx);
+    E.phi = zeros(1, E.n);
+    for i = 1:E.n
+        target = S1.phi(E_idx(i));
+        [~, loc] = ismember(target, E_idx);
+        E.phi(i) = loc;
+    end
+end
+
+function [PB, p1, p2] = struct_pullback(S1, S2, f, g)
+    % Baseado na construcao de subobjeto do produto
+    pairs = [];
+    for i = 1:S1.n
+        for j = 1:S2.n
+            if f(i) == g(j)
+                pairs = [pairs; i, j];
+            end
+        end
+    end
+    PB.n = size(pairs, 1);
+    p1 = pairs(:,1)'; p2 = pairs(:,2)';
+    PB.d = S1.d(p1); % d1 = d2 o f no pullback
+    PB.phi = zeros(1, PB.n);
+    for k = 1:PB.n
+        t1 = S1.phi(p1(k)); t2 = S2.phi(p2(k));
+        [~, PB.phi(k)] = ismember([t1, t2], pairs, 'rows');
+    end
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=Matlab, caption={Coequalizador e Pushout em Struct}]
+function [CE, quot] = struct_coequalizer(S1, S2, f, g)
+    parent = 1:S2.n;
+    function r = find_root(x)
+        while parent(x) ~= x, x = parent(x); end
+        r = x;
+    end
+    % Identificar f(i) ~ g(i)
+    for i = 1:S1.n
+        a = find_root(f(i)); b = find_root(g(i));
+        if a ~= b, parent(a) = b; end
+    end
+    % Fechar para congruencia (phi)
+    changed = true;
+    while changed
+        changed = false;
+        for x = 1:S2.n
+            rx = find_root(x);
+            pa = find_root(S2.phi(x));
+            pb = find_root(S2.phi(rx));
+            if pa ~= pb
+                parent(pa) = pb; changed = true;
+            end
+        end
+    end
+    [roots, ~, quot] = unique(arrayfun(@find_root, 1:S2.n));
+    CE.n = numel(roots);
+    CE.phi = quot(S2.phi(roots));
+    CE.d = S2.d(roots);
+end
+
+function [PO, i1, i2] = struct_pushout(S0, S1, S2, f, g)
+    C = struct_coproduct(S1, S2);
+    f_c = f; % f em S1
+    g_c = g + S1.n; % g em S2 deslocado
+    [PO, quot] = struct_coequalizer(S0, C, f_c, g_c);
+    i1 = quot(1:S1.n);
+    i2 = quot(S1.n+1:end);
+end
+\end{lstlisting}

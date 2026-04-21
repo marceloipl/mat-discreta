@@ -1,0 +1,123 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\title{Construções Categóricas em DLat, Bool e OrdMon}
+\author{Gemini 3 Flash}
+\date{Abril de 2026}
+
+\lstset{
+    language=Matlab,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{purple},
+    breaklines=true,
+    frame=single,
+    captionpos=b
+}
+
+\begin{document}
+
+\maketitle
+
+Este documento descreve as construções categóricas para Latices Distributivos finitos (\textbf{DLat}), Álgebras de Boolean finitas (\textbf{Bool}) e Monoides Ordenados finitos (\textbf{OrdMon}). As implementações são fornecidas em sintaxe simplificada de Octave/Matlab.
+
+\newpage
+
+\section{DLat: Latices Distributivos Finitos}
+
+Os latices distributivos finitos são fechados sob todos os limites e colimites finitos.
+
+\subsection{Construções Teóricas}
+\begin{itemize}
+    \item \textbf{Produtos:} O produto cartesiano $L \times M$ com operações definidas componente a componente.
+    \item \textbf{Equalizadores:} O conjunto de pontos onde dois homomorfismos de latices coincidem. Como as operações são pontuais, o resultado é um sub-latice.
+    \item \textbf{Coprodutos:} O latice distributivo livre sobre a união disjunta de geradores, embora para casos finitos seja frequentemente computado via categoria dual de conjuntos parcialmente ordenados (posets) finitos.
+\end{itemize}
+
+\subsection{Implementação em Octave}
+\begin{lstlisting}[caption={Construções DLat}]
+% Produto de dois latices
+function P = dlat_product(L, M)
+    % L e M sao estruturas com handles .elements e .op
+    [X, Y] = meshgrid(1:length(L.elements), 1:length(M.elements));
+    P.elements = [L.elements(X(:)), M.elements(Y(:))];
+    P.meet = @(a, b) [L.meet(a(1), b(1)), M.meet(a(2), b(2))];
+    P.join = @(a, b) [L.join(a(1), b(1)), M.join(a(2), b(2))];
+end
+
+% Equalizador de dois morfismos f e g
+function E = dlat_equalizer(f, g, L)
+    % Filtrar elementos onde f(x) == g(x)
+    idx = arrayfun(@(i) isequal(f(L.elements{i}), g(L.elements{i})), 1:length(L.elements));
+    E.elements = L.elements(idx);
+    E.meet = L.meet;
+    E.join = L.join;
+end
+\end{lstlisting}
+
+
+\newpage
+
+\section{Bool: Álgebras de Boolean Finitas}
+
+Em \textbf{Bool}, os limites (como produtos e equalizadores) são calculados como em \textbf{DLat}, mas com o requisito adicional de preservar o complemento ($\neg$).
+
+\subsection{Construções Teóricas}
+\begin{itemize}
+    \item \textbf{Produtos:} $B \times C$ usando AND, OR e NOT componente a componente.
+    \item \textbf{Coequalizadores:} Calculados tomando o quociente da álgebra de Boolean pelo ideal gerado pelas diferenças dos morfismos.
+\end{itemize}
+
+\subsection{Implementação em Octave}
+\begin{lstlisting}[caption={Construções Bool}]
+function B_out = bool_product(B1, B2)
+    % Produto cartesiano de conjuntos com operacoes Booleanas
+    B_out.elements = set_product(B1.elements, B2.elements);
+    B_out.not = @(a) [B1.not(a(1)), B2.not(a(2))];
+    B_out.and = @(a, b) [B1.and(a(1), b(1)), B2.and(a(2), b(2))];
+    B_out.or  = @(a, b) [B1.or(a(1), b(1)), B2.or(a(2), b(2))];
+end
+\end{lstlisting}
+
+\newpage
+
+\section{OrdMon: Monoides Ordenados}
+
+Os objetos de \textbf{OrdMon} são monoides equipados com uma ordem parcial $\le$ que é compatível com a operação binária.
+
+\subsection{Construções Teóricas}
+\begin{itemize}
+    \item \textbf{Produtos:} $M \times N$ com a ordem do produto: $(m, n) \le (m', n')$ sse $m \le_M m'$ e $n \le_N n'$.
+    \item \textbf{Equalizadores:} O sub-monoide consistindo em elementos onde os morfismos coincidem, herdando a ordem do domínio.
+\end{itemize}
+
+\subsection{Implementação em Octave}
+\begin{lstlisting}[caption={Construções OrdMon}]
+function OM = ordmon_product(M1, M2)
+    % Combinar monoides subjacentes
+    OM.elements = set_product(M1.elements, M2.elements);
+    OM.mul = @(a, b) [M1.mul(a(1), b(1)), M2.mul(a(2), b(2))];
+    OM.unit = [M1.unit, M2.unit];
+    % Verificacao da ordem do produto
+    OM.le = @(a, b) M1.le(a(1), b(1)) && M2.le(a(2), b(2));
+end
+
+function E = ordmon_equalizer(f, g, M)
+    % Filtrar elementos onde os morfismos sao iguais
+    E.elements = {};
+    for i = 1:length(M.elements)
+        if isequal(f(M.elements{i}), g(M.elements{i}))
+            E.elements{end+1} = M.elements{i};
+        end
+    end
+    E.mul = M.mul;
+    E.le = M.le;
+end
+\end{lstlisting}
+
+\end{document}

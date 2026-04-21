@@ -1,0 +1,19 @@
+\section{Construções em Simp}
+
+A categoria simplicial \textbf{Simp} é restritiva devido à exigência de que os morfismos preservem a ordem linear absoluta.
+
+\subsection{Fundamentação Teórica}
+\begin{itemize}
+    \item \textbf{Equalizador:} É a única construção universal básica que existe sempre em \textbf{Simp}. Consiste no subconjunto de índices onde os morfismos coincidem, o qual herda naturalmente a ordem do domínio.
+    \item \textbf{Limites e Colimites (Produto, Coproduto, Pullback, Pushout):} \textbf{Não existem em geral} nesta categoria. O produto cartesiano de ordens lineares gera uma grelha (ordem parcial) que não é necessariamente uma ordem linear, falhando a propriedade universal.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+\begin{lstlisting}[caption={Cálculo do Equalizador Simplicial}]
+% f e g sao morfismos [n] -> [m] (vetores ordenados)
+idx = find(f == g); % Encontra posicoes de coincidencia
+if ~isempty(idx)
+    k = length(idx) - 1; % Novo objeto [k]
+    eq_morphism = idx - 1; % Mapeamento para base 0
+end
+\end{lstlisting}

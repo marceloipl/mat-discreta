@@ -1,0 +1,50 @@
+\subsection{Categoria \textbf{Struct} --- Conjuntos Estruturados}
+\label{subsec:struct}
+
+\begin{definition}[Categoria Struct \cite{scripta12}]
+Os \emph{objetos} da categoria \textbf{Struct} são triplos $(d, \varphi, n)$, onde:
+\begin{itemize}
+    \item $n \in \mathbb{N}$ é o número de elementos do conjunto;
+    \item $\varphi: \{1,\ldots,n\} \to \{1,\ldots,n\}$ é um endomapa que codifica a estrutura interna do conjunto;
+    \item $d: \{1,\ldots,n\} \to \mathbb{C}$ é um mapa nos números complexos que descreve (possivelmente com repetição) os elementos armazenados.
+\end{itemize}
+Um \emph{morfismo} $f: (d_1, \varphi_1, n_1) \to (d_2, \varphi_2, n_2)$ é um mapa $f: \{1,\ldots,n_1\} \to \{1,\ldots,n_2\}$ tal que:
+\[
+    f \circ \varphi_1 = \varphi_2 \circ f \qquad \text{e} \qquad d_1 = d_2 \circ f.
+\]
+\end{definition}
+
+\subsubsection{Representação dos Objetos}
+
+\begin{lstlisting}[style=matlab, caption={Representação de um objeto de Struct em MATLAB/Octave}]
+% Objeto S = (d, phi, n)
+S.n   = 4;
+S.phi = [2, 3, 3, 1];         % endomapa phi: {1,2,3,4} -> {1,2,3,4}
+S.d   = [1+0i, 2+1i, 0+0i, 3-1i]; % mapa d: {1..4} -> C
+
+% phi(1)=2, phi(2)=3, phi(3)=3, phi(4)=1
+% d(1)=1, d(2)=2+i, d(3)=0, d(4)=3-i
+\end{lstlisting}
+
+\subsubsection{Representação dos Morfismos}
+
+\begin{lstlisting}[style=matlab, caption={Verificação de um morfismo de Struct}]
+function ok = is_struct_morphism(S1, S2, f)
+    % f: vetor de tamanho S1.n com valores em {1..S2.n}
+    ok = true;
+    for i = 1:S1.n
+        % Condicao: f(phi1(i)) == phi2(f(i))
+        if f(S1.phi(i)) ~= S2.phi(f(i))
+            ok = false; return;
+        end
+        % Condicao: d1(i) == d2(f(i))
+        if S1.d(i) ~= S2.d(f(i))
+            ok = false; return;
+        end
+    end
+end
+\end{lstlisting}
+
+\begin{remark}
+A condição $d_1 = d_2 \circ f$ significa que $f$ preserva os ``dados'' armazenados em cada posição. Se os elementos complexos forem substituídos por outro monoide ordenado (e.g., inteiros, reais, strings), basta substituir o campo \texttt{d} e adaptar a comparação.
+\end{remark}

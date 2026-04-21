@@ -1,0 +1,208 @@
+\subsection{Construções em \textbf{Struct}}
+\label{subsec:struct-constructions}
+
+\subsubsection{Produto}
+
+\begin{proposition}
+O produto de $(d_1, \varphi_1, n_1)$ e $(d_2, \varphi_2, n_2)$ em \textbf{Struct} é o triplo
+\[
+    (d, \varphi, n_1 \cdot n_2),
+\]
+onde os elementos são indexados por pares $(i,j) \in \{1,\ldots,n_1\} \times \{1,\ldots,n_2\}$ (codificados como $(i-1)\cdot n_2 + j$), com
+\[
+    \varphi(i,j) = (\varphi_1(i), \varphi_2(j)), \qquad d(i,j) = (d_1(i), d_2(j)).
+\]
+\end{proposition}
+
+\begin{lstlisting}[style=matlab, caption={Produto de dois objetos de Struct}]
+function P = struct_product(S1, S2)
+    P.n   = S1.n * S2.n;
+    P.phi = zeros(1, P.n);
+    P.d   = zeros(1, P.n, 'like', 1i);
+    for i = 1:S1.n
+        for j = 1:S2.n
+            k        = (i-1)*S2.n + j;
+            phi1_i   = S1.phi(i); phi2_j = S2.phi(j);
+            P.phi(k) = (phi1_i-1)*S2.n + phi2_j;
+            P.d(k)   = S1.d(i) + 1i*S2.d(j); % codificacao como complexo
+        end
+    end
+end
+\end{lstlisting}
+
+\subsubsection{Coproduto}
+
+O coproduto $(d_1, \varphi_1, n_1) \sqcup (d_2, \varphi_2, n_2)$ tem $n_1 + n_2$ elementos, com $\varphi$ e $d$ definidos por blocos:
+\[
+    \varphi(i) = \begin{cases} \varphi_1(i) & i \leq n_1 \\ n_1 + \varphi_2(i - n_1) & i > n_1 \end{cases}, \qquad
+    d(i) = \begin{cases} d_1(i) & i \leq n_1 \\ d_2(i - n_1) & i > n_1 \end{cases}.
+\]
+
+\begin{lstlisting}[style=matlab, caption={Coproduto de dois objetos de Struct}]
+function C = struct_coproduct(S1, S2)
+    C.n   = S1.n + S2.n;
+    C.phi = [S1.phi, S1.n + S2.phi];
+    C.d   = [S1.d,   S2.d];
+end
+\end{lstlisting}
+
+\subsubsection{Pullback}
+
+Dado $S_1 \xrightarrow{f} S_3 \xleftarrow{g} S_2$, o pullback é:
+\[
+    \{(i,j) \in \{1,\ldots,n_1\} \times \{1,\ldots,n_2\} : f(i) = g(j)\},
+\]
+com endomapa $\varphi_{PB}(i,j) = (\varphi_1(i), \varphi_2(j))$ e $d_{PB}(i,j) = d_1(i)$ (que é igual a $d_2(j)$ pois $f$ e $g$ preservam $d$).
+
+\begin{lstlisting}[style=matlab, caption={Pullback em Struct}]
+function [PB, pi1, pi2] = struct_pullback(S1, S2, S3, f, g)
+    pairs = [];
+    for i = 1:S1.n
+        for j = 1:S2.n
+            if f(i) == g(j)
+                pairs(end+1, :) = [i, j];
+            end
+        end
+    end
+    m    = size(pairs, 1);
+    PB.n = m;
+    PB.d = zeros(1, m, 'like', 1i);
+    PB.phi = zeros(1, m);
+    for k = 1:m
+        i = pairs(k,1); j = pairs(k,2);
+        PB.d(k) = S1.d(i);
+        fi = S1.phi(i); fj = S2.phi(j);
+        % Encontrar o indice do par (phi1(i), phi2(j)) em pairs
+        idx = find(pairs(:,1)==fi & pairs(:,2)==fj, 1);
+        PB.phi(k) = idx;
+    end
+    pi1 = pairs(:,1)';
+    pi2 = pairs(:,2)';
+end
+\end{lstlisting}
+
+\subsubsection{Pushout}
+
+O pushout de $S_1 \xleftarrow{f} S_0 \xrightarrow{g} S_2$ é o coproduto $S_1 \sqcup S_2$ quocientado pela menor congruência compatível com $\varphi$ que identifica $f(k) \sim n_1 + g(k)$ para todo $k \in \{1,\ldots,n_0\}$.
+
+\begin{lstlisting}[style=matlab, caption={Pushout em Struct (via union-find)}]
+function [PO, q1, q2] = struct_pushout(S0, S1, S2, f, g)
+    % Coproduto base
+    C = struct_coproduct(S1, S2);
+    % Union-find para as identificacoes f(k) ~ S1.n + g(k)
+    parent = 1:C.n;
+    function r = find_root(x)
+        while parent(x) ~= x, x = parent(x); end
+        r = x;
+    end
+    for k = 1:S0.n
+        a = find_root(f(k));
+        b = find_root(S1.n + g(k));
+        parent(a) = b;
+    end
+    % Construir classes de equivalencia
+    classes = zeros(1, C.n);
+    rep     = 0;
+    for x = 1:C.n
+        r = find_root(x);
+        if classes(r) == 0
+            rep = rep + 1;
+            classes(r) = rep;
+        end
+        classes(x) = classes(find_root(x));
+    end
+    PO.n   = rep;
+    PO.phi = zeros(1, rep);
+    PO.d   = zeros(1, rep, 'like', 1i);
+    for x = 1:C.n
+        cx = classes(x);
+        PO.phi(cx) = classes(C.phi(x));
+        PO.d(cx)   = C.d(x);
+    end
+    q1 = classes(1:S1.n);
+    q2 = classes(S1.n+1:end);
+end
+\end{lstlisting}
+
+\subsubsection{Equalizador}
+
+O equalizador de $f, g: S_1 \rightrightarrows S_2$ é o subobjeto de $S_1$ induzido por $E = \{i : f(i) = g(i)\}$, desde que $E$ seja fechado para $\varphi_1$ (i.e., $\varphi_1(E) \subseteq E$).
+
+\begin{lstlisting}[style=matlab, caption={Equalizador em Struct}]
+function [E, inc] = struct_equalizer(S1, f, g)
+    mask = (f == g);
+    % Fechar para phi1
+    changed = true;
+    while changed
+        changed = false;
+        for i = 1:S1.n
+            if mask(i) && ~mask(S1.phi(i))
+                mask(S1.phi(i)) = false;
+                mask(i) = false;
+                changed = true;
+            end
+        end
+    end
+    inc  = find(mask);
+    E.n  = numel(inc);
+    E.d  = S1.d(inc);
+    % Reindexar phi
+    E.phi = zeros(1, E.n);
+    for k = 1:E.n
+        E.phi(k) = find(inc == S1.phi(inc(k)));
+    end
+end
+\end{lstlisting}
+
+\subsubsection{Coequalizador}
+
+O coequalizador de $f, g: S_1 \rightrightarrows S_2$ é o quociente de $S_2$ pela menor congruência compatível com $\varphi_2$ que identifica $f(i) \sim g(i)$ para todo $i \in S_1$.
+
+\begin{lstlisting}[style=matlab, caption={Coequalizador em Struct}]
+function [CE, quot] = struct_coequalizer(S1, S2, f, g)
+    parent = 1:S2.n;
+    function r = find_root(x)
+        while parent(x) ~= x, x = parent(x); end
+        r = x;
+    end
+    % Identificar f(i) ~ g(i)
+    for i = 1:S1.n
+        a = find_root(f(i));
+        b = find_root(g(i));
+        if a ~= b, parent(a) = b; end
+    end
+    % Fechar para phi2: identificar phi2(f(i)) ~ phi2(g(i))
+    changed = true;
+    while changed
+        changed = false;
+        for x = 1:S2.n
+            a = find_root(x);
+            b = find_root(S2.phi(x));
+            pa = find_root(S2.phi(a));
+            if pa ~= find_root(b)
+                parent(pa) = find_root(b);
+                changed = true;
+            end
+        end
+    end
+    classes = zeros(1, S2.n);
+    rep = 0;
+    for x = 1:S2.n
+        r = find_root(x);
+        if classes(r) == 0
+            rep = rep + 1;
+            classes(r) = rep;
+        end
+        classes(x) = classes(find_root(x));
+    end
+    CE.n   = rep;
+    CE.phi = zeros(1, rep);
+    CE.d   = zeros(1, rep, 'like', 1i);
+    for x = 1:S2.n
+        cx = classes(x);
+        CE.phi(cx) = classes(S2.phi(x));
+        CE.d(cx)   = S2.d(x);
+    end
+    quot = classes;
+end
+\end{lstlisting}

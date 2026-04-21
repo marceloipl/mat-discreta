@@ -1,0 +1,192 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[portuguese]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{xcolor}
+\usepackage{listings}
+
+% Definicao de cores e estilo para o codigo MATLAB
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{matlabstyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=Matlab
+}
+\lstset{style=matlabstyle}
+
+\title{\textbf{Funtores e Transformações Naturais}}
+\author{Relatório Académico}
+\date{31/03/2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Funtores Covariantes}
+
+Nesta secção, definimos funtores covariantes entre os pares de categorias solicitados, traduzindo a lógica categórica para implementações matriciais/vetoriais típicas de MATLAB ou Octave.
+
+\subsection{Funtor $F: \mathbf{Sub} \to \mathbf{Rel}$}
+
+A categoria $\mathbf{Rel}$ possui conjuntos como objetos e relações binárias como morfismos (representáveis por matrizes booleanas). O funtor $F$ faz o mapeamento de uma inclusão de subconjuntos para a sua relação binária correspondente.
+
+\begin{itemize}
+    \item \textbf{Nos Objetos:} $F(A) = A$. O conjunto mantém-se inalterado.
+    \item \textbf{Nos Morfismos:} Uma inclusão $A \hookrightarrow B$ é convertida na relação de identidade restrita a $A$. Em termos de matrizes, gera-se uma matriz $|B| \times |A|$ onde a entrada $(i, j)$ é $1$ se o $j$-ésimo elemento de $A$ corresponder ao $i$-ésimo elemento de $B$, e $0$ caso contrário.
+\end{itemize}
+
+\begin{lstlisting}[caption={Exemplo de Sub para Rel em MATLAB}]
+A = [1, 2];
+B = [1, 2, 3];
+M_rel = [1, 0;   % 1 relaciona-se com 1
+         0, 1;   % 2 relaciona-se com 2
+         0, 0];  % 3 sem receber nada
+\end{lstlisting}
+
+
+\subsection{Funtor $G: \mathbf{Par} \to \mathbf{Rel}$}
+
+O funtor $G$ transforma aplicações parciais (onde algumas imagens podem estar indefinidas, representadas por \texttt{0}) nas suas relações gráficas associadas.
+
+\begin{itemize}
+    \item \textbf{Nos Objetos:} $G(n) = n$.
+    \item \textbf{Nos Morfismos:} Um morfismo $f: n \to m$ é mapeado para a relação binária $R_f = \{(x, f(x)) \mid f(x) \neq 0\}$. Qualquer elemento indefinido simplesmente não gera uma entrada com valor $1$ na coluna correspondente da matriz.
+\end{itemize}
+
+\begin{lstlisting}[caption={Exemplo de Par para Rel em MATLAB}]
+% f: 3 -> 4, onde f(2) e indefinido
+f = [2, 0, 1]; 
+% A matriz de relacao 4x3 resultante e:
+M_rel = zeros(4, 3);
+for j = 1:length(f)
+    if f(j) ~= 0
+        M_rel(f(j), j) = 1;
+    end
+end
+% O resultado visual seria:
+M_rel = [0, 0, 1;   (linha 1: f(3)=1)
+         1, 0, 0;   (linha 2: f(1)=2)
+         0, 0, 0; 
+         0, 0, 0]
+\end{lstlisting}
+
+\subsection{Funtor $H: \mathbf{End} \to \mathbf{Graph}$}
+
+Em $\mathbf{End}$, os objetos são conjuntos com uma endoaplicação $Y: X \to X$. Em $\mathbf{Graph}$, lidamos com grafos direcionados.
+
+\begin{itemize}
+    \item \textbf{Nos Objetos:} Uma endoaplicação representada por um vetor $Y$ de tamanho $n$ transforma-se num grafo onde:
+    \begin{itemize}
+        \item Os \textbf{Vértices} ($V$) são os elementos do domínio $\{1, 2, \dots, n\}$.
+        \item As \textbf{Arestas} ($E$) são indexadas também por $\{1, 2, \dots, n\}$.
+        \item A função \textbf{Origem} ($s$) é a identidade: a aresta $i$ sai do vértice $i$.
+        \item A função \textbf{Destino} ($t$) é a aplicação $Y$: a aresta $i$ entra no vértice $Y(i)$.
+    \end{itemize}
+    \item \textbf{Nos Morfismos:} Um morfismo de $\mathbf{End}$ (que comuta com as endoaplicações) traduz-se perfeitamente num homomorfismo de grafos que mapeia tanto vértices como arestas preservando a estrutura de incidência.
+\end{itemize}
+
+\begin{lstlisting}[caption={Exemplo de End para Graph em MATLAB}]
+% Endoaplicacao Y : {1,2,3} -> {1,2,3}
+Y = [2, 3, 1]; 
+
+% Traducao para o Grafo:
+Vertices = 1:3;
+Arestas = 1:3;
+Origem = Vertices;   % a aresta 1 sai do vertice 1
+Destino = Y;         % a aresta 1 vai para o vertice 2 (Y(1))
+% Cria um ciclo fechado direcionado 1->2->3->1
+\end{lstlisting}
+\newpage
+
+
+\section{Funtores e Transformações Naturais}
+Na Teoria das Categorias, um funtor atua como um tradutor rigoroso que mapeia objetos e morfismos de uma categoria para outra, preservando sempre a sua estrutura interna e regras de composição. Por sua vez, uma transformação natural funciona como uma ponte lógica entre dois funtores paralelos, permitindo transitar da imagem gerada por um funtor para a do outro de forma perfeitamente coerente e comutativa. Em suma, se os funtores estabelecem relações matemáticas entre categorias distintas, as transformações naturais alinham e relacionam os próprios funtores. Em contexto computacional, isto garante que a tradução entre diferentes representações de dados (como matrizes, vetores ou grafos) mantém a integridade matemática do sistema inicial. Neste contexto, para definir uma transformação natural, precisamos de comparar dois funtores paralelos. 
+\subsection{Transformação Natural em $\mathbf{Sub} \to \mathbf{Rel}$}
+\begin{itemize}
+    \item \textbf{Funtor $F_1$:} Mapeia a inclusão para a relação de identidade estrita (matriz diagonal).
+    \item \textbf{Funtor $F_2$:} Mapeia a inclusão para a relação universal (matriz totalmente preenchida a $1$).
+\end{itemize}
+A transformação natural $\alpha: F_1 \Rightarrow F_2$ comprova que a relação de identidade é um subgrafo lógico da relação universal.
+
+\begin{lstlisting}[caption={Transformacao em Sub -> Rel}]
+n = 3;
+M_F1 = eye(n);   % Funtor Identidade
+M_F2 = ones(n);  % Funtor Universal
+
+% Transformacao Natural (Validacao Logica M_F1 => M_F2)
+alpha_A = all((M_F1 & M_F2) == M_F1, 'all'); % Retorna 1 (true)
+\end{lstlisting}
+
+\subsection{Transformação Natural em $\mathbf{Par} \to \mathbf{Rel}$}
+\begin{itemize}
+    \item \textbf{Funtor $G_1$:} Mapeia a aplicação parcial para o seu grafo exato em forma matricial.
+    \item \textbf{Funtor $G_2$:} Mapeia a aplicação para a relação total.
+\end{itemize}
+
+\begin{lstlisting}[caption={Transformacao em Par -> Rel}]
+n = 3; m = 4;
+f = [2, 0, 1]; % Aplicacao parcial
+
+% Funtor G1: O Grafo exato
+M_G1 = zeros(m, n);
+for x = 1:length(f)
+    if f(x) ~= 0, M_G1(f(x), x) = 1; end
+end
+
+% Funtor G2: Relacao Universal
+M_G2 = ones(m, n);
+
+% Validacao da Transformacao Natural
+beta_n = all((M_G1 & M_G2) == M_G1, 'all'); % Retorna 1 (true)
+\end{lstlisting}
+
+\subsection{Transformação Natural em $\mathbf{End} \to \mathbf{Graph}$}
+\begin{itemize}
+    \item \textbf{Funtor $H_1$:} Gera um grafo de "passo único" (Arestas $x \to Y(x)$).
+    \item \textbf{Funtor $H_2$:} Gera um grafo de "passo duplo" (Arestas $Y(x) \to Y(Y(x))$).
+\end{itemize}
+A transformação natural $\gamma: H_1 \Rightarrow H_2$ traduz-se no homomorfismo de grafos onde os vértices avançam de acordo com $Y$ e as arestas se mantêm, comutando o diagrama de incidência perfeitamente.
+
+\begin{lstlisting}[caption={Transformacao em End -> Graph}]
+X = 1:4;
+Y = [2, 3, 3, 1]; 
+
+% H1: Passo Unico
+Origem1 = X; Destino1 = Y;
+
+% H2: Passo Duplo
+Origem2 = Y; Destino2 = Y(Y);
+
+% Transformacao Natural Gamma
+gamma_V = Y; % Transformacao dos vertices
+gamma_E = X; % Transformacao das arestas
+
+% Validacao da comutatividade:
+comuta_origem = isequal(gamma_V(Origem1), Origem2(gamma_E)); % Retorna 1
+comuta_destino = isequal(gamma_V(Destino1), Destino2(gamma_E)); % Retorna 1
+\end{lstlisting}
+
+
+\end{document}

@@ -1,0 +1,104 @@
+% ============================================================
+\section{Funtor $F: Simp \to PreOrd$}
+\label{sec:functor-simp-preord}
+
+\subsection{Fundamentação Teórica}
+
+A categoria simplicial $\mathbf{Simp}$ tem como objetos os conjuntos linearmente ordenados $[n] = \{0, 1, \ldots, n\}$ para $n \geq 0$, e como morfismos as funções que preservam a ordem (não decrescentes). A categoria $\mathbf{PreOrd}$ tem como objetos conjuntos finitos munidos de uma relação reflexiva e transitiva, e como morfismos os mapas monótonos. O funtor $F: \mathbf{Simp} \to \mathbf{PreOrd}$ interpreta cada cadeia $[n]$ como uma pré-ordem linear, transportando a estrutura de ordem total da categoria simplicial para a categoria das pré-ordens.
+
+\subsection{Funtor Covariante $F: Simp \to PreOrd$}
+
+\begin{definition}[Funtor covariante $F: \mathbf{Simp} \to \mathbf{PreOrd}$]
+O funtor $F$ atua da seguinte forma:
+\begin{itemize}
+    \item \textbf{Nos objetos:} $F([n])$ é o conjunto $\{0, 1, \ldots, n\}$ munido da pré-ordem definida pela relação $i \leq j \iff i \leq j$ (ordem natural dos inteiros). Em MATLAB, representa-se pela matriz de adjacência booleana triangular superior $M \in \{0,1\}^{(n+1) \times (n+1)}$ onde $M(i,j) = 1$ se e só se $i \leq j$.
+    \item \textbf{Nos morfismos:} Uma função não decrescente $f: [n] \to [m]$ (morfismo de $\mathbf{Simp}$) é enviada para o mesmo mapa $F(f) = f$, que é automaticamente um morfismo monótono em $\mathbf{PreOrd}$: se $i \leq j$ então $f(i) \leq f(j)$ por ser não decrescente.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+$F$ é bem definido e covariante: todo morfismo de $\mathbf{Simp}$ é monótono por definição, logo é morfismo de $\mathbf{PreOrd}$. A preservação da composição e da identidade é imediata.
+\end{proposition}
+
+\begin{lstlisting}[style=matlab, caption={Funtor $F: \mathbf{Simp} \to \mathbf{PreOrd}$ --- construção da pré-ordem de $[n]$}]
+function M = simp_to_preord(n)
+    % Constroi a matriz de adjacencia da pre-ordem linear [n]
+    % M(i,j) = 1 sse (i-1) <= (j-1), i.e., i <= j (indices 1-based)
+    sz = n + 1;
+    M  = zeros(sz, sz);
+    for i = 1:sz
+        for j = i:sz
+            M(i, j) = 1;
+        end
+    end
+    % Equivalente a M = triu(ones(sz))
+end
+
+function ok = simp_morphism_check(f, n, m)
+    % Verifica se f: [n]->[m] e nao decrescente (morfismo de Simp)
+    % f e um vector de comprimento n+1 com entradas em {0,...,m}
+    % Representado como f_vec (indice 1 = elemento 0, etc.)
+    ok = all(diff(f) >= 0);
+end
+\end{lstlisting}
+
+\begin{lstlisting}[style=matlab, caption={Exemplo: $F([2])$ e verificação de morfismo}]
+n = 2;
+M_preord = simp_to_preord(n);
+% M_preord = [1 1 1; 0 1 1; 0 0 1]  (ordem linear 0 <= 1 <= 2)
+
+% Morfismo de Simp: f:[2]->[3] nao decrescente
+% f(0)=0, f(1)=1, f(2)=3  ->  vetor [0,1,3] (base 0)
+f_vec = [1, 2, 4];  % base 1: f_vec(i) = f(i-1)+1
+ok = simp_morphism_check(f_vec, 2, 3);  % true
+
+% Imagem em PreOrd: mesmo mapa, verificar monotonia na pre-ordem
+M_dom = simp_to_preord(2);
+M_cod = simp_to_preord(3);
+is_monotone = true;
+for i = 1:3
+    for j = 1:3
+        if M_dom(i,j) && ~M_cod(f_vec(i), f_vec(j))
+            is_monotone = false;
+        end
+    end
+end
+\end{lstlisting}
+
+\subsection{Funtor Contravariante --- Análise de Existência}
+
+\begin{proposition}[Funtor contravariante $F^*: \mathbf{Simp}^{\mathrm{op}} \to \mathbf{PreOrd}$]
+Existe um funtor contravariante $F^*$ que envia $[n]$ à pré-ordem oposta $[n]^{\mathrm{op}}$ (com a ordem $i \geq j$, ou seja, $M^{\mathrm{op}}(i,j) = 1 \iff i \geq j$) e cada morfismo não decrescente $f: [n] \to [m]$ ao mesmo mapa $f$, que é monótono na pré-ordem oposta do domínio em direção à pré-ordem oposta do codomínio.
+\end{proposition}
+
+\begin{lstlisting}[style=matlab, caption={Pré-ordem oposta: funtor contravariante}]
+function M_op = simp_to_preord_op(n)
+    % Pre-ordem oposta: i >= j, equivalente a transposta da linear
+    M_op = simp_to_preord(n)';
+end
+\end{lstlisting}
+
+\subsection{Transformações Naturais}
+
+\begin{definition}[Transformação natural $\eta: F \Rightarrow G$]
+Seja $F$ o funtor que envia $[n]$ à pré-ordem linear $\leq$ (triangular superior) e $G$ o funtor que envia $[n]$ à pré-ordem trivial (apenas reflexividade, i.e., $M = I_{n+1}$). A família de morfismos $\eta_{[n]} = \mathrm{id}_{[n]}$ define uma transformação natural $\eta: G \Rightarrow F$, pois $i \leq_{G} i$ implica $i \leq_{F} i$ (reflexividade está contida na ordem linear), tornando a identidade um morfismo monótono de $G([n])$ em $F([n])$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Transformação natural $\eta: G \Rightarrow F$ --- pré-ordem trivial para linear}]
+function M_trivial = preord_trivial(n)
+    % Pre-ordem trivial: apenas reflexividade (matriz identidade)
+    M_trivial = eye(n+1);
+end
+
+function ok = check_nat_trans_simp_preord(n, f_vec)
+    % Verifica naturalidade: F(f) o eta_n = eta_m o G(f)
+    % Como eta = id e F(f) = G(f) = f, a igualdade e imediata
+    m = max(f_vec) - 1;  % inferir m
+    M_F_n = simp_to_preord(n);
+    M_G_n = preord_trivial(n);
+    % eta_n = id_(n+1): morfismo de M_G_n para M_F_n?
+    % Verificar: se M_G_n(i,j)=1 entao M_F_n(i,j)=1
+    ok = all(M_G_n(M_G_n == 1) <= M_F_n(M_G_n == 1));
+    fprintf('eta_[%d] e morfismo de PreOrd: %d\n', n, ok);
+end
+\end{lstlisting}

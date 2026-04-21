@@ -1,0 +1,16 @@
+\section{Bool (Álgebras de Boolean)}
+
+As Álgebras de Boolean são a base da lógica computacional moderna. Estas estruturas estendem os latices distributivos ao introduzir a noção de complemento e elementos extremos (zero e um).
+
+\subsection{Objetos}
+A modelação em MATLAB é feita expandindo a estrutura de \textbf{DLat} com a operação de negação lógica e a definição explícita das constantes de topo e base.
+
+\begin{lstlisting}[caption={Operações em Álgebra Booleana}]
+B.elements = {0, 1};
+B.not = @(a) 1 - a;      
+B.and = @(a, b) min(a, b); 
+B.or  = @(a, b) max(a, b); 
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos nesta categoria devem ser compatíveis com a negação, a conjunção e a disjunção, além de mapear corretamente os elementos neutros do sistema.

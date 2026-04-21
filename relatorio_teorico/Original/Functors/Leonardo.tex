@@ -1,0 +1,371 @@
+\documentclass[12pt,a4paper]{article}
+
+% ----- Encoding & Language -----
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% ----- Mathematics -----
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+
+% ----- Layout -----
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% ----- Colours & Graphics -----
+\usepackage[dvipsnames]{xcolor}
+\definecolor{mainblue}{RGB}{30,75,182}
+\definecolor{darkblue}{RGB}{31,56,100}
+\definecolor{lightblue}{RGB}{217,226,243}
+\definecolor{codebg}{RGB}{245,247,252}
+\definecolor{codefg}{RGB}{31,56,100}
+
+% ----- Headers & Footers -----
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{mainblue}\textit{MDPL26 --- Matemática Discreta, Pós-laboral}}
+\fancyhead[R]{\small\color{mainblue}\textit{Ponto 3 --- Alíneas (a), (b), (c)}}
+\fancyfoot[C]{\small\color{gray}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ----- Section Formatting -----
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries\color{darkblue}}{}{0em}{}[\color{mainblue}\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{mainblue}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\itshape\color{mainblue}}{}{0em}{}
+
+% ----- Code Listings -----
+\usepackage{listings}
+\lstset{
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\small\color{codefg},
+  frame=single,
+  framerule=0.4pt,
+  rulecolor=\color{mainblue!40},
+  breaklines=true,
+  columns=flexible,
+  keepspaces=true,
+  xleftmargin=1em,
+  xrightmargin=0.5em,
+  aboveskip=6pt,
+  belowskip=6pt,
+}
+
+% ----- Tables -----
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+
+% ----- Enumeration -----
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.5em, itemsep=2pt, topsep=4pt}
+
+% ----- Hyperlinks -----
+\usepackage[hidelinks]{hyperref}
+
+% ----- Diagrams -----
+\usepackage{tikz-cd}
+\usepackage{tikz}
+
+% ----- Title -----
+\title{
+  \vspace{-1cm}
+  {\large Politécnico de Leiria}\\[0.3em]
+  {\color{darkblue}\rule{\linewidth}{1.5pt}}\\[0.4em]
+  {\LARGE\bfseries\color{darkblue} Matemática Discreta --- MDPL26}\\[0.3em]
+  {\large\color{mainblue} Ponto 3 --- Funtores e Transformações Naturais}\\[0.2em]
+  {\normalsize\color{gray} Alíneas (a), (b) e (c)}\\[0.3em]
+  {\color{darkblue}\rule{\linewidth}{1.5pt}}
+}
+\author{}
+\date{}
+
+% ----- Custom commands -----
+\newcommand{\catname}[1]{\mathbf{#1}}
+\newcommand{\Fin}{\catname{Fin}}
+\newcommand{\Vect}{\catname{Vect}}
+\newcommand{\Sub}{\catname{Sub}}
+\newcommand{\Par}{\catname{Par}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\parto}{\rightharpoonup}  % partial map arrow
+
+% Coloured box for definitions/remarks
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+\newtcolorbox{defbox}[1][]{
+  colback=lightblue!50,
+  colframe=mainblue,
+  fonttitle=\bfseries\small,
+  title=#1,
+  boxrule=0.6pt,
+  arc=3pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+}
+
+% ============================================================
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\begin{abstract}
+\noindent
+Este documento apresenta, para cada par de categorias indicado nas alíneas (a), (b) e (c) do Ponto~3, os funtores covariantes e contravariantes possíveis, bem como as transformações naturais entre eles, com recurso a descrições simplificadas em MATLAB/Octave.
+\end{abstract}
+
+\tableofcontents
+\vspace{1em}
+
+% ============================================================
+\section{Alínea (a) --- \texorpdfstring{$\Fin$}{Fin} e \texorpdfstring{$\Vect$}{Vect}}
+
+\subsection{Descrição das categorias (modelo MATLAB/Octave)}
+
+\begin{defbox}[Categoria $\Fin$]
+Um objecto é representado pelo seu cardinal $n \in \N$. Um morfismo $f \colon n \to m$ é um vector de inteiros de comprimento $n$ com entradas em $\{1,\ldots,m\}$, onde $f(i)$ indica a imagem do elemento $i$.
+\end{defbox}
+
+\begin{lstlisting}[language=Matlab, caption={Objeto e morfismo em $\Fin$}]
+n = 3;          % objecto: conjunto {1,2,3}
+f = [2, 2, 1];  % morfismo: f(1)=2, f(2)=2, f(3)=1
+\end{lstlisting}
+
+\begin{defbox}[Categoria $\Vect$]
+Um objecto é um inteiro $d \geq 0$ representando a dimensão do espaço vectorial sobre $\C$. Um morfismo $L \colon d_1 \to d_2$ é uma matriz complexa $d_2 \times d_1$.
+\end{defbox}
+
+\begin{lstlisting}[language=Matlab, caption={Objeto e morfismo em $\Vect$}]
+d = 3;              % objecto: C^3
+L = [1 0 0; 0 1 0]; % morfismo: aplicacao linear C^3 -> C^2
+\end{lstlisting}
+
+% ---
+\subsection{Funtor covariante \texorpdfstring{$F \colon \Fin \to \Vect$}{F: Fin -> Vect} (funtor livre)}
+
+O \emph{funtor livre} $F \colon \Fin \to \Vect$ envia cada conjunto finito $n$ ao espaço vectorial $\C^n$ gerado pelos seus elementos como base canónica, e cada aplicação total $f \colon n \to m$ à aplicação linear $F(f) \colon \C^n \to \C^m$ definida na base canónica por
+\[
+  e_i \;\longmapsto\; e_{f(i)}.
+\]
+A imagem do funtor num morfismo $f$ é a matriz de permutação/incidência:
+
+\begin{lstlisting}[language=Matlab, caption={Funtor livre $F$ aplicado a um morfismo}]
+function L = free_functor(f, m)
+  n = length(f);
+  L = zeros(m, n);
+  for i = 1:n
+    L(f(i), i) = 1;
+  end
+end
+\end{lstlisting}
+
+\noindent\textbf{Propriedades do funtor $F$:}
+\begin{itemize}
+  \item $F(\mathrm{id}_n) = I_n$ (matriz identidade $n \times n$).
+  \item $F(g \circ f) = F(g) \cdot F(f)$ (preservação da composição).
+  \item $F$ envia aplicações injectivas a aplicações lineares injectivas.
+  \item $F$ envia aplicações sobrejectivas a aplicações lineares sobrejectivas.
+\end{itemize}
+
+O diagrama de naturalidade toma a forma:
+\[
+\begin{tikzcd}
+  F(n) \arrow[r, "F(f)"] \arrow[d, "\eta_n"'] & F(m) \arrow[d, "\eta_m"] \\
+  G(n) \arrow[r, "G(f)"']                     & G(m)
+\end{tikzcd}
+\]
+
+% ---
+\subsection{Funtor de esquecimento \texorpdfstring{$U \colon \Vect \to \Fin$}{U: Vect -> Fin}}
+
+O funtor de esquecimento $U \colon \Vect \to \Fin$ envia cada espaço vectorial de dimensão $d$ ao conjunto finito de índices $\{1,\ldots,d\}$ (a base canónica). Uma aplicação linear $L \colon \C^{d_1} \to \C^{d_2}$ é esquecida enquanto estrutura linear. Note-se que este processo requer a escolha de uma base, pelo que $U$ é bem definido apenas após fixar bases em cada objecto.
+
+% ---
+\subsection{Transformações naturais \texorpdfstring{$\eta \colon F \Rightarrow G$}{eta: F => G}}
+
+Dados dois funtores $F, G \colon \Fin \to \Vect$, uma \emph{transformação natural} $\eta \colon F \Rightarrow G$ é uma família de morfismos em $\Vect$,
+\[
+  \eta_n \colon F(n) \to G(n), \quad \text{para cada objecto } n \in \Fin,
+\]
+tal que para cada morfismo $f \colon n \to m$ em $\Fin$ o seguinte quadrado comuta:
+\[
+  G(f) \circ \eta_n \;=\; \eta_m \circ F(f).
+\]
+Em termos matriciais (MATLAB/Octave), a condição de naturalidade é:
+
+\begin{lstlisting}[language=Matlab, caption={Condição de naturalidade em $\Vect$}]
+% G_f, F_f: matrizes de F(f) e G(f); eta_n, eta_m: componentes de eta
+norm(G_f * eta_n - eta_m * F_f) < tol  % deve ser verdadeiro
+\end{lstlisting}
+
+\noindent\textbf{Exemplo:} Seja $F$ o funtor livre e $G$ um funtor que envia $n$ a $\C^n$ via uma base diferente. Então $\eta_n$ é simplesmente uma matriz de mudança de base invertível em cada componente, compatível com os morfismos.
+
+% ============================================================
+\section{Alínea (b) --- \texorpdfstring{$\Fin$}{Fin} e \texorpdfstring{$\Sub$}{Sub}}
+
+\subsection{Descrição das categorias (modelo MATLAB/Octave)}
+
+\begin{defbox}[Categoria $\Sub$]
+Um objecto é um vector de inteiros (os elementos do conjunto). Um morfismo $A \to B$ existe apenas se $A \subseteq B$, e é representado pelo vector lógico de inclusão.
+\end{defbox}
+
+\begin{lstlisting}[language=Matlab, caption={Morfismo de inclusão em $\Sub$}]
+A = [1, 3];  B = [1, 2, 3, 4];
+is_sub = all(ismember(A, B));  % verifica se A c= B
+incl   = ismember(B, A);       % vector logico da inclusao
+\end{lstlisting}
+
+% ---
+\subsection{Funtor covariante \texorpdfstring{$P \colon \Fin \to \Sub$}{P: Fin -> Sub} (conjunto das partes)}
+
+O \emph{funtor potência} $P \colon \Fin \to \Sub$ envia cada conjunto finito $n$ ao conjunto das suas partes $\mathcal{P}(n) = \{S \subseteq \{1,\ldots,n\}\}$, e cada aplicação total $f \colon n \to m$ à aplicação
+\[
+  P(f) \colon \mathcal{P}(n) \to \mathcal{P}(m), \quad S \;\longmapsto\; f(S) = \{f(i) : i \in S\}.
+\]
+
+\begin{lstlisting}[language=Matlab, caption={Funtor potência $P$}]
+function PS = power_set(n)
+  PS = {};
+  for k = 0:2^n-1
+    PS{end+1} = find(bitand(k, 2.^(0:n-1)));
+  end
+end
+
+function img = direct_image(f, S)
+  img = unique(f(S));  % imagem directa de S por f
+end
+\end{lstlisting}
+
+\noindent Este funtor preserva inclusões: se $S \subseteq T$ então $f(S) \subseteq f(T)$, pelo que está bem definido em $\Sub$ como codomínio.
+
+% ---
+\subsection{Funtor de esquecimento \texorpdfstring{$U \colon \Sub \to \Fin$}{U: Sub -> Fin}}
+
+O funtor de esquecimento $U \colon \Sub \to \Fin$ envia cada objecto de $\Sub$ (um subconjunto $A \subseteq B$) ao conjunto finito $A$ (ignorando a estrutura de inclusão), e cada morfismo (inclusão $A \hookrightarrow B$) à correspondente aplicação total em $\Fin$.
+
+% ---
+\subsection{Funtor contravariante \texorpdfstring{$P^* \colon \Fin^{\mathrm{op}} \to \Sub$}{P*: Fin^op -> Sub} (imagem inversa)}
+
+O \emph{funtor imagem inversa} $P^* \colon \Fin^{\mathrm{op}} \to \Sub$ envia cada aplicação $f \colon n \to m$ à aplicação
+\[
+  P^*(f) \colon \mathcal{P}(m) \to \mathcal{P}(n), \quad T \;\longmapsto\; f^{-1}(T) = \{i \in n : f(i) \in T\}.
+\]
+Este funtor é \emph{contravariante} porque inverte a direcção dos morfismos.
+
+\begin{lstlisting}[language=Matlab, caption={Funtor contravariante $P^*$ (pré-imagem)}]
+function preimg = inverse_image(f, T)
+  preimg = find(ismember(f, T));  % pre-imagem de T por f
+end
+\end{lstlisting}
+
+% ---
+\subsection{Transformações naturais entre funtores \texorpdfstring{$\Fin \to \Sub$}{Fin -> Sub}}
+
+Dados dois funtores $F, G \colon \Fin \to \Sub$, uma transformação natural $\eta \colon F \Rightarrow G$ consiste numa família de morfismos em $\Sub$,
+\[
+  \eta_n \colon F(n) \hookrightarrow G(n) \quad \text{(i.e., } F(n) \subseteq G(n) \text{ para todo } n\text{)},
+\]
+tal que para todo morfismo $f \colon n \to m$ em $\Fin$:
+\[
+  G(f)\bigl(\eta_n(x)\bigr) \;=\; \eta_m\bigl(F(f)(x)\bigr), \quad \forall\, x \in F(n).
+\]
+
+\noindent\textbf{Exemplo:} Seja $F = P$ (funtor potência) e $G$ o funtor que associa a $n$ o conjunto de todos os multiconjuntos de $\{1,\ldots,n\}$. A inclusão natural de subconjuntos em multiconjuntos define uma transformação natural $\eta \colon P \Rightarrow G$.
+
+% ============================================================
+\section{Alínea (c) --- \texorpdfstring{$\Fin$}{Fin} e \texorpdfstring{$\Par$}{Par}}
+
+\subsection{Descrição das categorias (modelo MATLAB/Octave)}
+
+\begin{defbox}[Categoria $\Par$]
+Um morfismo parcial $p \colon n \parto m$ é um vector de comprimento $n$ com entradas em $\{0, 1,\ldots,m\}$, onde $0$ significa que o elemento não tem imagem definida.
+\end{defbox}
+
+\begin{lstlisting}[language=Matlab, caption={Morfismo parcial em $\Par$}]
+n = 4;  m = 3;
+p = [2, 0, 1, 3];  % p(1)=2, p(2)=undef, p(3)=1, p(4)=3
+\end{lstlisting}
+
+% ---
+\subsection{Composição em \texorpdfstring{$\Par$}{Par}}
+
+A composição de duas aplicações parciais $p \colon n \parto m$ e $q \colon m \parto k$ é a aplicação parcial $(q \circ p) \colon n \parto k$ definida por
+\[
+  (q \circ p)(i) \;=\;
+  \begin{cases}
+    q(p(i)) & \text{se } p(i) \neq 0 \text{ e } q(p(i)) \neq 0,\\
+    \text{indefinida} & \text{caso contrário.}
+  \end{cases}
+\]
+
+\begin{lstlisting}[language=Matlab, caption={Composição de aplicações parciais}]
+function r = compose_partial(p, q)
+  r = zeros(1, length(p));
+  for i = 1:length(p)
+    if p(i) ~= 0 && q(p(i)) ~= 0
+      r(i) = q(p(i));
+    end
+  end
+end
+\end{lstlisting}
+
+% ---
+\subsection{Funtor de inclusão \texorpdfstring{$I \colon \Fin \to \Par$}{I: Fin -> Par}}
+
+Existe um funtor canónico de inclusão $I \colon \Fin \to \Par$ que envia cada conjunto finito $n$ a si próprio, e cada aplicação total $f \colon n \to m$ à mesma função vista como aplicação parcial (sem indefinições).
+
+\begin{lstlisting}[language=Matlab, caption={Inclusão de $\Fin$ em $\Par$}]
+function p = total_to_partial(f)
+  p = f;  % aplicacao total e um caso particular de parcial
+end
+\end{lstlisting}
+
+\noindent\textbf{Propriedades do funtor $I$:}
+\begin{itemize}
+  \item $I(\mathrm{id}_n) = \mathrm{id}_n$ em $\Par$ (vector $[1, 2, \ldots, n]$ sem indefinições).
+  \item $I(g \circ f) = I(g) \circ I(f)$ (a composição parcial coincide com a total quando ambas são totais).
+  \item $I$ é \emph{fiel}: morfismos distintos em $\Fin$ dão morfismos distintos em $\Par$.
+  \item $I$ \emph{não é pleno}: há morfismos em $\Par$ que não provêm de $\Fin$ (os que têm indefinições).
+\end{itemize}
+
+% ---
+\subsection{Transformações naturais \texorpdfstring{$\eta \colon F \Rightarrow G$}{eta: F => G} entre funtores \texorpdfstring{$\Fin \to \Par$}{Fin -> Par}}
+
+Dados dois funtores $F, G \colon \Fin \to \Par$, uma transformação natural $\eta \colon F \Rightarrow G$ é uma família de morfismos em $\Par$,
+\[
+  \eta_n \colon F(n) \parto G(n), \quad \text{para cada objecto } n \in \Fin,
+\]
+satisfazendo a condição de naturalidade: para todo morfismo $f \colon n \to m$ em $\Fin$,
+\[
+  G(f) \circ \eta_n \;=\; \eta_m \circ F(f) \qquad \text{(como aplicações parciais)}.
+\]
+
+\noindent\textbf{Exemplo:} Seja $F = I$ o funtor de inclusão $\Fin \hookrightarrow \Par$, e $G$ o funtor que, dada uma aplicação total $f$, produz a mesma aplicação mas com o primeiro elemento do domínio tornado indefinido. Então $\eta_n \colon n \parto n$ pode ser a aplicação parcial $i \mapsto i$ para $i > 1$ e indefinida em $i = 1$. A naturalidade exige que esta perturbação seja compatível com todos os morfismos de $\Fin$.
+
+% ============================================================
+\section{Resumo Comparativo}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{>{\bfseries}c p{3.2cm} p{5cm} p{4.5cm}}
+\toprule
+\rowcolor{darkblue!85}
+\color{white}Alínea & \color{white}Par de categorias & \color{white}Funtor principal & \color{white}Transformação natural \\
+\midrule
+\rowcolor{lightblue!60}
+(a) & $\Fin$, $\Vect$ & $F \colon \Fin \to \Vect$ (funtor livre) & $\eta_n \colon F(n) \to G(n)$, matrizes compatíveis \\
+\rowcolor{white}
+(b) & $\Fin$, $\Sub$ & $P \colon \Fin \to \Sub$ (cov.) \newline $P^* \colon \Fin^{\mathrm{op}} \to \Sub$ (contrav.) & $\eta_n \colon F(n) \subseteq G(n)$, inclusões naturais \\
+\rowcolor{lightblue!60}
+(c) & $\Fin$, $\Par$ & $I \colon \Fin \to \Par$ (inclusão) & $\eta_n \colon F(n) \parto G(n)$, aplic.\ parciais compatíveis \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vfill
+\begin{center}
+\color{gray}\small Politécnico de Leiria --- MDPL26 Matemática Discreta, Pós-laboral
+\end{center}
+
+\end{document}

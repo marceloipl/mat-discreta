@@ -1,0 +1,35 @@
+\section{OrdMon (Monoides Ordenados)}
+
+Os limites na categoria \textbf{OrdMon} devem respeitar simultaneamente a estrutura algébrica do monoide e a relação de ordem parcial compatível.
+
+\subsection{Fundamentação Teórica}
+\begin{itemize}
+    \item \textbf{Produtos:} O objeto $M \times N$ herda a ordem do produto, onde $(m, n) \le (m', n')$ se e só se as relações se verificam individualmente em cada componente ($m \le_M m'$ e $n \le_N n'$).
+    \item \textbf{Equalizadores:} Correspondem ao sub-monoide formado pelos elementos onde os morfismos coincidem, mantendo a ordem herdada do domínio original.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+Abaixo detalham-se as funções para a criação do produto e a extração do equalizador.
+
+\begin{lstlisting}[caption={Construções em Monoides Ordenados}]
+% Produto em OrdMon
+function OM = ordmon_product(M1, M2)
+    OM.elements = set_product(M1.elements, M2.elements);
+    OM.mul = @(a, b) [M1.mul(a(1), b(1)), M2.mul(a(2), b(2))];
+    OM.unit = [M1.unit, M2.unit];
+    % Verificacao da ordem combinada
+    OM.le = @(a, b) M1.le(a(1), b(1)) && M2.le(a(2), b(2));
+end
+
+% Equalizador em OrdMon
+function E = ordmon_equalizer(f, g, M)
+    E.elements = {};
+    for i = 1:length(M.elements)
+        if isequal(f(M.elements{i}), g(M.elements{i}))
+            E.elements{end+1} = M.elements{i};
+        end
+    end
+    E.mul = M.mul;
+    E.le = M.le;
+end
+\end{lstlisting}

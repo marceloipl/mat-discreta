@@ -1,0 +1,101 @@
+% ============================================================
+\section{Funtor $F: \mathbf{Graph} \to \mathbf{Rel}$ (Alínea 3.l)}
+\label{sec:functor-graph-rel}
+
+\subsection{Fundamentação Teórica}
+
+Em $\mathbf{Graph}$, os objetos são grafos dirigidos descritos por um conjunto de vértices $V$, um conjunto de arestas $A$, e dois mapas $s, t: A \to V$ (origem e destino). Um morfismo de grafos é um par $(f_V, f_A)$ que preserva a estrutura de incidência: $f_V \circ s = s' \circ f_A$ e $f_V \circ t = t' \circ f_A$. Em $\mathbf{Rel}$, os objetos são conjuntos finitos e os morfismos são relações binárias. O funtor $F: \mathbf{Graph} \to \mathbf{Rel}$ colapsa a distinção entre arestas e vértices, interpretando cada grafo como a relação binária de alcançabilidade em um passo.
+
+\subsection{Funtor Covariante $F: \mathbf{Graph} \to \mathbf{Rel}$}
+
+\begin{definition}[Funtor covariante $F: \mathbf{Graph} \to \mathbf{Rel}$]
+O funtor $F$ atua da seguinte forma:
+\begin{itemize}
+    \item \textbf{Nos objetos:} $F(V, A, s, t) = V$. O conjunto de vértices é enviado ao conjunto finito $V$, esquecendo as arestas.
+    \item \textbf{Nos morfismos:} O grafo $(V, A, s, t)$ é mapeado para a relação binária $R \subseteq V \times V$ definida por
+    \[
+        (u, v) \in R \iff \exists\, a \in A : s(a) = u \text{ e } t(a) = v.
+    \]
+    Em MATLAB, $R$ é a matriz de adjacência booleana $M \in \{0,1\}^{|V| \times |V|}$ onde $M(u, v) = 1$ se existe pelo menos uma aresta de $u$ para $v$.
+    \item Dado um morfismo de grafos $(f_V, f_A): (V_1, A_1, s_1, t_1) \to (V_2, A_2, s_2, t_2)$, o morfismo induzido em $\mathbf{Rel}$ é $F(f_V, f_A) = f_V$, visto como mapa entre os conjuntos de vértices.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+$F$ é covariante e bem definido. Se $(u, v) \in R_1$ (existe aresta $a$ com $s_1(a)=u$, $t_1(a)=v$), então existe $f_A(a) \in A_2$ com $s_2(f_A(a)) = f_V(u)$ e $t_2(f_A(a)) = f_V(v)$, logo $(f_V(u), f_V(v)) \in R_2$. Assim $F(f_V, f_A)$ é morfismo de $\mathbf{Rel}$.
+\end{proposition}
+
+\begin{lstlisting}[style=matlab, caption={Funtor $F: \mathbf{Graph} \to \mathbf{Rel}$ --- construção da matriz de adjacência}]
+function R_mat = graph_to_rel(n_vertices, src, tgt)
+    % n_vertices: numero de vertices
+    % src, tgt: vectores de comprimento |A| com indices dos vertices
+    R_mat = zeros(n_vertices, n_vertices);
+    for k = 1:length(src)
+        R_mat(src(k), tgt(k)) = 1;
+    end
+end
+
+function ok = check_graph_morphism(src1, tgt1, src2, tgt2, fV, fA)
+    % Verifica se (fV, fA) e morfismo de Graph
+    ok = isequal(fV(src1(fA)), src2(fA)) && ...
+         isequal(fV(tgt1(fA)), tgt2(fA));
+    % Equivalente: fV o s1 = s2 o fA e fV o t1 = t2 o fA
+    ok = all(fV(src1) == src2(fA)) && all(fV(tgt1) == tgt2(fA));
+end
+\end{lstlisting}
+
+\begin{lstlisting}[style=matlab, caption={Exemplo: grafo com 3 vértices e aplicação do funtor}]
+% Grafo G: vertices {1,2,3}, arestas {a1: 1->2, a2: 2->3, a3: 3->1}
+n_vertices = 3;
+src = [1, 2, 3];   % origens das arestas
+tgt = [2, 3, 1];   % destinos das arestas
+
+% Imagem em Rel: matriz de adjacencia
+R_mat = graph_to_rel(n_vertices, src, tgt);
+% R_mat = [0 1 0; 0 0 1; 1 0 0]  (ciclo 1->2->3->1)
+\end{lstlisting}
+
+\subsection{Funtor Contravariante --- Análise de Existência}
+
+\begin{proposition}[Funtor contravariante via grafo transposto]
+Existe um funtor contravariante $F^*: \mathbf{Graph}^{\mathrm{op}} \to \mathbf{Rel}$ que envia cada grafo $(V, A, s, t)$ à relação binária $R^{\mathrm{op}} \subseteq V \times V$ definida por $(u, v) \in R^{\mathrm{op}} \iff (v, u) \in R$ (i.e., a relação transposta). Em MATLAB, $R^{\mathrm{op}} = R^T$. A inversão da direção dos morfismos é compatível com a transposição da relação.
+\end{proposition}
+
+\begin{lstlisting}[style=matlab, caption={Funtor contravariante $F^*$ --- grafo transposto}]
+function R_op = graph_to_rel_op(n_vertices, src, tgt)
+    % Grafo transposto: inverter src e tgt
+    R_op = graph_to_rel(n_vertices, tgt, src);
+    % Equivalente: R_op = graph_to_rel(n_vertices, src, tgt)'
+end
+\end{lstlisting}
+
+\subsection{Transformações Naturais}
+
+\begin{definition}[Transformação natural $\eta: F \Rightarrow F^{+}$]
+Seja $F$ o funtor que gera a relação de alcançabilidade em um passo, e $F^{+}$ o funtor que gera o fecho transitivo da mesma relação (alcançabilidade em qualquer número de passos). A família de inclusões $\eta_{G}: R_G \hookrightarrow R_G^{+}$ (onde $R_G \subseteq R_G^{+}$ por definição de fecho transitivo) define uma transformação natural $\eta: F \Rightarrow F^{+}$, pois a natureza da inclusão é compatível com qualquer homomorfismo de grafos.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Transformação natural $\eta: F \Rightarrow F^{+}$ --- fecho transitivo}]
+function R_plus = transitive_closure(R_mat)
+    % Fecho transitivo via algoritmo de Warshall
+    n     = size(R_mat, 1);
+    R_plus = R_mat;
+    for k = 1:n
+        for i = 1:n
+            for j = 1:n
+                R_plus(i,j) = R_plus(i,j) || ...
+                              (R_plus(i,k) && R_plus(k,j));
+            end
+        end
+    end
+end
+
+function ok = check_nat_trans_graph_rel(src, tgt, n_vertices)
+    % Verifica que R e sub-relacao de R+ (eta e inclusao bem definida)
+    R      = graph_to_rel(n_vertices, src, tgt);
+    R_plus = transitive_closure(R);
+    % Condicao: R(i,j)=1 => R_plus(i,j)=1
+    ok = all(R(R == 1) <= R_plus(R == 1));
+    fprintf('R esta contida em R+: %d\n', ok);
+end
+\end{lstlisting}

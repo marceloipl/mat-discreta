@@ -1,0 +1,71 @@
+% ============================================================
+\section{Funtor $I: Fin \to Par$}
+\label{sec:functor-fin-par}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{Par}$ (modelo MATLAB/Octave)]
+Um morfismo parcial $p: n \rightharpoonup m$ é um vetor de comprimento $n$ com entradas em $\{0, 1,\ldots,m\}$, onde $0$ significa que o elemento não tem imagem definida.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Morfismo parcial em $\mathbf{Par}$}]
+n = 4;  m = 3;
+p = [2, 0, 1, 3];  % p(1)=2, p(2)=indefinido, p(3)=1, p(4)=3
+\end{lstlisting}
+
+\subsection{Composição em Par}
+
+A composição de duas aplicações parciais $p: n \rightharpoonup m$ e $q: m \rightharpoonup k$ é a aplicação parcial $(q \circ p): n \rightharpoonup k$ definida por
+\[
+    (q \circ p)(i) =
+    \begin{cases}
+        q(p(i)) & \text{se } p(i) \neq 0 \text{ e } q(p(i)) \neq 0,\\
+        \text{indefinida} & \text{caso contrário.}
+    \end{cases}
+\]
+
+\begin{lstlisting}[style=matlab, caption={Composição de aplicações parciais}]
+function r = compose_partial(p, q)
+    r = zeros(1, length(p));
+    for i = 1:length(p)
+        if p(i) ~= 0 && q(p(i)) ~= 0
+            r(i) = q(p(i));
+        end
+    end
+end
+\end{lstlisting}
+
+\subsection{Funtor de Inclusão $I: Fin \to Par$}
+
+Existe um funtor canónico de inclusão $I: \mathbf{Fin} \to \mathbf{Par}$ que envia cada conjunto finito $n$ a si próprio, e cada aplicação total $f: n \to m$ à mesma função vista como aplicação parcial (sem indefinições).
+
+\begin{lstlisting}[style=matlab, caption={Funtor de inclusão $I: \mathbf{Fin} \to \mathbf{Par}$}]
+function p = total_to_partial(f)
+    p = f;  % aplicacao total e um caso particular de parcial
+end
+\end{lstlisting}
+
+\begin{proposition}
+O funtor de inclusão $I$ satisfaz as seguintes propriedades:
+\begin{itemize}
+    \item $I(\mathrm{id}_n) = \mathrm{id}_n$ em $\mathbf{Par}$ (vetor $[1, 2, \ldots, n]$ sem indefinições);
+    \item $I(g \circ f) = I(g) \circ I(f)$ (a composição parcial coincide com a total quando ambas são totais);
+    \item $I$ é \emph{fiel}: morfismos distintos em $\mathbf{Fin}$ dão morfismos distintos em $\mathbf{Par}$;
+    \item $I$ \emph{não é pleno}: há morfismos em $\mathbf{Par}$ que não provêm de $\mathbf{Fin}$ (os que têm indefinições).
+\end{itemize}
+\end{proposition}
+
+\subsection{Transformações Naturais entre Funtores $Fin \to Par$}
+
+Dados dois funtores $F, G: \mathbf{Fin} \to \mathbf{Par}$, uma transformação natural $\eta: F \Rightarrow G$ é uma família de morfismos em $\mathbf{Par}$,
+\[
+    \eta_n: F(n) \rightharpoonup G(n), \quad \text{para cada objeto } n \in \mathbf{Fin},
+\]
+satisfazendo a condição de naturalidade: para todo morfismo $f: n \to m$ em $\mathbf{Fin}$,
+\[
+    G(f) \circ \eta_n \;=\; \eta_m \circ F(f) \qquad \text{(como aplicações parciais)}.
+\]
+
+\begin{remark}
+Seja $F = I$ o funtor de inclusão $\mathbf{Fin} \hookrightarrow \mathbf{Par}$, e $G$ o funtor que, dada uma aplicação total $f$, produz a mesma aplicação mas com o primeiro elemento do domínio tornado indefinido. Então $\eta_n: n \rightharpoonup n$ pode ser a aplicação parcial $i \mapsto i$ para $i > 1$ e indefinida em $i = 1$. A naturalidade exige que esta perturbação seja compatível com todos os morfismos de $\mathbf{Fin}$.
+\end{remark}

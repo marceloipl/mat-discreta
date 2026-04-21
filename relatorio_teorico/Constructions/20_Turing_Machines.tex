@@ -1,0 +1,57 @@
+\section{Turing Machines (Máquinas de Turing)}
+\label{sec:const-turing}
+
+As construções na categoria de Máquinas de Turing permitem modelar a computação paralela, a composição de algoritmos e a identificação de comportamentos equivalentes entre autómatos. O foco é garantir que os novos objetos preservem a coerência das funções de transição e dos estados de aceitação.
+
+\subsection{Fundamentação Teórica}
+
+\begin{itemize}
+    \item \textbf{Produtos:} O produto $M_1 \times M_2$ é a máquina de Turing que simula $M_1$ e $M_2$ em paralelo. O conjunto de estados é dado pelo produto cartesiano $Q_1 \times Q_2$, o alfabeto é $\Gamma_1 \times \Gamma_2$ (ou um alfabeto comum), e a função de transição aplica ambas as transições simultaneamente, movendo as respetivas cabeças de leitura de forma independente ou coordenada.
+    
+    \item \textbf{Coprodutos:} O coproduto $M_1 \sqcup M_2$ representa a união disjunta de duas máquinas. Na prática, cria-se uma máquina que pode executar $M_1$ ou $M_2$, partindo de um novo estado inicial que ramifica para os estados iniciais originais consoante o primeiro símbolo lido na fita.
+
+    \item \textbf{Pullbacks:} Dado um diagrama $M_1 \xrightarrow{f} M_3 \xleftarrow{g} M_2$, o pullback é a submáquina do produto $M_1 \times M_2$ cujos estados são os pares $(q_1, q_2)$ que satisfazem $f_Q(q_1) = g_Q(q_2)$. Esta máquina simula simultaneamente $M_1$ e $M_2$, mas apenas em estados que sejam compatíveis através da sua imagem em $M_3$.
+
+    \item \textbf{Pushouts:} O pushout de $M_1 \xleftarrow{f} M_0 \xrightarrow{g} M_2$ corresponde ao coproduto $M_1 \sqcup M_2$ quocientado pelas identificações $f_Q(q) \sim g_Q(q)$ para todo $q \in Q_0$ (e analogamente para os símbolos do alfabeto). Intuitivamente, esta construção "funde" dois autómatos ao longo de um subautómato comum $M_0$.
+
+    \item \textbf{Equalizadores:} O equalizador de dois morfismos paralelos $f, g: M_1 \rightrightarrows M_2$ é a submáquina de $M_1$ induzida pelo conjunto de estados onde as funções de transição e mapeamento coincidem ($f_Q(q) = g_Q(q)$), desde que este subconjunto contenha o estado inicial e seja fechado para as transições da máquina.
+
+    \item \textbf{Coequalizadores:} O coequalizador de $f, g: M_1 \rightrightarrows M_2$ é definido como o quociente de $M_2$ pela menor relação de equivalência que identifica as imagens $f(q) \sim g(q)$. O resultado é uma máquina simplificada onde estados que desempenham papéis equivalentes sob os morfismos $f$ e $g$ são fundidos num único estado.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+
+Abaixo apresentam-se as implementações em MATLAB para a construção de novos objetos nesta categoria, focando-se na manipulação de matrizes de transição e estados.
+
+\begin{lstlisting}[language=Matlab, caption={Produto de duas Máquinas de Turing}]
+function M = TM_product(M1, M2)
+    % Estados: pares (q1, q2) codificados como (q1-1)*M2.Q + q2
+    M.Q     = M1.Q * M2.Q;
+    M.Gamma = M1.Gamma; % assumindo Gamma1 == Gamma2 por simplicidade
+    M.blank = M1.blank;
+    M.q0    = (M1.q0 - 1) * M2.Q + M2.q0;
+    
+    % Estados finais: pares de estados finais
+    M.F = [];
+    for q1 = M1.F
+        for q2 = M2.F
+            M.F(end+1) = (q1-1)*M2.Q + q2;
+        end
+    end
+    
+    % Transicoes: aplicar M1 e M2 simultaneamente
+    M.delta = zeros(M.Q, numel(M.Gamma), 3);
+    for q1 = 1:M1.Q
+        for q2 = 1:M2.Q
+            q = (q1-1)*M2.Q + q2;
+            for a = 1:numel(M.Gamma)
+                tr1 = squeeze(M1.delta(q1,a,:))';
+                tr2 = squeeze(M2.delta(q2,a,:))';
+                new_q = (tr1(1)-1)*M2.Q + tr2(1);
+                % Simplificacao: usar simbolo e direcao de M1
+                M.delta(q, a, :) = [new_q, tr1(2), tr1(3)];
+            end
+        end
+    end
+end
+\end{lstlisting}

@@ -1,0 +1,85 @@
+\subsection{Categoria \textbf{Turing Machines}}
+\label{subsec:turing}
+
+\begin{definition}[Categoria Turing Machines]
+Os \emph{objetos} são máquinas de Turing (determinísticas) finitas. Um morfismo $f: M_1 \to M_2$ é um par de mapas $(f_Q, f_\Gamma)$ --- sobre os conjuntos de estados e de símbolos de fita, respetivamente --- que preservam a função de transição, o estado inicial, os estados finais, e o símbolo em branco.
+\end{definition}
+
+\subsubsection{Representação dos Objetos}
+
+Uma máquina de Turing $M = (Q, \Gamma, \delta, q_0, F, B)$ é codificada em MATLAB/Octave como uma \textit{struct}:
+
+\begin{itemize}
+    \item \texttt{Q} --- número de estados ($|Q|$), identificados por inteiros $1, \ldots, |Q|$;
+    \item \texttt{Gamma} --- vetor de símbolos de fita (representados como inteiros; o símbolo em branco é o índice 1 por convenção);
+    \item \texttt{delta} --- matriz de transição de dimensão $|Q| \times |\Gamma|$, onde \texttt{delta(q, a)} é um vetor $[q', a', d]$ com: $q'$ = novo estado, $a'$ = símbolo escrito, $d \in \{-1, 0, 1\}$ = direção;
+    \item \texttt{q0} --- estado inicial;
+    \item \texttt{F} --- vetor de estados finais/aceitação;
+    \item \texttt{blank} --- índice do símbolo em branco (por convenção, \texttt{blank = 1}).
+\end{itemize}
+
+\begin{lstlisting}[style=matlab, caption={Definição de uma máquina de Turing em MATLAB/Octave}]
+% Exemplo: MT que aceita a^n b^n (simplificado)
+M.Q     = 5;              % estados 1..5
+M.Gamma = [0, 1, 2, 3];  % 0=branco, 1='a', 2='b', 3='X'
+M.blank = 1;              % indice do branco em Gamma
+M.q0    = 1;              % estado inicial
+M.F     = [5];            % estados de aceitacao
+
+% delta(q, sym) = [new_q, new_sym, dir]   dir: -1=L, 0=N, 1=R
+M.delta = zeros(M.Q, numel(M.Gamma), 3);
+% Transicoes (exemplo parcial):
+M.delta(1, 2, :) = [2, 4, 1];  % q1, 'a' -> escreve 'X', vai direita, q2
+M.delta(2, 2, :) = [2, 2, 1];  % q2, 'a' -> fica 'a', vai direita, q2
+M.delta(2, 3, :) = [3, 4, -1]; % q2, 'b' -> escreve 'X', vai esquerda, q3
+% ... (restantes transicoes omitidas por brevidade)
+\end{lstlisting}
+
+\subsubsection{Representação dos Morfismos}
+
+\begin{definition}[Morfismo de Máquinas de Turing]
+Um morfismo $f: M_1 \to M_2$ é um par $(f_Q, f_\Gamma)$ de mapas
+\[
+f_Q: Q_1 \to Q_2, \qquad f_\Gamma: \Gamma_1 \to \Gamma_2,
+\]
+tais que:
+\begin{enumerate}
+    \item $f_Q(q_0^{(1)}) = q_0^{(2)}$ (preservação do estado inicial);
+    \item $f_Q(F_1) \subseteq F_2$ (preservação dos estados finais);
+    \item $f_\Gamma(B_1) = B_2$ (preservação do símbolo em branco);
+    \item Para cada $(q, a) \in Q_1 \times \Gamma_1$, se $\delta_1(q, a) = (q', a', d)$, então $\delta_2(f_Q(q), f_\Gamma(a)) = (f_Q(q'), f_\Gamma(a'), d)$ (preservação da função de transição).
+\end{enumerate}
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Verificação de um morfismo de Máquinas de Turing}]
+function ok = is_TM_morphism(M1, M2, fQ, fGamma)
+    % fQ: vetor de tamanho M1.Q  (fQ(q) em {1..M2.Q})
+    % fGamma: vetor de tamanho numel(M1.Gamma)
+    ok = true;
+    % 1) Estado inicial
+    if fQ(M1.q0) ~= M2.q0
+        ok = false; return;
+    end
+    % 2) Estados finais
+    for q = M1.F
+        if ~ismember(fQ(q), M2.F)
+            ok = false; return;
+        end
+    end
+    % 3) Simbolo em branco
+    if fGamma(M1.blank) ~= M2.blank
+        ok = false; return;
+    end
+    % 4) Funcao de transicao
+    for q = 1:M1.Q
+        for a = 1:numel(M1.Gamma)
+            tr = squeeze(M1.delta(q, a, :))';
+            q2 = tr(1); a2 = tr(2); d = tr(3);
+            tr2 = squeeze(M2.delta(fQ(q), fGamma(a), :))';
+            if tr2(1) ~= fQ(q2) || tr2(2) ~= fGamma(a2) || tr2(3) ~= d
+                ok = false; return;
+            end
+        end
+    end
+end
+\end{lstlisting}

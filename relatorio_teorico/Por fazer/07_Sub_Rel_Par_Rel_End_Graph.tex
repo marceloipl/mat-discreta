@@ -1,0 +1,162 @@
+% ============================================================
+\section{Funtor $F: \mathbf{Sub} \to \mathbf{Rel}$ (Alínea 3.d)}
+\label{sec:functor-sub-rel}
+
+\subsection{Fundamentação Teórica}
+
+A categoria $\mathbf{Rel}$ tem conjuntos finitos como objetos e relações binárias como morfismos, representáveis por matrizes booleanas. O funtor $F$ traduz cada inclusão de subconjuntos na sua relação binária correspondente, transportando a estrutura de \textbf{Sub} para o interior de \textbf{Rel}.
+
+\subsection{Funtor Covariante $F: \mathbf{Sub} \to \mathbf{Rel}$}
+
+\begin{definition}[Funtor covariante $F: \mathbf{Sub} \to \mathbf{Rel}$]
+O funtor $F$ atua da seguinte forma:
+\begin{itemize}
+    \item \textbf{Nos objetos:} $F(A) = A$. O conjunto mantém-se inalterado.
+    \item \textbf{Nos morfismos:} Uma inclusão $A \hookrightarrow B$ é convertida na relação de identidade restrita a $A$. Em termos de matrizes, gera-se uma matriz $|B| \times |A|$ onde a entrada $(i, j)$ é $1$ se o $j$-ésimo elemento de $A$ corresponder ao $i$-ésimo elemento de $B$, e $0$ caso contrário.
+\end{itemize}
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Funtor $F: \mathbf{Sub} \to \mathbf{Rel}$ em MATLAB}]
+A = [1, 2];
+B = [1, 2, 3];
+M_rel = [1, 0;   % 1 relaciona-se com 1
+         0, 1;   % 2 relaciona-se com 2
+         0, 0];  % 3 sem pre-imagem
+\end{lstlisting}
+
+\subsection{Transformação Natural em $\mathbf{Sub} \to \mathbf{Rel}$}
+
+Dados dois funtores paralelos $F_1, F_2: \mathbf{Sub} \to \mathbf{Rel}$:
+\begin{itemize}
+    \item \textbf{Funtor $F_1$:} Mapeia a inclusão para a relação de identidade estrita (matriz diagonal).
+    \item \textbf{Funtor $F_2$:} Mapeia a inclusão para a relação universal (matriz totalmente preenchida a $1$).
+\end{itemize}
+A transformação natural $\alpha: F_1 \Rightarrow F_2$ comprova que a relação de identidade é um subgrafo lógico da relação universal, validando a condição de naturalidade ponto a ponto.
+
+\begin{lstlisting}[style=matlab, caption={Transformação natural $\alpha: F_1 \Rightarrow F_2$ em $\mathbf{Sub} \to \mathbf{Rel}$}]
+n = 3;
+M_F1 = eye(n);   % Funtor F1: identidade
+M_F2 = ones(n);  % Funtor F2: relacao universal
+
+% Verificacao da transformacao natural (M_F1 => M_F2)
+alpha_A = all((M_F1 & M_F2) == M_F1, 'all'); % Retorna 1 (true)
+\end{lstlisting}
+
+% ============================================================
+\section{Funtor $G: \mathbf{Par} \to \mathbf{Rel}$ (Alínea 3.e)}
+\label{sec:functor-par-rel}
+
+\subsection{Fundamentação Teórica}
+
+O funtor $G$ transforma aplicações parciais (onde algumas imagens podem estar indefinidas, representadas por \texttt{0}) nas suas relações gráficas associadas. Qualquer função parcial pode ser vista como uma relação binária cujo grafo omite simplesmente os pares correspondentes a elementos sem imagem definida.
+
+\subsection{Funtor Covariante $G: \mathbf{Par} \to \mathbf{Rel}$}
+
+\begin{definition}[Funtor covariante $G: \mathbf{Par} \to \mathbf{Rel}$]
+O funtor $G$ atua da seguinte forma:
+\begin{itemize}
+    \item \textbf{Nos objetos:} $G(n) = n$.
+    \item \textbf{Nos morfismos:} Um morfismo parcial $f: n \rightharpoonup m$ é mapeado para a relação binária $R_f = \{(x, f(x)) \mid f(x) \neq 0\}$. Qualquer elemento indefinido não gera uma entrada com valor $1$ na coluna correspondente da matriz booleana.
+\end{itemize}
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Funtor $G: \mathbf{Par} \to \mathbf{Rel}$ --- construção da matriz relacional}]
+% f: 3 -> 4, onde f(2) e indefinido (representado por 0)
+f = [2, 0, 1];
+M_rel = zeros(4, 3);
+for j = 1:length(f)
+    if f(j) ~= 0
+        M_rel(f(j), j) = 1;
+    end
+end
+% Resultado: linha 1: f(3)=1; linha 2: f(1)=2; restantes a zero
+\end{lstlisting}
+
+\subsection{Transformação Natural em $\mathbf{Par} \to \mathbf{Rel}$}
+
+Dados dois funtores $G_1, G_2: \mathbf{Par} \to \mathbf{Rel}$:
+\begin{itemize}
+    \item \textbf{Funtor $G_1$:} Mapeia a aplicação parcial para o seu grafo exato em forma matricial.
+    \item \textbf{Funtor $G_2$:} Mapeia a aplicação para a relação total (matriz inteiramente preenchida a $1$).
+\end{itemize}
+
+\begin{lstlisting}[style=matlab, caption={Transformação natural $\beta: G_1 \Rightarrow G_2$ em $\mathbf{Par} \to \mathbf{Rel}$}]
+n = 3; m = 4;
+f = [2, 0, 1];  % Aplicacao parcial
+
+% Funtor G1: o grafo exato
+M_G1 = zeros(m, n);
+for x = 1:length(f)
+    if f(x) ~= 0, M_G1(f(x), x) = 1; end
+end
+
+% Funtor G2: relacao universal
+M_G2 = ones(m, n);
+
+% Validacao da transformacao natural (M_G1 e sub-relacao de M_G2)
+beta_n = all((M_G1 & M_G2) == M_G1, 'all'); % Retorna 1 (true)
+\end{lstlisting}
+
+% ============================================================
+\section{Funtor $H: \mathbf{End} \to \mathbf{Graph}$ (Alínea 3.f)}
+\label{sec:functor-end-graph}
+
+\subsection{Fundamentação Teórica}
+
+Em $\mathbf{End}$, os objetos são conjuntos finitos munidos de uma endoaplicação $\varphi: X \to X$. Em $\mathbf{Graph}$, os objetos são grafos direcionados descritos por um par de funções de origem e destino sobre arestas. O funtor $H$ constrói canonicamente, a partir de qualquer endomapa, um grafo direcionado em que cada elemento é simultaneamente vértice e aresta.
+
+\subsection{Funtor Covariante $H: \mathbf{End} \to \mathbf{Graph}$}
+
+\begin{definition}[Funtor covariante $H: \mathbf{End} \to \mathbf{Graph}$]
+O funtor $H$ atua da seguinte forma:
+\begin{itemize}
+    \item \textbf{Nos objetos:} Uma endoaplicação representada por um vetor $\varphi$ de tamanho $n$ transforma-se num grafo onde:
+    \begin{itemize}
+        \item Os \textbf{vértices} ($V$) são os elementos do domínio $\{1, 2, \ldots, n\}$;
+        \item As \textbf{arestas} ($E$) são indexadas também por $\{1, 2, \ldots, n\}$;
+        \item A função \textbf{origem} ($s$) é a identidade: a aresta $i$ sai do vértice $i$;
+        \item A função \textbf{destino} ($t$) é a aplicação $\varphi$: a aresta $i$ entra no vértice $\varphi(i)$.
+    \end{itemize}
+    \item \textbf{Nos morfismos:} Um morfismo de $\mathbf{End}$ (que comuta com as endoaplicações) traduz-se num homomorfismo de grafos que mapeia vértices e arestas preservando a estrutura de incidência.
+\end{itemize}
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Funtor $H: \mathbf{End} \to \mathbf{Graph}$}]
+% Endoaplicacao phi : {1,2,3} -> {1,2,3}
+phi = [2, 3, 1];
+
+% Traducao para grafo direcionado
+Vertices = 1:3;
+Arestas  = 1:3;
+Origem   = Vertices;   % aresta i sai do vertice i
+Destino  = phi;        % aresta i vai para o vertice phi(i)
+% Resultado: ciclo fechado direcionado 1->2->3->1
+\end{lstlisting}
+
+\subsection{Transformação Natural em $\mathbf{End} \to \mathbf{Graph}$}
+
+Dados dois funtores $H_1, H_2: \mathbf{End} \to \mathbf{Graph}$:
+\begin{itemize}
+    \item \textbf{Funtor $H_1$:} Gera um grafo de passo único (arestas $x \to \varphi(x)$).
+    \item \textbf{Funtor $H_2$:} Gera um grafo de passo duplo (arestas $\varphi(x) \to \varphi(\varphi(x))$).
+\end{itemize}
+A transformação natural $\gamma: H_1 \Rightarrow H_2$ traduz-se no homomorfismo de grafos onde os vértices avançam de acordo com $\varphi$ e as arestas se mantêm, comutando o diagrama de incidência.
+
+\begin{lstlisting}[style=matlab, caption={Transformação natural $\gamma: H_1 \Rightarrow H_2$ em $\mathbf{End} \to \mathbf{Graph}$}]
+X = 1:4;
+phi = [2, 3, 3, 1];
+
+% H1: passo unico
+Origem1 = X;   Destino1 = phi;
+
+% H2: passo duplo
+Origem2 = phi; Destino2 = phi(phi);
+
+% Componentes da transformacao natural gamma
+gamma_V = phi;  % transformacao dos vertices
+gamma_E = X;    % transformacao das arestas (identidade nos indices)
+
+% Verificacao da comutatividade dos diagramas de incidencia
+comuta_origem  = isequal(gamma_V(Origem1),  Origem2(gamma_E));  % true
+comuta_destino = isequal(gamma_V(Destino1), Destino2(gamma_E)); % true
+\end{lstlisting}

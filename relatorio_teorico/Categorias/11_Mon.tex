@@ -1,0 +1,22 @@
+\section{Mon (Monoides Finitos)}
+
+Os monoides representam a estrutura básica de composição e computação sequencial. Um monoide combina um conjunto com uma operação binária que deve ser associativa e possuir um elemento neutro (identidade).
+
+\subsection{Objetos}
+A modelação computacional de monoides finitos é realizada através de Tabelas de Cayley. Esta matriz armazena todos os resultados possíveis da operação binária entre os elementos do conjunto.
+
+\begin{lstlisting}[caption={Tabela de Cayley para Monoide C2}]
+% Elementos: 1 (Identidade), 2
+Tabela = [1 2; 
+          2 1];
+e = 1; % Índice do elemento neutro
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos de monoides (homomorfismos) devem preservar a estrutura operacional: a imagem do produto de dois elementos deve ser igual ao produto das suas imagens, e a identidade deve ser mapeada na identidade.
+
+\begin{lstlisting}[caption={Validação de Homomorfismo}]
+f = [1, 2];
+% 1. Verificar se f(e_A) == e_B
+% 2. Verificar se f(TabelaA(i,j)) == TabelaB(f(i), f(j))
+\end{lstlisting}

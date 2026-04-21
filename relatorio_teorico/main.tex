@@ -1,0 +1,154 @@
+\documentclass[12pt,a4paper]{report}
+
+% --- 1. Pacotes Fundamentais de Língua e Fontes ---
+\usepackage[utf8]{inputenc}   % Codificação do ficheiro
+\usepackage[T1]{fontenc}      % Codificação da fonte (importante para acentos)
+\usepackage[portuguese]{babel} % Tradução de termos (Conteúdo, Capítulo, etc.)
+\usepackage{lmodern}          % Fonte Vectorial de alta qualidade
+\usepackage{amsthm} % Pacote para teoremas e ambientes matemáticos
+
+% --- 2. Pacotes de Layout e Estética ---
+\usepackage[margin=2.5cm]{geometry} % Margens equilibradas
+\usepackage{titlesec}               % Personalização de títulos
+\usepackage{xcolor}                 % Gestão de cores
+\usepackage{booktabs}               % Tabelas profissionais
+\usepackage{graphicx}               % Inclusão de imagens
+\usepackage{amsmath, amssymb}       % Símbolos matemáticos
+\usepackage[pdftex]{hyperref}       % Links e índices clicáveis
+
+% --- 3. Configuração do Ambiente de Código (MATLAB) ---
+\usepackage{listings}
+\definecolor{comment_green}{rgb}{0,0.6,0}
+\definecolor{keyword_blue}{rgb}{0,0,1}
+\definecolor{string_purple}{rgb}{0.58,0,0.82}
+\definecolor{back_gray}{rgb}{0.97,0.97,0.97}
+
+% Definicao do estilo "matlab" que o erro diz estar em falta
+\lstdefinestyle{matlab}{
+    language=Matlab,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{purple},
+    commentstyle=\color{green!60!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=10pt,
+    backgroundcolor=\color{gray!5},
+    tabsize=4,
+    showstringspaces=false,
+    breaklines=true
+}
+
+\theoremstyle{definition} % Estilo com texto normal (romano)
+\newtheorem{remark}{Observação}[section]
+\newtheorem{definition}{Definição}[section]
+\newtheorem{proposition}{Proposição}[section]
+
+\lstset{
+    language=Matlab,
+    backgroundcolor=\color{back_gray},   
+    commentstyle=\color{comment_green},
+    keywordstyle=\color{keyword_blue},
+    stringstyle=\color{string_purple},
+    basicstyle=\ttfamily\small,
+    breaklines=true,         % Quebra linhas automáticas
+    frame=single,            % Moldura simples
+    showstringspaces=false,  % Não mostra espaços nas strings
+    extendedchars=true,      % Permite caracteres estendidos
+    % MAPA DE ACENTOS PARA O CÓDIGO (Resolve o erro de compilação)
+    literate={á}{{\'a}}1 {ã}{{\~a}}1 {à}{{\`a}}1 {é}{{\'e}}1 {ê}{{\^e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {õ}{{\~o}}1 {ú}{{\'u}}1 {ç}{{\c{c}}}1 {Á}{{\'A}}1 {Ã}{{\~A}}1 {À}{{\`A}}1 {É}{{\'E}}1 {Ê}{{\^E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Õ}{{\~O}}1 {Ú}{{\'U}}1 {Ç}{{\c{C}}}1
+}
+
+% --- 4. Personalização Visual ---
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{blue!60!black}}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+
+% --- 5. Metadados do Documento ---
+\title{
+    \vspace{2cm}
+    \rule{\linewidth}{0.5mm} \\[0.4cm]
+    \huge \textbf{Objetos e Morfismos em MATLAB} \\
+    \Large Relatório de Matemática Discreta (Pós-laboral) \\
+    \rule{\linewidth}{0.5mm} \\[1.5cm]
+}
+\author{
+    \textbf{Grupo Nº: 2} \\    
+    David Domingues (2022125309) \\
+    Diana Gomes (2019101181) \\
+    Guilherme Baltazar (2025209893) \\
+    Joana Venâncio (2016123347) \\
+    Leonardo Costa (2023137263) \\
+    Marcelo Marques (2022102560) \\
+    Miguel Reis (2024164633) \\ \\
+    Escola Superior de Tecnologia e Gestão \\
+    Instituto Politécnico de Leiria
+}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Introdução}
+Este relatório apresenta a modelação computacional de estruturas da Teoria das Categorias, focando-se na implementação de objetos, morfismos e construções universais em ambiente MATLAB/Octave.
+
+% --- NOTA SOBRE OS INPUTS ---
+% Se os teus ficheiros tiverem espaços nos nomes (ex: "Partial Orders"), 
+% o LaTeX pode dar erro. Recomendo usar nomes como "09_Partial_Orders.tex"
+
+\chapter{Modelação de Categorias}
+Nesta secção, detalhamos como cada estrutura matemática é representada através de matrizes, structs ou funções.
+
+\input{Categorias/01_Fin}
+\input{Categorias/02_Sub}
+\input{Categorias/03_Par}
+\input{Categorias/04_Simp}
+
+\input{Categorias/09_Partial_Orders}
+\input{Categorias/10_EqRel}
+\input{Categorias/11_Mon}
+
+\input{Categorias/16_DLat}
+\input{Categorias/17_Bool}
+\input{Categorias/18_OrdMon}
+\input{Categorias/19_Trees}
+\input{Categorias/20_Turing_Machines}
+\input{Categorias/21_Struct}
+
+
+\chapter{Construções e Funtores}
+Aqui demonstramos a capacidade de gerar novas estruturas (limites e colimites) e a relação entre diferentes categorias.
+
+\input{Constructions/01_Fin}
+\input{Constructions/02_Sub}
+\input{Constructions/03_Par}
+\input{Constructions/04_Simp}
+
+\input{Constructions/09_Partial_Orders}
+\input{Constructions/10_EqRel}
+\input{Constructions/11_Mon}
+
+\input{Constructions/16_DLat}
+\input{Constructions/17_Bool}
+\input{Constructions/18_OrdMon}
+\input{Constructions/19_Trees}
+\input{Constructions/20_Turing_Machines}
+\input{Constructions/21_Struct}
+
+\input{Functors/01_Fin_Vect}
+\input{Functors/02_Fin_Sub}
+\input{Functors/03_Fin_Par}
+
+\input{Functors/10_Rel_Fin}
+\input{Functors/11_Simp_PreOrd}
+\input{Functors/12_Graph_Rel}
+
+\input{Functors/20_Turing_Struct}
+\input{Functors/21_End_Mon}
+\input{Functors/22_End_Trees}
+\input{Functors/23_End_Turing}
+
+\end{document}

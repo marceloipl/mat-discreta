@@ -1,0 +1,33 @@
+\section{DLat (Latices Distributivos)}
+
+A categoria \textbf{DLat} é fechada para todos os limites e colimites finitos. Isto significa que, a partir de latices existentes, podemos sempre construir novas estruturas que preservam a distributividade.
+
+\subsection{Fundamentação Teórica}
+As construções universais implementadas e as suas propriedades são:
+\begin{itemize}
+    \item \textbf{Produtos:} O produto cartesiano $L \times M$ tem as operações de \textit{meet} e \textit{join} definidas componente a componente.
+    \item \textbf{Equalizadores:} O sub-latice contendo apenas os elementos onde dois homomorfismos coincidem. Como as operações são pontuais, a estrutura de latice é preservada no resultado.
+    \item \textbf{Coprodutos:} Embora mais complexos, em casos finitos podem ser computados através da categoria dual de conjuntos parcialmente ordenados (Posets).
+\end{itemize}
+
+\subsection{Implementação Computacional}
+Abaixo apresentam-se as funções para gerar o produto e o equalizador de latices.
+
+\begin{lstlisting}[caption={Produtos e Equalizadores em DLat}]
+% Produto de dois latices
+function P = dlat_product(L, M)
+    [X, Y] = meshgrid(1:length(L.elements), 1:length(M.elements));
+    P.elements = [L.elements(X(:)), M.elements(Y(:))];
+    P.meet = @(a, b) [L.meet(a(1), b(1)), M.meet(a(2), b(2))];
+    P.join = @(a, b) [L.join(a(1), b(1)), M.join(a(2), b(2))];
+end
+
+% Equalizador de dois morfismos f e g
+function E = dlat_equalizer(f, g, L)
+    % Filtrar elementos onde f(x) == g(x)
+    idx = arrayfun(@(i) isequal(f(L.elements{i}), g(L.elements{i})), 1:length(L.elements));
+    E.elements = L.elements(idx);
+    E.meet = L.meet;
+    E.join = L.join;
+end
+\end{lstlisting}

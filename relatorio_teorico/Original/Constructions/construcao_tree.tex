@@ -1,0 +1,88 @@
+\subsection{Construções em \textbf{Trees}}
+\label{subsec:trees-constructions}
+
+\subsubsection{Produto}
+
+\begin{proposition}
+O produto $T_1 \times T_2$ de duas árvores binárias pode ser construído como a árvore cujos nós são os pares $(u, v)$ com $u \in T_1$ e $v \in T_2$, com raiz $(\text{root}_1, \text{root}_2)$, e onde $(u,v)$ tem filho esquerdo/direito se e só se $u$ e $v$ têm filho esquerdo/direito em simultâneo.
+\end{proposition}
+
+\begin{remark}
+Esta construção é válida mas pode colapsar rapidamente para a árvore vazia se as duas árvores têm profundidades diferentes --- o produto nesta categoria é \emph{não trivial} e pode ser a árvore com um só nó (se as árvores têm alturas diferentes). Na prática, o produto existe mas pode ser menor do que qualquer dos fatores.
+\end{remark}
+
+\begin{lstlisting}[style=matlab, caption={Produto de duas árvores binárias (representação recursiva)}]
+function T = tree_product(T1, T2)
+    % Constroi o produto T1 x T2 recursivamente
+    % Retorna [] se um dos nos nao tem correspondente no outro
+    if isempty(T1) || isempty(T2)
+        T = []; return;
+    end
+    T.value = [T1.value, T2.value];  % par de valores
+    T.left  = tree_product(T1.left,  T2.left);
+    T.right = tree_product(T1.right, T2.right);
+end
+\end{lstlisting}
+
+\subsubsection{Coproduto}
+
+\begin{proposition}
+O coproduto (soma disjunta) $T_1 \sqcup T_2$ é a árvore obtida criando uma nova raiz com $T_1$ como sub-árvore esquerda e $T_2$ como sub-árvore direita.
+\end{proposition}
+
+\begin{lstlisting}[style=matlab, caption={Coproduto de duas árvores binárias}]
+function T = tree_coproduct(T1, T2)
+    T.value = [];     % nova raiz sem valor proprio
+    T.left  = T1;
+    T.right = T2;
+end
+\end{lstlisting}
+
+\subsubsection{Pullback}
+
+Dado um diagrama $T_1 \xrightarrow{f} T_3 \xleftarrow{g} T_2$, o pullback é a subárvore de $T_1 \times T_2$ formada pelos pares $(u,v)$ tais que $f(u) = g(v)$.
+
+\begin{lstlisting}[style=matlab, caption={Pullback de duas árvores sobre uma terceira}]
+function [PB, pi1, pi2] = tree_pullback(T1, T2, T3, f, g)
+    % f: morfismo T1->T3 (vetor), g: morfismo T2->T3 (vetor)
+    % Constroi os nos do pullback como pares (i,j) com f(i)==g(j)
+    nodes = [];
+    for i = 1:T1.n
+        for j = 1:T2.n
+            if f(i) == g(j)
+                nodes(end+1, :) = [i, j];
+            end
+        end
+    end
+    PB.nodes = nodes;  % cada linha e um par (i,j)
+    pi1 = nodes(:,1)'; % projecao para T1
+    pi2 = nodes(:,2)'; % projecao para T2
+    % A estrutura de arvore do pullback herda-se de T1 x T2
+end
+\end{lstlisting}
+
+\subsubsection{Pushout}
+
+O pushout de $T_1 \xleftarrow{f} T_0 \xrightarrow{g} T_2$ é o coproduto $T_1 \sqcup T_2$ quocientado pela relação que identifica $f(u)$ com $g(u)$ para cada nó $u \in T_0$. Em árvores binárias, isto corresponde a ``colar'' as duas árvores ao longo da imagem comum.
+
+\subsubsection{Equalizador}
+
+O equalizador de dois morfismos $f, g: T_1 \rightrightarrows T_2$ é a subárvore de $T_1$ induzida pelo conjunto de nós $E = \{u \in T_1 : f(u) = g(u)\}$, desde que $E$ forme uma subárvore (fechada para progenitores e para a raiz).
+
+\begin{lstlisting}[style=matlab, caption={Equalizador de dois morfismos de árvores}]
+function [E, inc] = tree_equalizer(T1, f, g)
+    % E: subconjunto dos nos de T1 onde f e g coincidem
+    mask = (f == g);
+    E    = find(mask);    % indices dos nos do equalizador
+    inc  = E;             % inclusao em T1
+    % Nota: verificar que E e fechado para progenitores
+end
+\end{lstlisting}
+
+\subsubsection{Coequalizador}
+
+O coequalizador de $f, g: T_1 \rightrightarrows T_2$ é o quociente de $T_2$ pela menor relação de equivalência que identifica $f(u)$ com $g(u)$ para todo $u \in T_1$, desde que o quociente admita estrutura de árvore binária.
+
+\begin{remark}
+Nem sempre o quociente é uma árvore binária (pode violar a estrutura de ramificação). Nestes casos, o coequalizador não existe em \textbf{Trees}, o que ilustra que esta categoria não é cocompleta em geral.
+\end{remark}

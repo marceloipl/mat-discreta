@@ -1,0 +1,23 @@
+\section{EqRel (Relações de Equivalência)}
+
+A categoria \textbf{EqRel} foca-se na partição de conjuntos em classes disjuntas. Ao contrário das ordens, estas relações são simétricas, sendo essenciais para modelar abstrações onde diferentes estados de um sistema são considerados indistinguíveis.
+
+\subsection{Objetos}
+Os objetos são representados por matrizes de adjacência simétricas. A principal característica computacional é que a matriz deve ser igual à sua transposta, garantindo que se $a \sim b$, então $b \sim a$.
+
+\begin{lstlisting}[caption={Matriz Simétrica de Equivalência}]
+% Exemplo: Duas classes de equivalência {1,2} e {3}
+R = [1 1 0;
+     1 1 0;
+     0 0 1];
+\end{lstlisting}
+
+\subsection{Morfismos}
+Um morfismo em \textbf{EqRel} é uma função que preserva a vizinhança: se dois elementos pertencem à mesma classe no domínio, as suas imagens devem pertencer à mesma classe no contradomínio.
+
+\begin{lstlisting}[caption={Teste de Preservação de Classe}]
+% f mapeia os elementos do conjunto original
+f = [1, 1, 2]; 
+
+% A condição R_dom(i,j) == 1 deve implicar R_codom(f(i), f(j)) == 1
+\end{lstlisting}

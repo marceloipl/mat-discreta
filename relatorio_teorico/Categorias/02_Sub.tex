@@ -1,0 +1,13 @@
+\section{Sub (Conjuntos Finitos e Inclusões)}
+
+Esta categoria forma um conjunto parcialmente ordenado (Poset), pois existe no máximo um morfismo (a inclusão) entre quaisquer dois objetos.
+
+\subsection{Objetos}
+Os objetos são vetores de elementos únicos, como por exemplo \texttt{A = [1, 3, 5]}.
+
+\subsection{Morfismos}
+O morfismo $A \hookrightarrow B$ é validado através de uma condição booleana que confirma se $A$ é um subconjunto de $B$.
+
+\begin{lstlisting}[caption={Verificação de Inclusão}]
+is_morphism = all(ismember(A, B));
+\end{lstlisting}

@@ -1,0 +1,216 @@
+% ============================================================
+\section{Funtor $F: \mathbf{Fin} \to \mathbf{Vect}$ (Alínea 3.a)}
+\label{sec:functor-fin-vect}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{Fin}$ (modelo MATLAB/Octave)]
+Um objeto é representado pelo seu cardinal $n \in \mathbb{N}$. Um morfismo $f: n \to m$ é um vetor de inteiros de comprimento $n$ com entradas em $\{1,\ldots,m\}$, onde $f(i)$ indica a imagem do elemento $i$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{Fin}$}]
+n = 3;          % objecto: conjunto {1,2,3}
+f = [2, 2, 1];  % morfismo: f(1)=2, f(2)=2, f(3)=1
+\end{lstlisting}
+
+\begin{definition}[Categoria $\mathbf{Vect}$ (modelo MATLAB/Octave)]
+Um objeto é um inteiro $d \geq 0$ representando a dimensão do espaço vetorial sobre $\mathbb{C}$. Um morfismo $L: d_1 \to d_2$ é uma matriz complexa $d_2 \times d_1$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{Vect}$}]
+d = 3;               % objecto: C^3
+L = [1 0 0; 0 1 0];  % morfismo: aplicacao linear C^3 -> C^2
+\end{lstlisting}
+
+\subsection{Funtor Covariante $F: \mathbf{Fin} \to \mathbf{Vect}$ (Funtor Livre)}
+
+O \emph{funtor livre} $F: \mathbf{Fin} \to \mathbf{Vect}$ envia cada conjunto finito $n$ ao espaço vetorial $\mathbb{C}^n$ gerado pelos seus elementos como base canónica, e cada aplicação total $f: n \to m$ à aplicação linear $F(f): \mathbb{C}^n \to \mathbb{C}^m$ definida na base canónica por
+\[
+    e_i \;\longmapsto\; e_{f(i)}.
+\]
+
+\begin{lstlisting}[style=matlab, caption={Funtor livre $F$ aplicado a um morfismo}]
+function L = free_functor(f, m)
+    n = length(f);
+    L = zeros(m, n);
+    for i = 1:n
+        L(f(i), i) = 1;
+    end
+end
+\end{lstlisting}
+
+\begin{proposition}
+O funtor livre $F$ satisfaz as seguintes propriedades:
+\begin{itemize}
+    \item $F(\mathrm{id}_n) = I_n$ (matriz identidade $n \times n$);
+    \item $F(g \circ f) = F(g) \cdot F(f)$ (preservação da composição);
+    \item $F$ envia aplicações injetivas a aplicações lineares injetivas;
+    \item $F$ envia aplicações sobrejetivas a aplicações lineares sobrejetivas.
+\end{itemize}
+\end{proposition}
+
+\subsection{Funtor de Esquecimento $U: \mathbf{Vect} \to \mathbf{Fin}$}
+
+O funtor de esquecimento $U: \mathbf{Vect} \to \mathbf{Fin}$ envia cada espaço vetorial de dimensão $d$ ao conjunto finito de índices $\{1,\ldots,d\}$ (a base canónica), esquecendo a estrutura linear. Note-se que este processo requer a escolha de uma base, pelo que $U$ é bem definido apenas após fixar bases em cada objeto.
+
+\subsection{Transformações Naturais $\eta: F \Rightarrow G$}
+
+Dados dois funtores $F, G: \mathbf{Fin} \to \mathbf{Vect}$, uma transformação natural $\eta: F \Rightarrow G$ é uma família de morfismos em $\mathbf{Vect}$,
+\[
+    \eta_n: F(n) \to G(n), \quad \text{para cada objeto } n \in \mathbf{Fin},
+\]
+tal que para cada morfismo $f: n \to m$ em $\mathbf{Fin}$ o seguinte quadrado comuta:
+\[
+    G(f) \circ \eta_n \;=\; \eta_m \circ F(f).
+\]
+
+\begin{lstlisting}[style=matlab, caption={Verificação da condição de naturalidade em $\mathbf{Vect}$}]
+% G_f, F_f: matrizes de F(f) e G(f); eta_n, eta_m: componentes de eta
+tol = 1e-10;
+is_natural = norm(G_f * eta_n - eta_m * F_f) < tol;  % deve ser true
+\end{lstlisting}
+
+% ============================================================
+\section{Funtor $P: \mathbf{Fin} \to \mathbf{Sub}$ (Alínea 3.b)}
+\label{sec:functor-fin-sub}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{Sub}$ (modelo MATLAB/Octave)]
+Um objeto é um vetor de inteiros (os elementos do conjunto). Um morfismo $A \to B$ existe apenas se $A \subseteq B$, e é representado pelo vetor lógico de inclusão.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Morfismo de inclusão em $\mathbf{Sub}$}]
+A = [1, 3];  B = [1, 2, 3, 4];
+is_sub = all(ismember(A, B));  % verifica se A esta contido em B
+incl   = ismember(B, A);       % vector logico da inclusao
+\end{lstlisting}
+
+\subsection{Funtor Covariante $P: \mathbf{Fin} \to \mathbf{Sub}$ (Conjunto das Partes)}
+
+O \emph{funtor potência} $P: \mathbf{Fin} \to \mathbf{Sub}$ envia cada conjunto finito $n$ ao conjunto das suas partes $\mathcal{P}(n) = \{S \subseteq \{1,\ldots,n\}\}$, e cada aplicação total $f: n \to m$ à aplicação
+\[
+    P(f): \mathcal{P}(n) \to \mathcal{P}(m), \quad S \;\longmapsto\; f(S) = \{f(i) : i \in S\}.
+\]
+
+\begin{lstlisting}[style=matlab, caption={Funtor potência $P$ e imagem direta}]
+function PS = power_set(n)
+    PS = {};
+    for k = 0:2^n-1
+        PS{end+1} = find(bitand(k, 2.^(0:n-1)));
+    end
+end
+
+function img = direct_image(f, S)
+    img = unique(f(S));  % imagem directa de S por f
+end
+\end{lstlisting}
+
+\begin{remark}
+Este funtor preserva inclusões: se $S \subseteq T$ então $f(S) \subseteq f(T)$, pelo que está bem definido em $\mathbf{Sub}$ como codomínio.
+\end{remark}
+
+\subsection{Funtor de Esquecimento $U: \mathbf{Sub} \to \mathbf{Fin}$}
+
+O funtor de esquecimento $U: \mathbf{Sub} \to \mathbf{Fin}$ envia cada objeto de $\mathbf{Sub}$ (um subconjunto $A \subseteq B$) ao conjunto finito $A$, ignorando a estrutura de inclusão, e cada morfismo (inclusão $A \hookrightarrow B$) à correspondente aplicação total em $\mathbf{Fin}$.
+
+\subsection{Funtor Contravariante $P^*: \mathbf{Fin}^{\mathrm{op}} \to \mathbf{Sub}$ (Imagem Inversa)}
+
+O \emph{funtor imagem inversa} $P^*: \mathbf{Fin}^{\mathrm{op}} \to \mathbf{Sub}$ envia cada aplicação $f: n \to m$ à aplicação
+\[
+    P^*(f): \mathcal{P}(m) \to \mathcal{P}(n), \quad T \;\longmapsto\; f^{-1}(T) = \{i \in n : f(i) \in T\}.
+\]
+Este funtor é \emph{contravariante} porque inverte a direção dos morfismos.
+
+\begin{lstlisting}[style=matlab, caption={Funtor contravariante $P^*$ (pré-imagem)}]
+function preimg = inverse_image(f, T)
+    preimg = find(ismember(f, T));  % pre-imagem de T por f
+end
+\end{lstlisting}
+
+\subsection{Transformações Naturais entre Funtores $\mathbf{Fin} \to \mathbf{Sub}$}
+
+Dados dois funtores $F, G: \mathbf{Fin} \to \mathbf{Sub}$, uma transformação natural $\eta: F \Rightarrow G$ consiste numa família de morfismos em $\mathbf{Sub}$,
+\[
+    \eta_n: F(n) \hookrightarrow G(n) \quad \text{(i.e., } F(n) \subseteq G(n) \text{ para todo } n\text{)},
+\]
+tal que para todo morfismo $f: n \to m$ em $\mathbf{Fin}$:
+\[
+    G(f)\bigl(\eta_n(x)\bigr) \;=\; \eta_m\bigl(F(f)(x)\bigr), \quad \forall\, x \in F(n).
+\]
+
+\begin{remark}
+Seja $F = P$ (funtor potência) e $G$ o funtor que associa a $n$ o conjunto de todos os multiconjuntos de $\{1,\ldots,n\}$. A inclusão natural de subconjuntos em multiconjuntos define uma transformação natural $\eta: P \Rightarrow G$.
+\end{remark}
+
+% ============================================================
+\section{Funtor $I: \mathbf{Fin} \to \mathbf{Par}$ (Alínea 3.c)}
+\label{sec:functor-fin-par}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{Par}$ (modelo MATLAB/Octave)]
+Um morfismo parcial $p: n \rightharpoonup m$ é um vetor de comprimento $n$ com entradas em $\{0, 1,\ldots,m\}$, onde $0$ significa que o elemento não tem imagem definida.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Morfismo parcial em $\mathbf{Par}$}]
+n = 4;  m = 3;
+p = [2, 0, 1, 3];  % p(1)=2, p(2)=indefinido, p(3)=1, p(4)=3
+\end{lstlisting}
+
+\subsection{Composição em $\mathbf{Par}$}
+
+A composição de duas aplicações parciais $p: n \rightharpoonup m$ e $q: m \rightharpoonup k$ é a aplicação parcial $(q \circ p): n \rightharpoonup k$ definida por
+\[
+    (q \circ p)(i) =
+    \begin{cases}
+        q(p(i)) & \text{se } p(i) \neq 0 \text{ e } q(p(i)) \neq 0,\\
+        \text{indefinida} & \text{caso contrário.}
+    \end{cases}
+\]
+
+\begin{lstlisting}[style=matlab, caption={Composição de aplicações parciais}]
+function r = compose_partial(p, q)
+    r = zeros(1, length(p));
+    for i = 1:length(p)
+        if p(i) ~= 0 && q(p(i)) ~= 0
+            r(i) = q(p(i));
+        end
+    end
+end
+\end{lstlisting}
+
+\subsection{Funtor de Inclusão $I: \mathbf{Fin} \to \mathbf{Par}$}
+
+Existe um funtor canónico de inclusão $I: \mathbf{Fin} \to \mathbf{Par}$ que envia cada conjunto finito $n$ a si próprio, e cada aplicação total $f: n \to m$ à mesma função vista como aplicação parcial (sem indefinições).
+
+\begin{lstlisting}[style=matlab, caption={Funtor de inclusão $I: \mathbf{Fin} \to \mathbf{Par}$}]
+function p = total_to_partial(f)
+    p = f;  % aplicacao total e um caso particular de parcial
+end
+\end{lstlisting}
+
+\begin{proposition}
+O funtor de inclusão $I$ satisfaz as seguintes propriedades:
+\begin{itemize}
+    \item $I(\mathrm{id}_n) = \mathrm{id}_n$ em $\mathbf{Par}$ (vetor $[1, 2, \ldots, n]$ sem indefinições);
+    \item $I(g \circ f) = I(g) \circ I(f)$ (a composição parcial coincide com a total quando ambas são totais);
+    \item $I$ é \emph{fiel}: morfismos distintos em $\mathbf{Fin}$ dão morfismos distintos em $\mathbf{Par}$;
+    \item $I$ \emph{não é pleno}: há morfismos em $\mathbf{Par}$ que não provêm de $\mathbf{Fin}$ (os que têm indefinições).
+\end{itemize}
+\end{proposition}
+
+\subsection{Transformações Naturais entre Funtores $\mathbf{Fin} \to \mathbf{Par}$}
+
+Dados dois funtores $F, G: \mathbf{Fin} \to \mathbf{Par}$, uma transformação natural $\eta: F \Rightarrow G$ é uma família de morfismos em $\mathbf{Par}$,
+\[
+    \eta_n: F(n) \rightharpoonup G(n), \quad \text{para cada objeto } n \in \mathbf{Fin},
+\]
+satisfazendo a condição de naturalidade: para todo morfismo $f: n \to m$ em $\mathbf{Fin}$,
+\[
+    G(f) \circ \eta_n \;=\; \eta_m \circ F(f) \qquad \text{(como aplicações parciais)}.
+\]
+
+\begin{remark}
+Seja $F = I$ o funtor de inclusão $\mathbf{Fin} \hookrightarrow \mathbf{Par}$, e $G$ o funtor que, dada uma aplicação total $f$, produz a mesma aplicação mas com o primeiro elemento do domínio tornado indefinido. Então $\eta_n: n \rightharpoonup n$ pode ser a aplicação parcial $i \mapsto i$ para $i > 1$ e indefinida em $i = 1$. A naturalidade exige que esta perturbação seja compatível com todos os morfismos de $\mathbf{Fin}$.
+\end{remark}

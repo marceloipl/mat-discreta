@@ -1,0 +1,16 @@
+\section{OrdMon (Monoides Ordenados)}
+
+A categoria \textbf{OrdMon} une álgebra e ordem. Um monoide ordenado exige que a operação binária seja compatível com a relação de ordem, ou seja, se $a \le b$, então $a*c \le b*c$.
+
+\subsection{Objetos}
+A representação destes objetos requer uma estrutura híbrida que combine a Tabela de Cayley (para a parte algébrica) com uma matriz de adjacência (para a componente de ordem).
+
+\begin{lstlisting}[caption={Modelação Híbrida de OrdMon}]
+OM.elements = {1, 2, 3};
+OM.mul = @(a, b) a + b; 
+OM.unit = 1;            
+OM.le = @(a, b) a <= b; 
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos em \textbf{OrdMon} são os que satisfazem simultaneamente as condições de homomorfismo de monoides e de monotonia de ordens parciais.

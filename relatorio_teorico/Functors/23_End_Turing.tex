@@ -1,0 +1,103 @@
+% ============================================================
+\section{Funtor End $\rightarrow$ Turing Machines}
+\label{sec:functor-end-turing}
+
+\subsection{Fundamentação Teórica}
+
+O funtor $F: \mathbf{End} \to \mathbf{Turing\ Machines}$ constrói, a partir de uma endomapa $\varphi: X \to X$, uma máquina de Turing simplificada cujos estados correspondem aos elementos de $X$ e cuja função de transição é ditada por $\varphi$. A construção preserva a estrutura de morfismo: um mapa que comuta com as endomapas induz um par de mapas de estados e de fita compatível com as respetivas funções de transição.
+
+\subsection{Funtor Covariante End $\rightarrow$ Turing Machines}
+
+\begin{definition}[Funtor covariante $F: \mathbf{End} \to \mathbf{Turing\ Machines}$]
+Dado $(X, \varphi) \in \mathbf{End}$ com $X = \{1,\ldots,n\}$, constrói-se a máquina de Turing $F(X,\varphi) = (Q, \Gamma, \delta, q_0, F_{\mathrm{acc}}, B)$ da seguinte forma:
+\begin{itemize}
+    \item $Q = X \cup \{n{+}1\}$ --- os estados são os elementos de $X$ mais um estado de paragem $q_{\mathrm{halt}} = n{+}1$;
+    \item $\Gamma = X \cup \{n{+}1\}$ --- o alfabeto de fita são os elementos de $X$ mais o símbolo em branco $B = n{+}1$;
+    \item $q_0 = 1$ (estado inicial), $F_{\mathrm{acc}} = \{n{+}1\}$ (único estado de aceitação);
+    \item Função de transição: no estado $q \in X$, ao ler o símbolo $a \in X$, a máquina escreve $\varphi(a)$, move para a direita, e transita para $\varphi(q)$:
+    \[
+        \delta(q, a) = (\varphi(q),\; \varphi(a),\; R), \quad q, a \in X;
+    \]
+    ao ler $B$ em qualquer estado, transita para $q_{\mathrm{halt}}$: $\delta(q, B) = (n{+}1, B, N)$.
+\end{itemize}
+Dado um morfismo $f: (X_1, \varphi_1) \to (X_2, \varphi_2)$ em \textbf{End}, o morfismo induzido é $F(f) = (f_Q, f_\Gamma)$ com $f_Q = [f,\, n_2{+}1]$ e $f_\Gamma = [f,\, n_2{+}1]$ (os estados e símbolos em $X_1$ mapeiam via $f$; $q_{\mathrm{halt}}^{(1)}$ mapeia para $q_{\mathrm{halt}}^{(2)}$; $B_1$ mapeia para $B_2$).
+\end{definition}
+
+\begin{proposition}
+$F$ é covariante: $f \circ \varphi_1 = \varphi_2 \circ f$ implica
+\[
+    \delta_2(f_Q(q), f_\Gamma(a)) = (f_Q(\varphi_1(q)),\, f_\Gamma(\varphi_1(a)),\, R),
+\]
+que é exatamente a condição de morfismo de \textbf{Turing\ Machines}.
+\end{proposition}
+
+\begin{lstlisting}[style=matlab, caption={Funtor covariante $F: \mathbf{End} \to \mathbf{Turing\ Machines}$}]
+function M = functor_End_to_TM(phi, n)
+    M.Q = n+1; M.Gamma = 1:(n+1); M.blank = n+1;
+    M.q0 = 1;  M.F = n+1;
+    M.delta = zeros(n+1, n+1, 3);
+    for q = 1:n
+        for a = 1:n
+            M.delta(q,a,:) = [phi(q), phi(a), 1];
+        end
+        M.delta(q,n+1,:) = [n+1, n+1, 0];
+    end
+    for a = 1:(n+1)
+        M.delta(n+1,a,:) = [n+1, a, 0];
+    end
+end
+
+function [fQ, fG] = functor_End_to_TM_morphism(f, n2)
+    fQ = [f, n2+1];  fG = [f, n2+1];
+end
+\end{lstlisting}
+
+\subsection{Funtor Contravariante --- Análise de Existência}
+
+\begin{proposition}[Inexistência de functor contravariante canónico]
+Não existe functor contravariante canónico $G: \mathbf{End} \to \mathbf{Turing\ Machines}$. Para que $G(f): F(X_2, \varphi_2) \to F(X_1, \varphi_1)$ fosse morfismo de \textbf{TM}, seria necessário um par $(g_Q, g_\Gamma)$ com $g_Q \circ \varphi_2 = \varphi_1 \circ g_Q$, ou seja um morfismo de \textbf{End} ``inverso'' de $f$, inexistente em geral. Na subcategoria dos isomorfismos, $G(f) = F(f^{-1})$ é válido.
+\end{proposition}
+
+\subsection{Transformações Naturais}
+
+\subsubsection{Translação por $k_0$ iterações}
+
+Para $k_0 \geq 1$, seja $F^{(k_0)}$ o functor que usa $\varphi^{k_0}$. A transformação natural $\eta^{(k_0)}: F \Rightarrow F^{(k_0)}$ tem componentes $\eta^{(k_0)}_{(X,\varphi)} = (\mathrm{id}_Q, \mathrm{id}_\Gamma)$ e é natural porque $f \circ \varphi_1^{k_0} = \varphi_2^{k_0} \circ f$.
+
+\subsubsection{Composto com $F_{\mathrm{TM} \to \mathrm{Struct}}$}
+
+O composto $F_{\mathrm{TM} \to \mathrm{Struct}} \circ F: \mathbf{End} \to \mathbf{Struct}$ envia $(X, \varphi)$ em $(\mathbf{d}_\varphi, \varphi, n{+}1)$. Existe uma transformação natural entre este composto e o functor de imersão $\iota: \mathbf{End} \to \mathbf{Struct}$ dado por $\iota(X,\varphi) = (0, \varphi, n)$, com componentes dadas pela inclusão $X \hookrightarrow X \cup \{q_{\mathrm{halt}}\}$.
+
+\begin{lstlisting}[style=matlab, caption={Verificação da naturalidade $\eta^{(k_0)}: F \Rightarrow F^{(k_0)}$ em $\mathbf{End} \to \mathbf{TM}$}]
+function ok = check_TM_nat_trans(phi, n, k0)
+    % Verifica que id_(n+1) e morfismo TM de F(phi) para F(phi^k0)
+    M1   = functor_End_to_TM(phi, n);
+    phik = phi;
+    for i = 1:k0-1, phik = phi(phik); end
+    M2   = functor_End_to_TM(phik, n);
+    fQ   = 1:(n+1);  fGam = 1:(n+1);
+    ok   = is_TM_morphism(M1, M2, fQ, fGam);
+end
+\end{lstlisting}
+
+\begin{lstlisting}[style=matlab, caption={Componente da transformação natural $\iota \Rightarrow F_{\mathrm{TM} \to \mathrm{Struct}} \circ F$ em $(X,\varphi)$}]
+function [S_iota, S_comp, inc] = nat_trans_iota_to_comp(phi, n)
+    % Calcula os dois objectos de Struct e a componente (inclusao)
+    % iota(X, phi) = (0, phi, n)
+    S_iota.n   = n;
+    S_iota.phi = phi;
+    S_iota.d   = zeros(1, n, 'like', 1i);
+
+    % (F_TM->Struct o F)(X, phi) = functor_TM_to_Struct(functor_End_to_TM(phi,n))
+    M      = functor_End_to_TM(phi, n);
+    S_comp = functor_TM_to_Struct(M);
+
+    % Componente: inclusao X -> X U {q_halt}  (i.e., 1:n -> 1:n)
+    inc = 1:n;  % cada x in X mapeia para o mesmo indice em S_comp
+
+    % Verificacao: inc e morfismo de Struct de S_iota para S_comp
+    ok_phi = all(inc(phi) == S_comp.phi(inc));   % inc o phi = phi_comp o inc
+    ok_d   = all(S_iota.d == S_comp.d(inc));     % d_iota = d_comp o inc
+    fprintf('inc e morfismo de Struct: phi ok=%d, d ok=%d\n', ok_phi, ok_d);
+end
+\end{lstlisting}

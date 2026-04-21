@@ -1,0 +1,31 @@
+\section{Construções em Fin}
+
+A categoria \textbf{Fin} é completa e cocompleta, o que permite a existência de todos os limites e colimites finitos. A implementação em MATLAB utiliza predominantemente operações sobre vetores e matrizes de índices.
+
+\subsection{Fundamentação Teórica}
+\begin{itemize}
+    \item \textbf{Produto ($A \times B$):} O objeto resultante tem cardinalidade $n \times m$. As projeções são geradas para cobrir todas as combinações do produto cartesiano.
+    \item \textbf{Coproduto ($A \sqcup B$):} União disjunta com objeto $n + m$. As injeções mapeiam o primeiro conjunto para o início do novo intervalo e o segundo para o restante.
+    \item \textbf{Equalizador:} O subconjunto do domínio onde $f(i) = g(i)$.
+    \item \textbf{Coequalizador:} Espaço quociente da relação $f(i) \sim g(i)$. É modelado computacionalmente através de componentes conexas de um grafo onde as arestas ligam as imagens dos morfismos.
+    \item \textbf{Pullback:} O conjunto de pares $(x, y)$ que satisfazem a equação $f(x) = g(y)$.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+\begin{lstlisting}[caption={Construções Universais em Fin}]
+% Produto e Projeções
+[P1, P2] = ndgrid(1:n, 1:m);
+p_A = P1(:)'; p_B = P2(:)'; 
+
+% Equalizador
+eq_map = find(f == g);
+eq_obj = length(eq_map);
+
+% Pullback (f: A -> C, g: B -> C)
+[X, Y] = ndgrid(1:length(dom_f), 1:length(dom_g));
+pb_indices = find(f(X) == g(Y));
+
+% Coequalizador (Esquema de componentes conexas)
+% Requer a criacao de um grafo com arestas (f(i), g(i))
+% e calculo de 'conncomp' para identificar as classes.
+\end{lstlisting}

@@ -1,0 +1,95 @@
+\subsection{Alínea 3.u) --- Functor $F: \mathbf{End} \to \mathbf{Mon}$}
+\label{subsec:functor-end-mon}
+
+\subsubsection{Functor Covariante $F: \mathbf{End} \to \mathbf{Mon}$}
+
+\begin{definition}[Functor covariante $F: \mathbf{End} \to \mathbf{Mon}$]
+Dado $(X,\varphi) \in \mathbf{End}$, define-se o monoide das iterações distintas:
+\[
+    F(X,\varphi) = \bigl(\{\varphi^0, \varphi^1, \ldots\},\;\circ,\;\varphi^0\bigr).
+\]
+Como $X$ é finito, a sequência estabiliza (é eventualmente periódica). Dado $f: (X_1,\varphi_1) \to (X_2,\varphi_2)$, define-se $F(f)(\varphi_1^k) = \varphi_2^k$.
+\end{definition}
+
+\begin{proposition}
+$F$ é covariante e bem definido: $f \circ \varphi_1^k = \varphi_2^k \circ f$ (por indução em $k$) garante que $F(f)$ é homomorfismo de monoides, preservando composição e neutro.
+\end{proposition}
+
+\begin{lstlisting}[style=matlab, caption={Functor covariante $F: \mathbf{End} \to \mathbf{Mon}$}]
+function Mon = functor_End_to_Mon(phi, n)
+    iterates = {};
+    cur = 1:n;       % phi^0 = identidade
+    while true
+        found = any(cellfun(@(x) isequal(x, cur), iterates));
+        if found, break; end
+        iterates{end+1} = cur;
+        cur = phi(cur);
+    end
+    m = numel(iterates);
+    Mon.elements = iterates;
+    Mon.identity = 1;
+    Mon.mult = zeros(m, m);
+    for i = 1:m
+        for j = 1:m
+            comp = iterates{j}(iterates{i});
+            for r = 1:m
+                if isequal(iterates{r}, comp)
+                    Mon.mult(i,j) = r; break;
+                end
+            end
+        end
+    end
+end
+\end{lstlisting}
+
+\subsubsection{Functor Contravariante --- Análise de Existência}
+
+\begin{proposition}[Inexistência de functor contravariante canónico]
+Não existe functor contravariante canónico $G: \mathbf{End} \to \mathbf{Mon}$. Um morfismo $f: (X_1,\varphi_1) \to (X_2,\varphi_2)$ deveria induzir $G(f): F(X_2,\varphi_2) \to F(X_1,\varphi_1)$, ou seja, um homomorfismo $\varphi_2^k \mapsto \varphi_1^k$. Mas $f \circ \varphi_1^k = \varphi_2^k \circ f$ não fornece um mapa inverso canónico entre os monoides (salvo se $f$ for bijetivo).
+\end{proposition}
+
+\begin{remark}
+Na subcategoria dos isomorfismos de \textbf{End}, $G(f) = F(f^{-1})$ define um functor contravariante bem definido, pois $f^{-1} \circ \varphi_2^k = \varphi_1^k \circ f^{-1}$.
+\end{remark}
+
+\subsubsection{Transformações Naturais}
+
+\paragraph{Translação por $k_0$ iterações.}
+Para $k_0 \geq 0$ fixo, a família de homomorfismos $\eta^{(k_0)}_{(X,\varphi)}: \varphi^k \mapsto \varphi^{k+k_0}$ define uma transformação natural $\eta^{(k_0)}: F \Rightarrow F$. A naturalidade segue de $F(f)(\varphi_1^{k+k_0}) = \varphi_2^{k+k_0}$.
+
+\paragraph{Adjunção com $U: \mathbf{Mon} \to \mathbf{End}$.}
+Existe uma bijeção natural $\mathbf{Mon}(F(X,\varphi), N) \cong \mathbf{End}((X,\varphi), U(N))$, onde $U$ envia $(M,\cdot,e)$ no endomapa de multiplicação à esquerda por um gerador. Isto significa que $F$ é adjunto à esquerda de $U$, e a unidade desta adjunção é uma transformação natural $\eta: \mathrm{Id}_{\mathbf{End}} \Rightarrow U \circ F$ com $\eta_{(X,\varphi)}(x) = \varphi$ (o gerador).
+
+\begin{lstlisting}[style=matlab, caption={Transformação natural $\eta^{(k_0)}: F \Rightarrow F$ (translação por $k_0$)}]
+function eta_comp = apply_eta_Mon(Mon, k0)
+    % eta^(k0)(phi^k) = phi^(k+k0) via composicao no monoide
+    m   = size(Mon.mult, 1);
+    gen = 2;  % indice de phi^1 (phi^0=1, phi^1=2, ...)
+    pk0 = Mon.identity;
+    for i = 1:k0
+        pk0 = Mon.mult(pk0, gen);
+    end
+    eta_comp = zeros(1, m);
+    for k = 1:m
+        eta_comp(k) = Mon.mult(k, pk0);
+    end
+end
+\end{lstlisting}
+
+\begin{lstlisting}[style=matlab, caption={Unidade da adjunção $\eta: \mathrm{Id}_{\mathbf{End}} \Rightarrow U \circ F$ --- componente em $(X,\varphi)$}]
+function eta_x = unit_adjunction_End_Mon(phi, n)
+    % eta_(X,phi)(x) = indice de phi^1 no monoide F(X,phi)
+    % i.e., o gerador phi visto como elemento do monoide de iteracoes
+    Mon = functor_End_to_Mon(phi, n);
+    % O gerador e phi^1, que tem indice 2 por convencao (phi^0=1, phi^1=2)
+    gen_idx = 2;
+    % eta e o mapa constante que envia qualquer x em phi (o gerador)
+    eta_x = repmat(gen_idx, 1, n);
+    % Verificacao: U(F(X,phi)) e o endomapa "multiplicar por gen_idx"
+    % i.e., U(Mon)(k) = Mon.mult(k, gen_idx) para todo k no monoide
+    U_phi = zeros(1, numel(Mon.elements));
+    for k = 1:numel(Mon.elements)
+        U_phi(k) = Mon.mult(k, gen_idx);
+    end
+end
+\end{lstlisting}

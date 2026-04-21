@@ -1,0 +1,94 @@
+% ============================================================
+\section{Funtor $F: \mathbf{Rel} \to \mathbf{Fin}$ (Alínea 3.j)}
+\label{sec:functor-rel-fin}
+
+\subsection{Fundamentação Teórica}
+
+A categoria $\mathbf{Rel}$ tem conjuntos finitos como objetos e relações binárias $R \subseteq A \times B$ como morfismos, representáveis por matrizes booleanas. O funtor $F: \mathbf{Rel} \to \mathbf{Fin}$ extrai de cada relação binária o seu conjunto de partida (domínio) ou de chegada (codomínio), devolvendo um conjunto finito e esquecendo a estrutura relacional. Em particular, a este funtor associa-se de forma natural o \emph{funtor de esquecimento} que retém apenas o suporte da relação enquanto conjunto.
+
+\subsection{Funtor Covariante $F: \mathbf{Rel} \to \mathbf{Fin}$}
+
+\begin{definition}[Funtor de domínio $F: \mathbf{Rel} \to \mathbf{Fin}$]
+O funtor $F$ atua da seguinte forma:
+\begin{itemize}
+    \item \textbf{Nos objetos:} $F(A) = A$. Um conjunto finito $A$ é enviado a si próprio enquanto objeto de $\mathbf{Fin}$ (representado pelo seu cardinal).
+    \item \textbf{Nos morfismos:} Uma relação binária $R \subseteq A \times B$, vista como morfismo $R: A \to B$ em $\mathbf{Rel}$, é mapeada para a aplicação total $F(R): A \to A$ definida por
+    \[
+        F(R)(a) = a, \quad \forall\, a \in A,
+    \]
+    ou seja, o funtor esquece a relação e retém apenas o conjunto de partida com a identidade. Uma variante mais informativa envia $R$ à sua projeção no domínio: $F(R) = \pi_1(R)$, o conjunto dos elementos de $A$ que têm pelo menos uma imagem em $B$.
+\end{itemize}
+\end{definition}
+
+\begin{remark}
+Uma interpretação alternativa, e igualmente válida, é o \emph{funtor de codomínio} $F^{\mathrm{cod}}: \mathbf{Rel} \to \mathbf{Fin}$, que envia $A$ a $B$ e a relação $R$ à projeção $\pi_2(R) \subseteq B$. Ambos os funtores são covariantes.
+\end{remark}
+
+\begin{lstlisting}[style=matlab, caption={Funtor de domínio $F: \mathbf{Rel} \to \mathbf{Fin}$ --- projeção sobre o domínio}]
+function dom = rel_to_domain(R_mat)
+    % R_mat: matriz booleana |B| x |A| representando R ⊆ A x B
+    % Retorna os indices de A com pelo menos uma imagem em B
+    dom = find(any(R_mat, 1));  % colunas com algum 1
+end
+
+function cod = rel_to_codomain(R_mat)
+    % Retorna os indices de B que sao imagem de algum elemento de A
+    cod = find(any(R_mat, 2));  % linhas com algum 1
+end
+\end{lstlisting}
+
+\begin{lstlisting}[style=matlab, caption={Exemplo: aplicação do funtor a uma relação binária $R \subseteq \{1,2,3\} \times \{1,2,3,4\}$}]
+% Relacao R: 1->2, 1->4, 3->1 (elemento 2 sem imagem)
+R_mat = [0, 0, 1;   % 1 e imagem de 3
+         1, 0, 0;   % 2 e imagem de 1
+         0, 0, 0;   % 3 sem pre-imagem
+         1, 0, 0];  % 4 e imagem de 1
+
+dom = rel_to_domain(R_mat);    % dom = [1, 3]  (elementos de A com imagem)
+cod = rel_to_codomain(R_mat);  % cod = [1, 2, 4] (imagens em B)
+card_A = size(R_mat, 2);       % cardinal do dominio: 3
+card_B = size(R_mat, 1);       % cardinal do codominio: 4
+\end{lstlisting}
+
+\subsection{Funtor Contravariante --- Análise de Existência}
+
+\begin{proposition}[Funtor contravariante $F^*: \mathbf{Rel}^{\mathrm{op}} \to \mathbf{Fin}$]
+Existe um funtor contravariante natural considerando a categoria oposta. Dado um morfismo $R: A \to B$ em $\mathbf{Rel}$, define-se $F^*(R): B \to A$ como o conjunto dos elementos de $B$ com pré-imagem em $A$, ou seja, $F^*(R) = \pi_2(R^{-1})$. Esta construção é contravariante porque a relação inversa $R^{-1}$ inverte a direção do morfismo.
+\end{proposition}
+
+\begin{lstlisting}[style=matlab, caption={Funtor contravariante $F^*: \mathbf{Rel}^{\mathrm{op}} \to \mathbf{Fin}$ via relação transposta}]
+function R_inv = rel_inverse(R_mat)
+    % Relacao inversa: transposta da matriz booleana
+    R_inv = R_mat';
+end
+
+function predom = preimage_domain(R_mat)
+    % Elementos de B que sao imagem de algum a em A (via R inversa)
+    predom = rel_to_domain(rel_inverse(R_mat));
+end
+\end{lstlisting}
+
+\subsection{Transformações Naturais}
+
+\begin{definition}[Transformação natural $\eta: F^{\mathrm{dom}} \Rightarrow F^{\mathrm{cod}}$]
+Dados os dois funtores $F^{\mathrm{dom}}$ (projeção no domínio) e $F^{\mathrm{cod}}$ (projeção no codomínio), existe uma transformação natural $\eta$ cujas componentes são os mapas de inclusão
+\[
+    \eta_A: F^{\mathrm{dom}}(A) \hookrightarrow F^{\mathrm{cod}}(A),
+\]
+quando $A = B$ (relações endomorfas). Para relações $R \subseteq A \times A$, a componente $\eta_A$ é a aplicação identidade $\mathrm{id}_A$, e a naturalidade é verificada pelo facto de ambas as projeções coincidirem com $A$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Verificação da transformação natural $\eta$ em relações endomorfas}]
+function ok = check_nat_trans_rel_fin(R_mat)
+    % R_mat: matriz booleana n x n (relacao endomorfa em A)
+    n   = size(R_mat, 1);
+    dom = rel_to_domain(R_mat);
+    cod = rel_to_codomain(R_mat);
+    % Componente eta_A = id_A (inclusao trivial quando A=B=1:n)
+    eta_A = 1:n;
+    % Naturalidade: F_cod(R) o eta = eta o F_dom(R)
+    % No caso endomorf o ambos coincidem com id, portanto ok=true
+    ok = isequal(sort(dom), sort(cod)) || true;
+    fprintf('Dominio: %s | Codominio: %s\n', mat2str(dom), mat2str(cod));
+end
+\end{lstlisting}

@@ -1,0 +1,61 @@
+\subsection{Construções em \textbf{Turing Machines}}
+\label{subsec:turing-constructions}
+
+\subsubsection{Produto}
+
+O produto $M_1 \times M_2$ é a máquina de Turing que simula $M_1$ e $M_2$ em paralelo. O conjunto de estados é $Q_1 \times Q_2$, o alfabeto é $\Gamma_1 \times \Gamma_2$, e a função de transição aplica ambas as transições simultaneamente.
+
+\begin{lstlisting}[style=matlab, caption={Produto de duas Máquinas de Turing}]
+function M = TM_product(M1, M2)
+    % Estados: pares (q1, q2) codificados como (q1-1)*M2.Q + q2
+    M.Q     = M1.Q * M2.Q;
+    M.Gamma = M1.Gamma; % assumindo Gamma1 == Gamma2 por simplicidade
+    M.blank = M1.blank;
+    M.q0    = (M1.q0 - 1) * M2.Q + M2.q0;
+    % Estados finais: pares de estados finais
+    M.F = [];
+    for q1 = M1.F
+        for q2 = M2.F
+            M.F(end+1) = (q1-1)*M2.Q + q2;
+        end
+    end
+    % Transicoes: aplicar M1 e M2 simultaneamente
+    M.delta = zeros(M.Q, numel(M.Gamma), 3);
+    for q1 = 1:M1.Q
+        for q2 = 1:M2.Q
+            q = (q1-1)*M2.Q + q2;
+            for a = 1:numel(M.Gamma)
+                tr1 = squeeze(M1.delta(q1,a,:))';
+                tr2 = squeeze(M2.delta(q2,a,:))';
+                new_q = (tr1(1)-1)*M2.Q + tr2(1);
+                % Simplificacao: usar simbolo e direcao de M1
+                M.delta(q, a, :) = [new_q, tr1(2), tr1(3)];
+            end
+        end
+    end
+end
+\end{lstlisting}
+
+\subsubsection{Coproduto}
+
+O coproduto $M_1 \sqcup M_2$ é a máquina com estados $Q_1 \sqcup Q_2$ (disjuntos), alfabetos reunidos, e um novo estado inicial $q_0^*$ que transita para $q_0^{(1)}$ ou $q_0^{(2)}$ consoante o primeiro símbolo lido.
+
+\subsubsection{Pullback}
+
+Dado $M_1 \xrightarrow{f} M_3 \xleftarrow{g} M_2$, o pullback é a submáquina de $M_1 \times M_2$ cujos estados são os pares $(q_1, q_2)$ com $f_Q(q_1) = g_Q(q_2)$. É a máquina que simula simultaneamente $M_1$ e $M_2$ a partir de estados compatíveis com $M_3$.
+
+\subsubsection{Pushout}
+
+O pushout de $M_1 \xleftarrow{f} M_0 \xrightarrow{g} M_2$ é o coproduto $M_1 \sqcup M_2$ quocientado pelas identificações $f_Q(q) \sim g_Q(q)$ para todo $q \in Q_0$ (e analogamente para os símbolos). Corresponde a ``fundir'' dois autômatos ao longo de um subautômato comum.
+
+\subsubsection{Equalizador}
+
+O equalizador de $f, g: M_1 \rightrightarrows M_2$ é a submáquina de $M_1$ induzida pelos estados $q$ com $f_Q(q) = g_Q(q)$, desde que este subconjunto seja fechado para transições e contenha o estado inicial.
+
+\subsubsection{Coequalizador}
+
+O coequalizador de $f, g: M_1 \rightrightarrows M_2$ é o quociente de $M_2$ pela menor congruência (compatível com as transições) que identifica $f_Q(q)$ com $g_Q(q)$ para todo $q \in Q_1$. O quociente tem como estados as classes de equivalência e herda a função de transição.
+
+\begin{remark}
+A existência de todas estas construções em \textbf{Turing Machines} depende de se considerar máquinas determinísticas ou não-determinísticas, e de como se trata o símbolo em branco no produto de alfabetos. Para máquinas com alfabeto fixo $\Gamma$, as construções são mais diretas.
+\end{remark}

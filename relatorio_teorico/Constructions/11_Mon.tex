@@ -1,0 +1,32 @@
+\section{Mon (Monoides Finitos)}
+
+Para que uma construção em \textbf{Mon} seja válida, o objeto resultante deve manter a integridade da operação binária (associatividade) e garantir a existência de uma identidade global.
+
+\subsection{Fundamentação Teórica}
+\begin{itemize}
+    \item \textbf{Produtos:} O produto de monoides define a operação componente a componente: $(m,n) * (m',n') = (m * m', n * n')$.
+    \item \textbf{Equalizadores:} Corresponde ao sub-monoide que contém todos os elementos onde dois homomorfismos produzem o mesmo resultado.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+A construção do produto exige a geração de uma nova Tabela de Cayley expandida.
+
+\begin{lstlisting}[caption={Criação da Tabela de Cayley para Produto de Monoides}]
+function MonP = monoid_product(MA, idA, MB, idB)
+    na = size(MA,1); nb = size(MB,1);
+    MonP.table = zeros(na*nb, na*nb);
+    
+    % Construção da tabela via mapeamento de índices lineares
+    for i=1:na*nb
+        for j=1:na*nb
+            [ia, ib] = ind2sub([na, nb], i);
+            [ja, jb] = ind2sub([na, nb], j);
+            % Operação componente a componente
+            resA = MA(ia, ja);
+            resB = MB(ib, jb);
+            MonP.table(i,j) = sub2ind([na, nb], resA, resB);
+        end
+    end
+    MonP.identity = sub2ind([na, nb], idA, idB);
+end
+\end{lstlisting}

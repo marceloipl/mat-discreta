@@ -1,0 +1,71 @@
+% ============================================================
+\section{Funtor $F: Fin \to Vect$}
+\label{sec:functor-fin-vect}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{Fin}$ (modelo MATLAB/Octave)]
+Um objeto é representado pelo seu cardinal $n \in \mathbb{N}$. Um morfismo $f: n \to m$ é um vetor de inteiros de comprimento $n$ com entradas em $\{1,\ldots,m\}$, onde $f(i)$ indica a imagem do elemento $i$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{Fin}$}]
+n = 3;          % objecto: conjunto {1,2,3}
+f = [2, 2, 1];  % morfismo: f(1)=2, f(2)=2, f(3)=1
+\end{lstlisting}
+
+\begin{definition}[Categoria $\mathbf{Vect}$ (modelo MATLAB/Octave)]
+Um objeto é um inteiro $d \geq 0$ representando a dimensão do espaço vetorial sobre $\mathbb{C}$. Um morfismo $L: d_1 \to d_2$ é uma matriz complexa $d_2 \times d_1$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{Vect}$}]
+d = 3;               % objecto: C^3
+L = [1 0 0; 0 1 0];  % morfismo: aplicacao linear C^3 -> C^2
+\end{lstlisting}
+
+\subsection{Funtor Covariante $F: Fin \to Vect$ (Funtor Livre)}
+
+O \emph{funtor livre} $F: \mathbf{Fin} \to \mathbf{Vect}$ envia cada conjunto finito $n$ ao espaço vetorial $\mathbb{C}^n$ gerado pelos seus elementos como base canónica, e cada aplicação total $f: n \to m$ à aplicação linear $F(f): \mathbb{C}^n \to \mathbb{C}^m$ definida na base canónica por
+\[
+    e_i \;\longmapsto\; e_{f(i)}.
+\]
+
+\begin{lstlisting}[style=matlab, caption={Funtor livre $F$ aplicado a um morfismo}]
+function L = free_functor(f, m)
+    n = length(f);
+    L = zeros(m, n);
+    for i = 1:n
+        L(f(i), i) = 1;
+    end
+end
+\end{lstlisting}
+
+\begin{proposition}
+O funtor livre $F$ satisfaz as seguintes propriedades:
+\begin{itemize}
+    \item $F(\mathrm{id}_n) = I_n$ (matriz identidade $n \times n$);
+    \item $F(g \circ f) = F(g) \cdot F(f)$ (preservação da composição);
+    \item $F$ envia aplicações injetivas a aplicações lineares injetivas;
+    \item $F$ envia aplicações sobrejetivas a aplicações lineares sobrejetivas.
+\end{itemize}
+\end{proposition}
+
+\subsection{Funtor de Esquecimento $U: Vect \to Fin$}
+
+O funtor de esquecimento $U: \mathbf{Vect} \to \mathbf{Fin}$ envia cada espaço vetorial de dimensão $d$ ao conjunto finito de índices $\{1,\ldots,d\}$ (a base canónica), esquecendo a estrutura linear. Note-se que este processo requer a escolha de uma base, pelo que $U$ é bem definido apenas após fixar bases em cada objeto.
+
+\subsection{Transformações Naturais $\eta: F \Rightarrow G$}
+
+Dados dois funtores $F, G: \mathbf{Fin} \to \mathbf{Vect}$, uma transformação natural $\eta: F \Rightarrow G$ é uma família de morfismos em $\mathbf{Vect}$,
+\[
+    \eta_n: F(n) \to G(n), \quad \text{para cada objeto } n \in \mathbf{Fin},
+\]
+tal que para cada morfismo $f: n \to m$ em $\mathbf{Fin}$ o seguinte quadrado comuta:
+\[
+    G(f) \circ \eta_n \;=\; \eta_m \circ F(f).
+\]
+
+\begin{lstlisting}[style=matlab, caption={Verificação da condição de naturalidade em $\mathbf{Vect}$}]
+% G_f, F_f: matrizes de F(f) e G(f); eta_n, eta_m: componentes de eta
+tol = 1e-10;
+is_natural = norm(G_f * eta_n - eta_m * F_f) < tol;  % deve ser true
+\end{lstlisting}

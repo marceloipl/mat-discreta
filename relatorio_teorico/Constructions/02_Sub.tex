@@ -1,0 +1,41 @@
+\section{Construções em Sub}
+
+Na categoria \textbf{Sub}, onde os objetos são subconjuntos de um universo comum e os morfismos são inclusões, as construções universais simplificam-se em operações de álgebra de conjuntos.
+
+\subsection{Fundamentação Teórica}
+\begin{itemize}
+    \item \textbf{Produto e Pullback:} Ambos correspondem à intersecção de conjuntos. No caso do Pullback, dadas inclusões de $A$ e $B$ em $C$, o resultado é o subconjunto comum máximo $A \cap B$.
+    \item \textbf{Coproduto e Pushout:} Correspondem à união de conjuntos. O Pushout, dadas inclusões de um domínio comum $C$ em $A$ e $B$, resulta na união $A \cup B$, que "cola" as duas estruturas.
+    \item \textbf{Equalizador:} Como existe no máximo um morfismo entre dois objetos, morfismos paralelos só existem se forem idênticos. O equalizador é, portanto, o próprio domínio.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+A implementação utiliza as funções nativas de conjuntos do MATLAB para garantir que a propriedade de unicidade de elementos nos objetos seja preservada.
+
+\begin{lstlisting}[caption={Operações de Conjuntos em Sub}]
+% 1. Produto Categórico (Interseção)
+% Exemplo: A = {1, 2, 3}, B = {2, 3, 4} -> A intersect B = {2, 3}
+A = [1, 2, 3]; B = [2, 3, 4];
+Prod = intersect(A, B);
+
+% 2. Coproduto Categórico (União)
+% Exemplo: A = {1, 2}, B = {3, 4} -> A union B = {1, 2, 3, 4}
+A_cop = [1, 2]; B_cop = [3, 4];
+Coprod = union(A_cop, B_cop);
+
+% 3. Pullback (Interseção num codomínio comum C)
+% Exemplo: C = {1..5}, A = {1,2,3}, B = {3,4,5} -> PB = {3}
+C = [1, 2, 3, 4, 5];
+A_pb = [1, 2, 3]; B_pb = [3, 4, 5];
+PB = intersect(A_pb, B_pb);
+
+% 4. Pushout (União com base num domínio comum C)
+% Exemplo: C = {2}, A = {1,2}, B = {2,3} -> PO = {1, 2, 3}
+C_po = [2];
+A_po = [1, 2]; B_po = [2, 3];
+PO = union(A_po, B_po);
+
+% 5. Equalizador
+% Para inclusões idênticas f, g: A -> B, o eq é o domínio A
+Eq = A;
+\end{lstlisting}

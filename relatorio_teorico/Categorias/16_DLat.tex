@@ -1,0 +1,15 @@
+\section{DLat (Latices Distributivos)}
+
+Os latices distributivos são estruturas onde qualquer par de elementos possui um ínfimo e um supremo, e onde estas operações distribuem-se entre si. São fundamentais para o estudo de álgebras de lógica e conjuntos.
+
+\subsection{Objetos}
+Utilizamos uma abordagem de programação funcional em MATLAB, recorrendo a estruturas que armazenam os "handles" das operações de \textit{meet} ($\wedge$) e \textit{join} ($\vee$).
+
+\begin{lstlisting}[caption={Estrutura Funcional de Latice}]
+L.elements = {1, 2, 3, 4}; 
+L.meet = @(a, b) min(a, b); 
+L.join = @(a, b) max(a, b); 
+\end{lstlisting}
+
+\subsection{Morfismos}
+Um morfismo em \textbf{DLat} é uma função que preserva ambas as operações binárias. A validação exige testar a igualdade $f(a \wedge b) = f(a) \wedge f(b)$ para todos os pares do domínio.

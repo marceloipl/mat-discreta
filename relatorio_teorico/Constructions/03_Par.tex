@@ -1,0 +1,22 @@
+\section{Construções em Par}
+
+As construções em \textbf{Par} (Aplicações Parciais) diferem significativamente de \textbf{Fin}, especialmente no que toca ao produto.
+
+\subsection{Fundamentação Teórica}
+\begin{itemize}
+    \item \textbf{Equalizador:} Identifica onde $f$ e $g$ coincidem (ambos definidos e iguais) ou onde ambos são indefinidos (\texttt{0} ou \texttt{NaN}).
+    \item \textbf{Coproduto:} Funciona como em \textbf{Fin}, através da união disjunta das cardinalidades.
+    \item \textbf{Produto Categórico:} O produto clássico falha nesta categoria. O objeto produto correto é a união disjunta $A \sqcup B \sqcup (A \times B)$, refletindo a possibilidade de uma componente ser indefinida enquanto a outra não é.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+\begin{lstlisting}[caption={Equalizador e Objeto Produto em Par}]
+% Equalizador Parcial
+% f e g sao vetores onde 0 representa 'indefinido'
+eq_map = find((f == g & f ~= 0) | (f == 0 & g == 0));
+eq_obj = length(eq_map);
+
+% Objeto Produto (Calculo da cardinalidade)
+% n = card(A), m = card(B)
+prod_obj_size = n + m + (n * m);
+\end{lstlisting}

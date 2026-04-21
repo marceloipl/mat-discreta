@@ -1,0 +1,67 @@
+\section{Trees (Árvores Binárias)}
+\label{sec:modeling-trees}
+
+A categoria \textbf{Trees} é composta por árvores binárias finitas como objetos, onde a estrutura é definida pela hierarquia entre nós e pela lateralidade das ramificações. Esta categoria é essencial para modelar processos de decisão dicotómicos e estruturas de dados hierárquicas onde a distinção entre esquerda e direita é semanticamente relevante.
+
+\subsection{Objetos}
+No ambiente MATLAB/Octave, os objetos desta categoria podem ser representados de duas formas complementares, dependendo da operação ou construção categorial a realizar:
+
+\paragraph{1. Representação por Array de Progenitores:}
+Esta forma utiliza um vetor \texttt{parent} (onde \texttt{parent(i)} é o índice do pai do nó $i$) e um vetor \texttt{side} (onde $0$ representa o filho esquerdo e $1$ o filho direito). É a representação mais eficiente para validar propriedades de morfismos e calcular limites.
+
+\begin{lstlisting}[language=Matlab, caption={Representação por Array de Progenitores}]
+% Arvore com 7 nos: raiz=1, filhos esquerdos/direitos indicados
+%       1
+%      / \
+%     2   3
+%    / \ / \
+%   4  5 6  7
+
+n      = 7;
+parent = [0, 1, 1, 2, 2, 3, 3];  % parent(1)=0 -> raiz
+side   = [-1, 0, 1, 0, 1, 0, 1]; % -1=raiz, 0=esq, 1=dir
+
+tree.n      = n;
+tree.parent = parent;
+tree.side   = side;
+\end{lstlisting}
+
+\paragraph{2. Representação Recursiva:}
+Tal como explorado no script original, esta representação define a árvore como uma estrutura (\textit{struct}) que contém um valor e referências para as suas subárvores. Esta abordagem é fundamental para a definição de construções como o Produto de árvores, facilitando a navegação descendente.
+
+\begin{lstlisting}[language=Matlab, caption={Representação Recursiva de uma Árvore Binária}]
+% Definicao de um no com subarvores
+node.value = 10;    % Conteudo informativo do no
+node.left  = [];    % Subarvore esquerda (vazia se [])
+node.right = [];    % Subarvore direita (vazia se [])
+
+% Exemplo de construcao de uma arvore de altura 1
+T.value = 1;
+T.left  = struct('value', 2, 'left', [], 'right', []);
+T.right = struct('value', 3, 'left', [], 'right', []);
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos $f: T_1 \to T_2$ nesta categoria são mapeamentos entre os conjuntos de nós que preservam estritamente a raiz, a relação de parentesco e a lateralidade. Para que $f$ seja um morfismo válido, a imagem do pai de um nó em $T_1$ deve coincidir com o pai da imagem desse nó em $T_2$, mantendo-se a posição relativa (lado).
+
+\begin{lstlisting}[language=Matlab, caption={Algoritmo de Verificação de Morfismo de Árvores}]
+function ok = is_tree_morphism(T1, T2, f)
+    ok = true;
+    
+    % 1) Verificacao da Raiz: a imagem da raiz deve ser a raiz
+    r1 = find(T1.parent == 0);
+    r2 = find(T2.parent == 0);
+    if f(r1) ~= r2, ok = false; return; end
+    
+    % 2) Preservacao de Estrutura e Lateralidade
+    for i = 1:T1.n
+        if T1.parent(i) ~= 0
+            p1 = T1.parent(i);
+            % O pai da imagem deve ser a imagem do pai
+            if T2.parent(f(i)) ~= f(p1), ok = false; return; end
+            % O lado (esquerdo/direito) deve ser preservado
+            if T2.side(f(i)) ~= T1.side(i), ok = false; return; end
+        end
+    end
+end
+\end{lstlisting}

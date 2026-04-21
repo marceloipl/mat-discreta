@@ -1,0 +1,24 @@
+\section{Bool (Álgebras de Boolean)}
+
+Em \textbf{Bool}, as construções de limites seguem a lógica dos latices distributivos, mas com a exigência categórica de preservação do complemento ($\neg$) em todos os mapeamentos.
+
+\subsection{Fundamentação Teórica}
+\begin{itemize}
+    \item \textbf{Produtos:} A construção $B \times C$ utiliza as operações lógicas AND, OR e NOT aplicadas componente a componente.
+    \item \textbf{Coequalizadores:} No contexto de Álgebras de Boolean, estes são calculados tomando o quociente da álgebra pelo ideal gerado pelas diferenças entre os morfismos aplicados.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+A implementação do produto baseia-se na expansão do conjunto de suporte através de um produto cartesiano de conjuntos.
+
+\begin{lstlisting}[caption={Produto em Álgebras de Boolean}]
+function B_out = bool_product(B1, B2)
+    % Nota: set_product e uma funcao auxiliar para o produto de conjuntos
+    B_out.elements = set_product(B1.elements, B2.elements);
+    
+    % Definicao das operacoes componente a componente
+    B_out.not = @(a) [B1.not(a(1)), B2.not(a(2))];
+    B_out.and = @(a, b) [B1.and(a(1), b(1)), B2.and(a(2), b(2))];
+    B_out.or  = @(a, b) [B1.or(a(1), b(1)), B2.or(a(2), b(2))];
+end
+\end{lstlisting}

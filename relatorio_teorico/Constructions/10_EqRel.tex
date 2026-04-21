@@ -1,0 +1,21 @@
+\section{EqRel (Relações de Equivalência)}
+
+As construções em \textbf{EqRel} lidam com a manipulação de classes de equivalência para formar novos conjuntos quocientes ou uniões estruturadas.
+
+\subsection{Fundamentação Teórica}
+Nesta categoria, destacam-se as seguintes construções:
+\begin{itemize}
+    \item \textbf{Produtos:} O produto de duas relações $R_A$ e $R_B$ relaciona pares de elementos se as suas respetivas componentes estiverem relacionadas nas estruturas originais.
+    \item \textbf{Coprodutos:} Definidos pela união disjunta das relações, onde não existe relação cruzada entre elementos de conjuntos diferentes.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+A implementação do produto baseia-se na interseção das relações estendidas ao novo espaço cartesiano.
+
+\begin{lstlisting}[caption={Produto de Relações de Equivalência}]
+function R_prod = eqrel_product(RA, RB)
+    % RA e RB são matrizes simétricas de equivalência
+    % O produto preserva a estrutura de blocos das classes
+    R_prod = kron(RA, RB); 
+end
+\end{lstlisting}

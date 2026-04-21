@@ -1,0 +1,65 @@
+% ============================================================
+\section{Funtor $F: \mathbf{End} \to \mathbf{Trees}$ (Alínea 3.v)}
+\label{sec:functor-end-trees}
+
+\subsection{Fundamentação Teórica}
+
+O funtor $F: \mathbf{End} \to \mathbf{Trees}$ constrói, a partir de uma endomapa $\varphi: X \to X$, uma árvore binária de antecessores: cada elemento $x \in X$ tem como pai $\varphi(x)$ (se $x$ não for ponto fixo), ou a raiz virtual, caso contrário. Este funtor é definido na subcategoria de endomapas com grau de entrada no máximo 2 (condição necessária para a estrutura binária).
+
+\subsection{Funtor Covariante $F: \mathbf{End} \to \mathbf{Trees}$}
+
+\begin{definition}[Funtor covariante $F: \mathbf{End} \to \mathbf{Trees}$]
+Dado $(X, \varphi) \in \mathbf{End}$ com $X = \{1,\ldots,n\}$, constrói-se a \emph{árvore de antecessores} de $\varphi$: o pai de $x$ é $\varphi(x)$ se $\varphi(x) \neq x$, e a raiz virtual $r = n{+}1$ se $x$ for ponto fixo. Os irmãos são ordenados por índice crescente (no máximo dois por nó). Dado $f: (X_1, \varphi_1) \to (X_2, \varphi_2)$, o morfismo induzido é $F(f) = [f,\,r_2]$.
+\end{definition}
+
+\begin{remark}
+Se $|\varphi^{-1}(x)| > 2$ para algum $x$, a estrutura não é binária. O functor é então definido na subcategoria de endomapas com grau de entrada $\leq 2$.
+\end{remark}
+
+\begin{lstlisting}[style=matlab, caption={Funtor covariante $F: \mathbf{End} \to \mathbf{Trees}$}]
+function T = functor_End_to_Trees(phi, n)
+    parent_arr        = phi;
+    fixed             = find(phi == 1:n);
+    parent_arr(fixed) = n+1;
+    parent_arr(n+1)   = 0;
+    side_arr = -ones(1, n+1);
+    for p = 1:(n+1)
+        ch = sort(find(parent_arr == p));
+        if numel(ch) >= 1, side_arr(ch(1)) = 0; end
+        if numel(ch) >= 2, side_arr(ch(2)) = 1; end
+    end
+    T.n = n+1; T.parent = parent_arr; T.side = side_arr;
+end
+
+function Tf = functor_End_to_Trees_morphism(f, n2)
+    Tf = [f, n2+1];
+end
+\end{lstlisting}
+
+\subsection{Funtor Contravariante --- Análise de Existência}
+
+\begin{proposition}[Inexistência de functor contravariante canónico]
+Não existe functor contravariante canónico $G: \mathbf{End} \to \mathbf{Trees}$. Um morfismo $f: (X_1, \varphi_1) \to (X_2, \varphi_2)$ deveria induzir $G(f): F(X_2, \varphi_2) \to F(X_1, \varphi_1)$, ou seja, um morfismo de árvores que inverte a orientação dos morfismos de \textbf{End}. Tal mapa exige uma secção $g: X_2 \to X_1$ com $g \circ \varphi_2 = \varphi_1 \circ g$, que só existe canonicamente quando $f$ é bijetivo.
+\end{proposition}
+
+\subsection{Transformações Naturais}
+
+\subsubsection{Translação por $k_0$ iterações}
+
+Para $k_0 \geq 1$, seja $F^{(k_0)}$ o functor que usa $\varphi^{k_0}$ como endomapa de referência. A transformação natural $\eta^{(k_0)}: F \Rightarrow F^{(k_0)}$ tem componentes $\eta^{(k_0)}_{(X,\varphi)} = \mathrm{id}_{X \cup \{r\}}$. Esta é natural porque $f \circ \varphi_1^{k_0} = \varphi_2^{k_0} \circ f$ (por indução), logo $F^{(k_0)}(f) = F(f)$.
+
+\subsubsection{Adjunção com $U: \mathbf{Trees} \to \mathbf{End}$}
+
+O functor $U$ extrai o endomapa pai de uma árvore. A unidade da adjunção $\mathrm{Id}_{\mathbf{End}} \Rightarrow U \circ F$ tem componentes $\mathrm{id}_X$, pois por construção $F(X, \varphi)$ tem exatamente $\varphi$ como endomapa pai (nos não-raízes).
+
+\begin{lstlisting}[style=matlab, caption={Verificação da naturalidade $\eta^{(k_0)}: F \Rightarrow F^{(k_0)}$}]
+function ok = check_iter_nat_trees(phi, n, k0)
+    % Verifica que id_(n+1) e morfismo Trees de F(phi) para F(phi^k0)
+    T1   = functor_End_to_Trees(phi, n);
+    phik = phi;
+    for i = 1:k0-1, phik = phi(phik); end
+    T2   = functor_End_to_Trees(phik, n);
+    id   = 1:T1.n;
+    ok   = is_tree_morphism(T1, T2, id);
+end
+\end{lstlisting}

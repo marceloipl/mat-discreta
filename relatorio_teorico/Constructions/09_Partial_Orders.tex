@@ -1,0 +1,25 @@
+\section{Partial Orders (Posets)}
+
+As construções na categoria de ordens parciais baseiam-se na preservação da relação de ordem entre elementos. O foco principal é garantir que as novas estruturas criadas mantenham as propriedades de reflexividade, antissimetria e transitividade.
+
+\subsection{Fundamentação Teórica}
+As principais construções universais implementadas para esta categoria são:
+\begin{itemize}
+    \item \textbf{Produtos:} O produto cartesiano $A \times B$ equipado com a ordem do produto, onde $(a,b) \le (a',b')$ se e só se $a \le_A a'$ e $b \le_B b'$.
+    \item \textbf{Equalizadores:} Dado um par de morfismos, o equalizador identifica o sub-poset onde as funções coincidem, herdando a ordem do domínio original.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+Em MATLAB, a construção do produto de ordens parciais pode ser otimizada recorrendo ao produto de Kronecker das matrizes de adjacência.
+
+\begin{lstlisting}[caption={Construção do Produto de Posets}]
+function P = poset_product(MA, MB)
+    % MA e MB são as matrizes de adjacência booleana das ordens
+    % O produto de Kronecker combina as relações corretamente
+    P_matrix = kron(MA, MB);
+    
+    % O resultado é a matriz de adjacência do novo Poset produto
+    P.matrix = P_matrix;
+    P.n_elements = size(P_matrix, 1);
+end
+\end{lstlisting}

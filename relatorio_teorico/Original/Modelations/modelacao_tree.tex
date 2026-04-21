@@ -1,0 +1,91 @@
+\section{Modelação das Categorias em MATLAB/Octave}
+\label{sec:modeling}
+
+% ---------------------------------------------------------------------
+\subsection{Categoria \textbf{Trees} --- Árvores Binárias}
+\label{subsec:trees}
+
+\begin{definition}[Categoria Trees]
+Os \emph{objetos} da categoria \textbf{Trees} são árvores binárias finitas. Os \emph{morfismos} são mapas entre árvores que preservam a estrutura de ramificação, isto é, que respeitam a relação pai-filho e a ordenação esquerda/direita dos nós.
+\end{definition}
+
+\subsubsection{Representação dos Objetos}
+
+Uma árvore binária pode ser representada em MATLAB/Octave de duas formas complementares:
+
+\paragraph{Representação por array de progenitores (\textit{parent array}).}
+Dado um conjunto de $n$ nós numerados de $1$ a $n$, a árvore é codificada por um vetor \texttt{parent} de comprimento $n$, onde \texttt{parent(i)} é o índice do pai do nó $i$, e \texttt{parent(root) = 0}. Para distinguir filho esquerdo de filho direito, usa-se um vetor adicional \texttt{side}: \texttt{side(i) = 0} para filho esquerdo, \texttt{side(i) = 1} para filho direito, e \texttt{side(root) = -1}.
+
+\begin{lstlisting}[style=matlab, caption={Representação de uma árvore binária por array de progenitores}]
+% Arvore com 7 nos: raiz=1, filhos esquerdos/direitos indicados
+%       1
+%      / \
+%     2   3
+%    / \ / \
+%   4  5 6  7
+
+n      = 7;
+parent = [0, 1, 1, 2, 2, 3, 3];  % parent(1)=0 -> raiz
+side   = [-1, 0, 1, 0, 1, 0, 1]; % -1=raiz, 0=esq, 1=dir
+
+tree.n      = n;
+tree.parent = parent;
+tree.side   = side;
+\end{lstlisting}
+
+\paragraph{Representação recursiva por célula (\textit{cell array}).}
+Alternativa mais próxima da definição recursiva: cada nó é uma \textit{struct} com campos \texttt{value}, \texttt{left} e \texttt{right} (podendo ser \texttt{[]}).
+
+\begin{lstlisting}[style=matlab, caption={Representação recursiva de uma árvore binária}]
+function node = make_node(val, left, right)
+    node.value = val;
+    node.left  = left;
+    node.right = right;
+end
+
+leaf4 = make_node(4, [], []);
+leaf5 = make_node(5, [], []);
+leaf6 = make_node(6, [], []);
+leaf7 = make_node(7, [], []);
+node2 = make_node(2, leaf4, leaf5);
+node3 = make_node(3, leaf6, leaf7);
+root  = make_node(1, node2, node3);
+\end{lstlisting}
+
+\subsubsection{Representação dos Morfismos}
+
+\begin{definition}[Morfismo de árvores binárias]
+Um morfismo $f: T_1 \to T_2$ entre duas árvores binárias é um mapa $f: \{1,\ldots,n_1\} \to \{1,\ldots,n_2\}$ tal que:
+\begin{enumerate}
+    \item $f$ envia a raiz de $T_1$ na raiz de $T_2$;
+    \item Para cada nó $i$ em $T_1$, se $j = \mathrm{parent}_{T_1}(i)$ então $\mathrm{parent}_{T_2}(f(i)) = f(j)$ (preservação da relação pai-filho);
+    \item A posição (esquerda/direita) é preservada: $\mathrm{side}_{T_2}(f(i)) = \mathrm{side}_{T_1}(i)$.
+\end{enumerate}
+\end{definition}
+
+Em MATLAB/Octave, um morfismo é representado por um vetor \texttt{f} de comprimento $n_1$, onde \texttt{f(i)} é o nó de $T_2$ para o qual o nó $i$ de $T_1$ é enviado.
+
+\begin{lstlisting}[style=matlab, caption={Verificação de um morfismo de árvores binárias}]
+function ok = is_tree_morphism(T1, T2, f)
+    % Verifica se f: T1 -> T2 e um morfismo de arvores binarias
+    ok = true;
+    % 1) Raiz vai para raiz
+    root1 = find(T1.parent == 0);
+    root2 = find(T2.parent == 0);
+    if f(root1) ~= root2
+        ok = false; return;
+    end
+    % 2 e 3) Preservacao da estrutura pai-filho e do lado
+    for i = 1:T1.n
+        if T1.parent(i) ~= 0
+            p1 = T1.parent(i);
+            if T2.parent(f(i)) ~= f(p1)
+                ok = false; return;
+            end
+            if T2.side(f(i)) ~= T1.side(i)
+                ok = false; return;
+            end
+        end
+    end
+end
+\end{lstlisting}

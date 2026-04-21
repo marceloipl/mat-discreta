@@ -1,0 +1,30 @@
+\section{Partial Orders (Posets)}
+
+A categoria de ordens parciais é fundamental para modelar hierarquias e dependências funcionais. Um objeto nesta categoria define-se por um conjunto finito e uma relação binária que respeita a reflexividade, antissimetria e transitividade.
+
+\subsection{Objetos}
+No ambiente MATLAB, a forma mais eficiente de representar estas relações é através de matrizes de adjacência booleanas. Esta estrutura permite-nos validar propriedades algébricas complexas utilizando operações de álgebra matricial.
+
+\begin{lstlisting}[caption={Representação de um Poset (1 <= 2 <= 3)}]
+% Matriz de adjacência para uma ordem linear
+n = 3;
+M = [1 1 1; 
+     0 1 1; 
+     0 0 1]; 
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos nesta categoria são funções monótonas. Um mapeamento $f$ é válido se, para quaisquer elementos $i, j$, a condição $i \le j$ implicar obrigatoriamente $f(i) \le f(j)$.
+
+\begin{lstlisting}[caption={Algoritmo de Verificação de Monotonia}]
+% f é um vetor onde o índice é o domínio e o valor é a imagem
+f = [1, 2, 2]; 
+
+isMorphism = true;
+[I, J] = find(M_domain); 
+for k = 1:length(I)
+    if ~M_codomain(f(I(k)), f(J(k)))
+        isMorphism = false; break;
+    end
+end
+\end{lstlisting}

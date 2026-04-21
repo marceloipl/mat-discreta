@@ -1,0 +1,51 @@
+\section{Struct (Conjuntos Estruturados)}
+\label{sec:modeling-struct}
+
+A categoria \textbf{Struct} permite modelar coleções de dados onde cada elemento possui um valor associado e uma relação de sucessão definida por um endomapa. 
+
+\subsection{Objetos}
+Os objetos da categoria \textbf{Struct} são triplos $(d, \varphi, n)$, onde:
+\begin{itemize}
+    \item $n \in \mathbb{N}$ é o número de elementos do conjunto;
+    \item $\varphi: \{1, \dots, n\} \to \{1, \dots, n\}$ é um endomapa que codifica a estrutura interna do conjunto;
+    \item $d: \{1, \dots, n\} \to \mathbb{C}$ é um mapa nos números complexos que descreve (possivelmente com repetição) os elementos armazenados.
+\end{itemize}
+
+No ambiente MATLAB/Octave, estes objetos são representados por uma \textit{struct} com os campos correspondentes aos componentes do triplo:
+
+\begin{lstlisting}[language=Matlab, caption={Representação de um objeto de Struct}]
+% Objeto S = (d, phi, n)
+S.n   = 4;
+S.phi = [2, 3, 3, 1];         % endomapa phi: {1,2,3,4} -> {1,2,3,4}
+S.d   = [1+0i, 2+1i, 0+0i, 3-1i]; % mapa d: {1..4} -> C
+
+% Interpretacao: 
+% phi(1)=2, phi(2)=3, phi(3)=3, phi(4)=1
+% d(1)=1, d(2)=2+i, d(3)=0, d(4)=3-i
+\end{lstlisting}
+
+\subsection{Morfismos}
+Um morfismo $f: (d_1, \varphi_1, n_1) \to (d_2, \varphi_2, n_2)$ é um mapa $f: \{1, \dots, n_1\} \to \{1, \dots, n_2\}$ tal que as seguintes condições de compatibilidade são satisfeitas:
+\[
+    f \circ \varphi_1 = \varphi_2 \circ f \qquad \text{e} \qquad d_1 = d_2 \circ f.
+\]
+A primeira condição garante que a estrutura de sucessão é preservada, enquanto a segunda garante a preservação dos dados associados a cada elemento.
+
+\begin{lstlisting}[language=Matlab, caption={Verificação de um morfismo de Struct}]
+function ok = is_struct_morphism(S1, S2, f)
+    % f e um vetor de indices onde f(i) e a imagem do elemento i
+    ok = true;
+    
+    for i = 1:S1.n
+        % 1) Verificacao da condicao f(phi1(i)) == phi2(f(i))
+        if f(S1.phi(i)) ~= S2.phi(f(i))
+            ok = false; return;
+        end
+        
+        % 2) Verificacao da condicao d1(i) == d2(f(i))
+        if abs(S1.d(i) - S2.d(f(i))) > 1e-10 % Tolerancia para complexos
+            ok = false; return;
+        end
+    end
+end
+\end{lstlisting}
