@@ -1,0 +1,81 @@
+% ============================================================
+\section{Funtor \texorpdfstring{$F: Sub \to Rel$}{F: Sub -> Rel}}
+\label{sec:functor-sub-rel}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{Sub}$ (modelo MATLAB/Octave)]
+Os objetos são conjuntos finitos representados por vetores de inteiros. Um morfismo $A \hookrightarrow B$ existe apenas quando $A \subseteq B$, sendo representado pelo vetor lógico de inclusão que indica quais os elementos de $B$ que pertencem a $A$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{Sub}$}]
+A = [1, 2];        % subconjunto
+B = [1, 2, 3];     % conjunto maior
+is_sub = all(ismember(A, B));  % verifica A ⊆ B -> true
+incl   = ismember(B, A);       % vector logico da inclusao: [1,1,0]
+\end{lstlisting}
+
+\begin{definition}[Categoria $\mathbf{Rel}$ (modelo MATLAB/Octave)]
+Os objetos são conjuntos finitos. Um morfismo $R: A \to B$ é uma relação binária $R \subseteq A \times B$, representada por uma matriz booleana $|B| \times |A|$ onde a entrada $(i,j)$ vale $1$ se e só se $(a_j, b_i) \in R$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{Rel}$}]
+% Relacao R ⊆ {1,2} x {1,2,3}: matriz booleana 3x2
+M_rel = [1, 0;   % b_1 relaciona-se com a_1
+         0, 1;   % b_2 relaciona-se com a_2
+         0, 0];  % b_3 sem pre-imagem
+\end{lstlisting}
+
+\subsection{Funtor Covariante \texorpdfstring{$F: Sub \to Rel$}{F: Sub -> Rel}}
+
+O funtor $F$ traduz cada inclusão de subconjuntos na sua relação binária correspondente, transportando a estrutura de $\mathbf{Sub}$ para o interior de $\mathbf{Rel}$.
+
+\begin{itemize}
+    \item \textbf{Nos objetos:} $F(A) = A$. O conjunto mantém-se inalterado.
+    \item \textbf{Nos morfismos:} Uma inclusão $A \hookrightarrow B$ é convertida na relação de identidade restrita a $A$. Gera-se uma matriz $|B| \times |A|$ onde a entrada $(i,j)$ é $1$ se o $j$-ésimo elemento de $A$ corresponder ao $i$-ésimo elemento de $B$, e $0$ caso contrário.
+\end{itemize}
+
+\begin{lstlisting}[style=matlab, caption={Funtor $F$ aplicado a uma inclusão $A \hookrightarrow B$}]
+A = [1, 2];
+B = [1, 2, 3];
+
+% Construcao da matriz relacional correspondente a inclusao
+M_rel = zeros(length(B), length(A));
+for j = 1:length(A)
+    idx = find(B == A(j));
+    if ~isempty(idx)
+        M_rel(idx, j) = 1;
+    end
+end
+% Resultado: M_rel = [1,0; 0,1; 0,0]
+\end{lstlisting}
+
+\begin{proposition}
+O funtor $F: \mathbf{Sub} \to \mathbf{Rel}$ satisfaz as seguintes propriedades:
+\begin{itemize}
+    \item $F(\mathrm{id}_A)$ é a matriz identidade restrita a $A$;
+    \item $F$ preserva a composição de inclusões: $F(B \hookrightarrow C) \circ F(A \hookrightarrow B) = F(A \hookrightarrow C)$;
+    \item $F$ é fiel: inclusões distintas produzem relações distintas.
+\end{itemize}
+\end{proposition}
+
+\subsection{Transformações Naturais \texorpdfstring{$\alpha: F_1 \Rightarrow F_2$}{alpha: F1 => F2}}
+
+Dados dois funtores paralelos $F_1, F_2: \mathbf{Sub} \to \mathbf{Rel}$, uma transformação natural $\alpha: F_1 \Rightarrow F_2$ é uma família de morfismos em $\mathbf{Rel}$,
+\[
+    \alpha_A : F_1(A) \to F_2(A), \quad \text{para cada objeto } A \in \mathbf{Sub},
+\]
+tal que para cada morfismo $A \hookrightarrow B$ o seguinte quadrado comuta:
+\[
+    F_2(A \hookrightarrow B) \circ \alpha_A \;=\; \alpha_B \circ F_1(A \hookrightarrow B).
+\]
+Considerando $F_1$ como o funtor que mapeia a inclusão para a relação de identidade estrita (matriz diagonal) e $F_2$ como o funtor que mapeia para a relação universal (matriz totalmente preenchida a $1$), a transformação natural $\alpha: F_1 \Rightarrow F_2$ comprova que a relação de identidade é um subgrafo lógico da relação universal.
+
+\begin{lstlisting}[style=matlab, caption={Verificação da transformação natural $\alpha: F_1 \Rightarrow F_2$ em $\mathbf{Sub} \to \mathbf{Rel}$}]
+n = 3;
+M_F1 = eye(n);   % Funtor F1: relacao de identidade (diagonal)
+M_F2 = ones(n);  % Funtor F2: relacao universal
+
+% Validacao: F1 e sub-relacao de F2 (condicao de naturalidade)
+alpha_A = all((M_F1 & M_F2) == M_F1, 'all');  % Retorna 1 (true)
+\end{lstlisting}

@@ -1,0 +1,128 @@
+% ============================================================
+\section{Funtor \texorpdfstring{$Z: Lat \to Bool$}{Z: DLat -> Bool}}
+\label{sec:functor-dlat-bool}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{DLat}$ (modelo MATLAB/Octave)]
+Os objetos são reticulados distributivos finitos $(L, \wedge, \vee)$, representados por uma \texttt{struct} com o conjunto de elementos e as operações de meet e join. Um morfismo $f: L \to M$ é um homomorfismo de reticulados, preservando meet e join: $f(a \wedge b) = f(a) \wedge f(b)$ e $f(a \vee b) = f(a) \vee f(b)$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{DLat}$}]
+% Reticulado distributivo: cadeia linear {0,1,2,3}
+L.elements = [0, 1, 2, 3];
+L.meet     = @(x, y) min(x, y);   % meet (infimo)
+L.join     = @(x, y) max(x, y);   % join (supremo)
+L.bot      = 0;
+L.top      = 3;
+
+% Verificacao de homomorfismo f: L -> M
+is_hom = all(arrayfun(@(a, b) ...
+    M.meet(f(a), f(b)) == f(L.meet(a, b)) && ...
+    M.join(f(a), f(b)) == f(L.join(a, b)), ...
+    L.elements, L.elements));
+\end{lstlisting}
+
+\begin{definition}[Categoria $\mathbf{Bool}$ (modelo MATLAB/Octave)]
+Os objetos são álgebras booleanas finitas $(B, \wedge, \vee, \neg, \bot, \top)$, que acrescentam ao reticulado a operação de complemento e os elementos distinguidos $\bot$ e $\top$. Um morfismo preserva todas as operações, incluindo o complemento.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{Bool}$}]
+% Algebra booleana: 2^2 = {00,01,10,11} representada por {0,1,2,3}
+B.elements = [0, 1, 2, 3];
+B.meet     = @(x, y) bitand(x, y);
+B.join     = @(x, y) bitor(x, y);
+B.compl    = @(x) bitxor(x, 3);   % complemento bit a bit em 2 bits
+B.bot      = 0;
+B.top      = 3;
+\end{lstlisting}
+
+\subsection{Funtor Covariante \texorpdfstring{$Z: DLat \to Bool$}{Z: DLat -> Bool} (Centro Booleano)}
+
+O funtor $Z: \mathbf{DLat} \to \mathbf{Bool}$ envia cada reticulado distributivo limitado $L$ ao seu \emph{centro booleano}, o subconjunto dos elementos complementados,
+\[
+    Z(L) = \bigl\{a \in L \;\big|\; \exists\, a' \in L : a \wedge a' = \bot \;\text{ e }\; a \vee a' = \top\bigr\}.
+\]
+Em reticulados distributivos, $Z(L)$ é sempre uma subálgebra booleana de $L$ (com complemento único). Cada morfismo $f: L \to M$ em $\mathbf{DLat}$ induz $Z(f) = f|_{Z(L)}: Z(L) \to Z(M)$, pois homomorfismos de reticulados preservam a propriedade de ser complementado.
+
+\begin{lstlisting}[style=matlab, caption={Funtor $Z$ --- extração do centro booleano de um reticulado distributivo}]
+function B = center_boolean(L)
+    complemented = [];
+    for a = L.elements
+        for b = L.elements
+            if L.meet(a,b) == L.bot && L.join(a,b) == L.top
+                complemented = [complemented, a];
+                break;
+            end
+        end
+    end
+    B.elements = unique(complemented);
+    B.meet     = L.meet;
+    B.join     = L.join;
+    B.compl    = @(a) find_complement(L, a);
+    B.bot      = L.bot;
+    B.top      = L.top;
+end
+
+function c = find_complement(L, a)
+    % Complemento unico em reticulados distributivos
+    for b = L.elements
+        if L.meet(a,b) == L.bot && L.join(a,b) == L.top
+            c = b; return;
+        end
+    end
+    c = NaN;
+end
+\end{lstlisting}
+
+\begin{remark}
+Em reticulados distributivos, cada elemento tem no máximo um complemento, pelo que $Z(L)$ é bem definida e $Z(f)$ está bem definido como restrição de $f$ ao centro booleano.
+\end{remark}
+
+\subsection{Funtor de Esquecimento \texorpdfstring{$J: Bool \to DLat$}{J: Bool -> DLat}}
+
+O funtor de esquecimento $J: \mathbf{Bool} \to \mathbf{DLat}$ envia cada álgebra booleana $(B, \wedge, \vee, \neg, \bot, \top)$ ao reticulado distributivo subjacente $(B, \wedge, \vee)$, ignorando o complemento. Cada morfismo booleano é automaticamente um morfismo de reticulados, pelo que $J$ está bem definido.
+
+\begin{lstlisting}[style=matlab, caption={Funtor de esquecimento $J: \mathbf{Bool} \to \mathbf{DLat}$}]
+function L = forget_bool_to_dlat(B)
+    L.elements = B.elements;
+    L.meet     = B.meet;
+    L.join     = B.join;
+    L.bot      = B.bot;
+    L.top      = B.top;
+    % complemento e esquecido
+end
+\end{lstlisting}
+
+\subsection{Transformações Naturais \texorpdfstring{$\iota: J \circ Z \Rightarrow \mathrm{Id}_{\mathbf{DLat}}$}{iota: JZ => Id}}
+
+A transformação natural canónica entre os dois funtores paralelos é
+\[
+    \iota : J \circ Z \;\Rightarrow\; \mathrm{Id}_{\mathbf{DLat}},
+\]
+cujas componentes são as inclusões do centro booleano no reticulado original,
+\[
+    \iota_L : J(Z(L)) \hookrightarrow L, \quad a \mapsto a.
+\]
+A condição de naturalidade exige que, para todo morfismo $f: L \to M$ em $\mathbf{DLat}$,
+\[
+    f \circ \iota_L \;=\; \iota_M \circ J(Z(f)).
+\]
+Como $\iota$ é a inclusão, isto reduz-se a verificar que $f$ envia o centro booleano de $L$ para dentro do centro booleano de $M$.
+
+\begin{lstlisting}[style=matlab, caption={Verificação da naturalidade de $\iota$ para um morfismo $f: L \to M$}]
+function ok = check_iota_naturality(L, M, f)
+    ZL = center_boolean(L);
+    ZM = center_boolean(M);
+
+    % Naturalidade: f(a) pertence a Z(M) para todo a em Z(L)
+    ok = true;
+    for a = ZL.elements
+        if ~ismember(f(a), ZM.elements)
+            ok = false; return;
+        end
+    end
+    % Se ok=true, iota e natural: elementos complementados de L
+    % sao enviados em elementos complementados de M
+end
+\end{lstlisting}

@@ -1,0 +1,47 @@
+\section{Lat (Reticulados Finitos)}
+
+A categoria dos reticulados finitos (\textbf{Lat}) estuda conjuntos equipados com duas operações binárias: o ínfimo (\emph{meet}, $\wedge$) e o supremo (\emph{join}, $\vee$). Estas operações satisfazem os axiomas da comutatividade, associatividade, absorção e idempotência.
+
+\subsection{Objetos}
+No ambiente MATLAB, como trabalhamos com conjuntos finitos de tamanho $n$, a forma mais eficaz de representar um reticulado é através de duas matrizes $n \times n$. Cada matriz atua como uma tabela de pesquisa (\emph{look-up table}), onde a entrada $(i, j)$ guarda o resultado da operação entre os elementos $i$ e $j$.
+
+\begin{lstlisting}[caption={Representação de um Reticulado (Diamante de 4 elementos)}]
+% Reticulado com 4 elementos: 1 (Fundo), 2 e 3 (Incomparaveis), 4 (Topo)
+n = 4;
+
+% Matriz da operacao meet (infimo)
+M_meet = [1 1 1 1; 
+          1 2 1 2; 
+          1 1 3 3; 
+          1 2 3 4];
+
+% Matriz da operacao join (supremo)
+M_join = [1 2 3 4; 
+          2 2 4 4; 
+          3 4 3 4; 
+          4 4 4 4];
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos em \textbf{Lat} não precisam apenas de preservar a ordem (como acontece na categoria dos Posets); eles exigem uma preservação algébrica estrita. Um mapeamento $f$ é um homomorfismo de reticulados se, e só se, preservar ambas as operações para quaisquer elementos $i, j$: $f(i \wedge j) = f(i) \wedge f(j)$ e $f(i \vee j) = f(i) \vee f(j)$.
+
+\begin{lstlisting}[caption={Algoritmo de Verificacao de Homomorfismo de Reticulados}]
+% f e um vetor onde o indice e o dominio e o valor e a imagem
+f = [1, 4, 4, 4]; % Exemplo de um mapeamento (colapsa tudo no Topo)
+
+isMorphism = true;
+for i = 1:n_domain
+    for j = 1:n_domain
+        % Verifica preservacao do meet (infimo)
+        if f(M_meet_domain(i, j)) ~= M_meet_codomain(f(i), f(j))
+            isMorphism = false; break;
+        end
+        
+        % Verifica preservacao do join (supremo)
+        if f(M_join_domain(i, j)) ~= M_join_codomain(f(i), f(j))
+            isMorphism = false; break;
+        end
+    end
+    if ~isMorphism, break; end
+end
+\end{lstlisting}

@@ -1,12 +1,12 @@
 % ============================================================
-\section{Funtor End $\rightarrow$ Mon}
+\section{Funtor \texorpdfstring{$F: End \to Mon$}{F: End -> Mon}}
 \label{sec:functor-end-mon}
 
 \subsection{Fundamentação Teórica}
 
 O funtor $F: \mathbf{End} \to \mathbf{Mon}$ associa a cada endomapa $\varphi$ o monoide das suas iterações distintas, capturando a estrutura algébrica do comportamento dinâmico de $\varphi$ a longo prazo. Como $X$ é finito, a sequência de iteradas estabiliza (torna-se eventualmente periódica), pelo que o monoide é sempre finito.
 
-\subsection{Funtor Covariante End $\rightarrow$ Mon}
+\subsection{Funtor Covariante \texorpdfstring{$F: End \to Mon$}{F: End -> Mon}}
 
 \begin{definition}[Funtor covariante $F: \mathbf{End} \to \mathbf{Mon}$]
 Dado $(X, \varphi) \in \mathbf{End}$, define-se o monoide das iterações distintas:
@@ -72,7 +72,7 @@ function eta_comp = apply_eta_Mon(Mon, k0)
     % eta^(k0)(phi^k) = phi^(k+k0) via composicao no monoide
     m   = size(Mon.mult, 1);
     gen = 2;  % indice de phi^1 (phi^0=1, phi^1=2, ...)
-    pk0 = Mon.identity;\input{Matemática Discreta/Report/Functors/21_End_Mon}
+    pk0 = Mon.identity;
     for i = 1:k0
         pk0 = Mon.mult(pk0, gen);
     end

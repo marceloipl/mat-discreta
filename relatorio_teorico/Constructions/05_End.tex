@@ -1,0 +1,35 @@
+% ============================================================
+\section{End (Endomaps)}
+As construções na categoria de endomapas focam-se na preservação da evolução de estados. O foco principal é garantir que as novas estruturas criadas mantenham uma dinâmica válida, onde a "comutatividade" da evolução do sistema original é respeitada.
+
+\subsection{Fundamentação Teórica}
+As principais construções universais implementadas para esta categoria são:
+\begin{itemize}
+    \item \textbf{Produtos:} O produto $X \times Y$ atua em paralelo com o endomapa produto definido por $\alpha \times \beta (x, y) = (\alpha(x), \beta(y))$.
+    \item \textbf{Equalizadores:} O subconjunto de estados invariantes face aos morfismos concorrentes, munido da restrição da dinâmica original.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+Em vez do produto de Kronecker, iteramos e indexamos linearmente a combinação de vetores para construir o endomapa produto diretamente num vetor unidimensional.
+
+\begin{lstlisting}[caption={Construção do Produto Paralelo de Endomapas}]
+function P = endo_product(EA, EB)
+    % EA e EB são vetores de endomapas
+    nA = length(EA);
+    nB = length(EB);
+    P_vector = zeros(1, nA * nB);
+    
+    for i = 1:nA
+        for j = 1:nB
+            % Cálculo do índice no produto cartesiano
+            idx = (i-1)*nB + j;
+            % Onde (EA(i), EB(j)) cai no novo vetor referencial
+            val = (EA(i)-1)*nB + EB(j);
+            P_vector(idx) = val;
+        end
+    end
+    
+    P.vector = P_vector;
+    P.n_elements = nA * nB;
+end
+\end{lstlisting}

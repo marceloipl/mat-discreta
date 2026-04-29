@@ -1,0 +1,101 @@
+% ============================================================
+\section{Funtor \texorpdfstring{$U_1, U_2: DIMag \to Mag$}{U1, U2: DIMag -> Mag}}
+\label{sec:functor-dimag-mag}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{DIMag}$ (modelo MATLAB/Octave)]
+Um objeto é um dimagma finito $(M, \ast, \circ)$, ou seja, um conjunto finito $M$ com duas operações binárias independentes. Em MATLAB, representa-se por uma \texttt{struct} com campos \texttt{elements}, \texttt{op1} e \texttt{op2}.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto em $\mathbf{DIMag}$}]
+D.elements = [0, 1, 2];
+D.op1 = @(x, y) mod(x + y, 3);   % primeira operacao
+D.op2 = @(x, y) mod(x * y, 3);   % segunda operacao
+\end{lstlisting}
+
+\begin{definition}[Categoria $\mathbf{Mag}$ (modelo MATLAB/Octave)]
+Um objeto é um magma finito $(M, \ast)$, ou seja, um conjunto finito com uma única operação binária, sem axiomas adicionais. Em MATLAB, representa-se por uma \texttt{struct} com campos \texttt{elements} e \texttt{op}.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto em $\mathbf{Mag}$}]
+M.elements = [0, 1, 2];
+M.op = @(x, y) mod(x + y, 3);
+\end{lstlisting}
+
+\subsection{Funtores Covariantes \texorpdfstring{$U_1, U_2: DIMag \to Mag$}{U1, U2: DIMag -> Mag}}
+
+Existem dois funtores de esquecimento covariantes naturais:
+\[
+    U_1: \mathbf{DIMag} \to \mathbf{Mag}, \qquad U_1(M, \ast, \circ) = (M, \ast),
+\]
+\[
+    U_2: \mathbf{DIMag} \to \mathbf{Mag}, \qquad U_2(M, \ast, \circ) = (M, \circ).
+\]
+Cada um esquece uma das duas operações, retendo apenas a outra. Nos morfismos, ambos atuam como a identidade, uma vez que qualquer homomorfismo de dimagmas que preserve as duas operações também preserva cada uma individualmente.
+
+\begin{lstlisting}[style=matlab, caption={Funtores de esquecimento $U_1$ e $U_2$}]
+function M = forget_first(D)
+    % U1: esquece a segunda operacao, retendo a primeira
+    M.elements = D.elements;
+    M.op = D.op1;
+end
+
+function M = forget_second(D)
+    % U2: esquece a primeira operacao, retendo a segunda
+    M.elements = D.elements;
+    M.op = D.op2;
+end
+\end{lstlisting}
+
+\subsection{Funtor Diagonal \texorpdfstring{$\Delta: Mag \to DIMag$}{Delta: Mag -> DIMag}}
+
+Existe também o funtor diagonal, adjunto à direita de $U_1$ e $U_2$:
+\[
+    \Delta: \mathbf{Mag} \to \mathbf{DIMag}, \qquad \Delta(M, \ast) = (M, \ast, \ast).
+\]
+Este funtor duplica a operação, colocando a mesma nas duas posições do dimagma resultante.
+
+\begin{lstlisting}[style=matlab, caption={Funtor diagonal $\Delta: \mathbf{Mag} \to \mathbf{DIMag}$}]
+function D = diagonal_magma(M)
+    % Delta: duplica a operacao unica em ambas as posicoes
+    D.elements = M.elements;
+    D.op1 = M.op;
+    D.op2 = M.op;
+end
+\end{lstlisting}
+
+\begin{proposition}
+Verificam-se os seguintes isomorfismos naturais:
+\[
+    U_1 \circ \Delta \cong \mathrm{Id}_{\mathbf{Mag}}, \qquad U_2 \circ \Delta \cong \mathrm{Id}_{\mathbf{Mag}}.
+\]
+\end{proposition}
+
+\subsection{Transformações Naturais \texorpdfstring{$\eta: U_1 \Rightarrow U_2$}{eta: U1 => U2}}
+
+Dados os dois funtores paralelos $U_1, U_2: \mathbf{DIMag} \to \mathbf{Mag}$, uma transformação natural $\eta: U_1 \Rightarrow U_2$ é uma família de morfismos em $\mathbf{Mag}$,
+\[
+    \eta_{(M,\ast,\circ)}: (M, \ast) \to (M, \circ), \quad \text{para cada } (M,\ast,\circ) \in \mathbf{DIMag},
+\]
+tal que para cada morfismo $f: (M_1, \ast_1, \circ_1) \to (M_2, \ast_2, \circ_2)$ o seguinte quadrado comuta:
+\[
+    U_2(f) \circ \eta_{M_1} = \eta_{M_2} \circ U_1(f).
+\]
+A identidade $\mathrm{id}_M$ é uma transformação natural $U_1 \Rightarrow U_2$ se e só se a primeira e a segunda operação coincidem, ou seja, se o dimagma é na realidade um magma (caso $\Delta$).
+
+\begin{lstlisting}[style=matlab, caption={Verificação da condição de naturalidade $\eta: U_1 \Rightarrow U_2$}]
+function ok = check_nat_trans_dimag_mag(D, eta)
+    % Verifica se eta e morfismo de Mag de U1(D) para U2(D)
+    % i.e., eta(x * y) == eta(x) o eta(y) para todo x,y
+    ok = true;
+    for i = 1:length(D.elements)
+        for j = 1:length(D.elements)
+            x = D.elements(i);  y = D.elements(j);
+            lhs = eta(D.op1(x, y));
+            rhs = D.op2(eta(x), eta(y));
+            if lhs ~= rhs, ok = false; return; end
+        end
+    end
+end
+\end{lstlisting}

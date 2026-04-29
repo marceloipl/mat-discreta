@@ -1,12 +1,12 @@
 % ============================================================
-\section{Funtor End $\rightarrow$ Turing Machines}
+\section{Funtor \texorpdfstring{$F: End \to Turing Machines$}{F: End -> Turing Machines}}
 \label{sec:functor-end-turing}
 
 \subsection{Fundamentação Teórica}
 
 O funtor $F: \mathbf{End} \to \mathbf{Turing\ Machines}$ constrói, a partir de uma endomapa $\varphi: X \to X$, uma máquina de Turing simplificada cujos estados correspondem aos elementos de $X$ e cuja função de transição é ditada por $\varphi$. A construção preserva a estrutura de morfismo: um mapa que comuta com as endomapas induz um par de mapas de estados e de fita compatível com as respetivas funções de transição.
 
-\subsection{Funtor Covariante End $\rightarrow$ Turing Machines}
+\subsection{Funtor Covariante \texorpdfstring{$F: End \to Turing Machines$}{F: End -> Turing Machines}}
 
 \begin{definition}[Funtor covariante $F: \mathbf{End} \to \mathbf{Turing\ Machines}$]
 Dado $(X, \varphi) \in \mathbf{End}$ com $X = \{1,\ldots,n\}$, constrói-se a máquina de Turing $F(X,\varphi) = (Q, \Gamma, \delta, q_0, F_{\mathrm{acc}}, B)$ da seguinte forma:

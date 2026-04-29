@@ -1,0 +1,28 @@
+% ============================================================
+\section{End (Endomaps)}
+A categoria de endomapas (ou sistemas dinâmicos discretos autónomos) foca-se na evolução de estados.
+Um objeto é um conjunto finito munido de uma função (endomorfismo) que mapeia o conjunto para si mesmo, $\alpha: X \to X$.
+
+\subsection{Objetos}
+Dado que a relação é estritamente uma função (cada elemento tem exatamente uma imagem), a representação mais eficiente em MATLAB não é uma matriz, mas sim um vetor de índices, o que otimiza significativamente o uso de memória e tempo de acesso.
+
+\begin{lstlisting}[caption={Representação de um Endomapa}]
+% Vetor representando f(1)=2, f(2)=3, f(3)=1 (Um ciclo de comprimento 3)
+E = [2, 3, 1];
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos são funções equivariantes que "comutam" com a dinâmica.
+Um mapeamento $f: (X, \alpha) \to (Y, \beta)$ é válido se aplicar a dinâmica e depois mapear for igual a mapear e depois aplicar a dinâmica do codomínio: $f(\alpha(x)) = \beta(f(x))$.
+
+\begin{lstlisting}[caption={Verificação do Quadrado Comutativo}]
+% f é o morfismo; EA e EB são os endomapas
+isMorphism = true;
+for x = 1:length(f)
+    % Verifica se comuta: f(alpha(x)) == beta(f(x))
+    if f(EA(x)) ~= EB(f(x))
+        isMorphism = false;
+        break;
+    end
+end
+\end{lstlisting}

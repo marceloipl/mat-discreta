@@ -1,0 +1,39 @@
+\section{DIMag (Dimagmas Finitos)}
+A categoria de dimagmas finitos generaliza a de magmas ao equipar cada conjunto com duas operações binárias independentes. Não são impostos quaisquer axiomas sobre as operações nem qualquer relação entre elas, tornando $\mathbf{DIMag}$ uma das categorias algébricas mais gerais.
+
+\subsection{Objetos}
+Os objetos de $\mathbf{DIMag}$ são dimagmas finitos, ou seja, conjuntos finitos $D$ equipados com duas operações binárias $\cdot,\, \ast\,: D \times D \to D$ independentes entre si. Em MATLAB, um dimagma é representado por uma \texttt{struct} com o conjunto de elementos e as duas funções anónimas correspondentes às operações.
+
+\begin{lstlisting}[caption={Representação de um dimagma finito}]
+% Definicao de um dimagma: conjunto {1,2,3} com duas operacoes
+DIMag      = struct();
+DIMag.set  = {1, 2, 3};              % Conjunto finito
+DIMag.op1  = @(a, b) mod(a + b, 3); % Primeira operacao binaria
+DIMag.op2  = @(a, b) mod(a * b, 3); % Segunda operacao binaria (independente)
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos em $\mathbf{DIMag}$ são aplicações que preservam simultaneamente ambas as operações. Dados dois dimagmas $(D, \cdot, \ast)$ e $(E, \odot, \otimes)$, uma aplicação $f: D \to E$ é um morfismo se e só se
+\[
+    f(a \cdot b) = f(a) \odot f(b)
+    \quad \text{e} \quad
+    f(a \ast b) = f(a) \otimes f(b), \quad \forall\, a, b \in D.
+\]
+A verificação percorre todos os pares de elementos do domínio e valida as duas condições em simultâneo.
+
+\begin{lstlisting}[caption={Verificação de morfismo entre dimagmas}]
+% Construtor de verificador de morfismo entre dois dimagmas D1 e D2
+MorphismDIMag = @(D1, D2) @(f) ...
+    all(arrayfun(@(a, b) ...
+        D2.op1(f(a), f(b)) == f(D1.op1(a, b)) && ...
+        D2.op2(f(a), f(b)) == f(D1.op2(a, b)), ...
+        D1.set, D1.set));
+
+% Funcao auxiliar equivalente (forma explicita)
+function ok = check_morphism(D1, D2, f)
+    ok = all(arrayfun(@(a, b) ...
+             D2.op1(f(a), f(b)) == f(D1.op1(a, b)) && ...
+             D2.op2(f(a), f(b)) == f(D1.op2(a, b)), ...
+             D1.set, D1.set));
+end
+\end{lstlisting}

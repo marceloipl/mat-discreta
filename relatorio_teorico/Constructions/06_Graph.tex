@@ -1,0 +1,22 @@
+% ============================================================
+\section{Graph (Directed Graphs)}
+As construções na categoria de grafos direcionados baseiam-se na preservação da estrutura de incidência. O foco principal é garantir que a direcionalidade explícita das arestas originais seja devidamente transportada para as novas redes criadas.
+
+\subsection{Fundamentação Teórica}
+As principais construções universais implementadas para esta categoria são:
+\begin{itemize}
+    \item \textbf{Produtos:} O produto tensorial de grafos, onde os vértices são pares de vértices originais, e existe uma aresta entre $(a,b)$ e $(a',b')$ se $a \to a'$ e $b \to b'$.
+    \item \textbf{Equalizadores:} O subgrafo induzido pelo conjunto de vértices onde as funções (homomorfismos paralelos) concordam.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+A implementação matemática via matrizes garante uma avaliação computacional imediata do produto tensorial.
+
+\begin{lstlisting}[caption={Construção do Produto Tensorial de Grafos}]
+function G = graph_product(MA, MB)
+    % Produto tensorial de grafos
+    G_matrix = kron(MA, MB);
+    G.matrix = G_matrix;
+    G.n_vertices = size(G_matrix, 1);
+end
+\end{lstlisting}

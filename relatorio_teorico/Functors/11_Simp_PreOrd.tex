@@ -1,12 +1,12 @@
 % ============================================================
-\section{Funtor $F: Simp \to PreOrd$}
+\section{Funtor \texorpdfstring{$F: Simp \to PreOrd$}{F: Simp -> PreOrd}}
 \label{sec:functor-simp-preord}
 
 \subsection{Fundamentação Teórica}
 
 A categoria simplicial $\mathbf{Simp}$ tem como objetos os conjuntos linearmente ordenados $[n] = \{0, 1, \ldots, n\}$ para $n \geq 0$, e como morfismos as funções que preservam a ordem (não decrescentes). A categoria $\mathbf{PreOrd}$ tem como objetos conjuntos finitos munidos de uma relação reflexiva e transitiva, e como morfismos os mapas monótonos. O funtor $F: \mathbf{Simp} \to \mathbf{PreOrd}$ interpreta cada cadeia $[n]$ como uma pré-ordem linear, transportando a estrutura de ordem total da categoria simplicial para a categoria das pré-ordens.
 
-\subsection{Funtor Covariante $F: Simp \to PreOrd$}
+\subsection{Funtor Covariante \texorpdfstring{$F: Simp \to PreOrd$}{F: Simp -> PreOrd}}
 
 \begin{definition}[Funtor covariante $F: \mathbf{Simp} \to \mathbf{PreOrd}$]
 O funtor $F$ atua da seguinte forma:
@@ -20,7 +20,7 @@ O funtor $F$ atua da seguinte forma:
 $F$ é bem definido e covariante: todo morfismo de $\mathbf{Simp}$ é monótono por definição, logo é morfismo de $\mathbf{PreOrd}$. A preservação da composição e da identidade é imediata.
 \end{proposition}
 
-\begin{lstlisting}[style=matlab, caption={Funtor $F: \mathbf{Simp} \to \mathbf{PreOrd}$ --- construção da pré-ordem de $[n]$}]
+\begin{lstlisting}[style=matlab, caption={[Funtor F: Simp -> PreOrd] Funtor $F: \mathbf{Simp} \to \mathbf{PreOrd}$ --- construção da pré-ordem de $[n]$}]
 function M = simp_to_preord(n)
     % Constroi a matriz de adjacencia da pre-ordem linear [n]
     % M(i,j) = 1 sse (i-1) <= (j-1), i.e., i <= j (indices 1-based)
@@ -42,7 +42,7 @@ function ok = simp_morphism_check(f, n, m)
 end
 \end{lstlisting}
 
-\begin{lstlisting}[style=matlab, caption={Exemplo: $F([2])$ e verificação de morfismo}]
+\begin{lstlisting}[style=matlab, caption={[Exemplo: F([2])] Exemplo: $F([2])$ e verificação de morfismo}]
 n = 2;
 M_preord = simp_to_preord(n);
 % M_preord = [1 1 1; 0 1 1; 0 0 1]  (ordem linear 0 <= 1 <= 2)
@@ -84,7 +84,7 @@ end
 Seja $F$ o funtor que envia $[n]$ à pré-ordem linear $\leq$ (triangular superior) e $G$ o funtor que envia $[n]$ à pré-ordem trivial (apenas reflexividade, i.e., $M = I_{n+1}$). A família de morfismos $\eta_{[n]} = \mathrm{id}_{[n]}$ define uma transformação natural $\eta: G \Rightarrow F$, pois $i \leq_{G} i$ implica $i \leq_{F} i$ (reflexividade está contida na ordem linear), tornando a identidade um morfismo monótono de $G([n])$ em $F([n])$.
 \end{definition}
 
-\begin{lstlisting}[style=matlab, caption={Transformação natural $\eta: G \Rightarrow F$ --- pré-ordem trivial para linear}]
+\begin{lstlisting}[style=matlab, caption={[Transformação natural eta: G -> F] Transformação natural $\eta: G \Rightarrow F$ --- pré-ordem trivial para linear}]
 function M_trivial = preord_trivial(n)
     % Pre-ordem trivial: apenas reflexividade (matriz identidade)
     M_trivial = eye(n+1);

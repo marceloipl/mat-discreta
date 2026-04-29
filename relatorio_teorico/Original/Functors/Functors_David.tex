@@ -1,0 +1,722 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\geometry{margin=2.5cm}
+
+\title{Construções Categóricas em Categorias Algébricas\\
+\large com exemplos em MATLAB/Octave}
+\author{}
+\date{}
+
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+\definecolor{darkgreen}{rgb}{0,0.45,0}
+\definecolor{darkblue}{rgb}{0,0,0.6}
+
+\lstset{
+    backgroundcolor=\color{codegray},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    columns=fullflexible,
+    keepspaces=true,
+    keywordstyle=\color{darkblue},
+    commentstyle=\color{darkgreen},
+    showstringspaces=false
+}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introdução}
+
+Neste documento estudamos, para várias categorias algébricas, as construções de
+produtos, coproductos, pullbacks, pushouts, equalizadores e coequalizadores.
+Além disso, indicamos funtores e transformações naturais entre alguns pares de
+categorias.
+
+Como o enunciado pede também uma descrição simplificada em \texttt{MATLAB/Octave},
+incluímos exemplos computacionais elementares. Esses exemplos são
+\textbf{didáticos} e servem para ilustrar as construções; não implementam toda a
+generalidade algébrica de forma completamente formal.
+
+\section*{Categorias consideradas}
+
+\begin{itemize}
+    \item $\mathbf{Mag}$: magmas $(M,\ast)$.
+    \item $\mathbf{DIMag}$: magmas com duas operações $(M,\ast,\circ)$.
+    \item $\mathbf{Mon}$: monóides $(M,\ast,e)$.
+    \item $\mathbf{OrdMon}$: monóides ordenados $(M,\ast,e,\le)$.
+    \item $\mathbf{Lat}$: reticulados $(L,\wedge,\vee)$.
+    \item $\mathbf{DLat}$: reticulados distributivos.
+    \item $\mathbf{Bool}$: álgebras booleanas.
+\end{itemize}
+
+\section*{Representação em MATLAB/Octave}
+
+Em \texttt{MATLAB/Octave}, representamos as estruturas por \texttt{structs}. Por
+exemplo, um magma pode ser representado por um conjunto finito de elementos e uma
+operação binária:
+
+\begin{lstlisting}[language=Matlab]
+% Exemplo de magma
+A.elements = [0 1 2];
+A.op = @(x,y) mod(x + y, 3);
+\end{lstlisting}
+
+Um monóide acrescenta um elemento neutro:
+
+\begin{lstlisting}[language=Matlab]
+M.elements = [0 1 2];
+M.op = @(x,y) mod(x + y, 3);
+M.e = 0;
+\end{lstlisting}
+
+Um reticulado pode ser representado por duas operações:
+
+\begin{lstlisting}[language=Matlab]
+L.elements = [0 1];
+L.meet = @(x,y) min(x,y);
+L.join = @(x,y) max(x,y);
+\end{lstlisting}
+
+\section*{1. Categoria \(\mathbf{Mag}\)}
+
+\subsection*{Produto}
+
+Sejam $(A,\ast_A)$ e $(B,\ast_B)$ magmas. O produto é o magma
+\[
+A\times B
+\]
+com operação definida por
+\[
+(a,b)\ast(a',b')=(a\ast_A a',\, b\ast_B b').
+\]
+
+\paragraph{Código MATLAB/Octave:}
+\begin{lstlisting}[language=Matlab]
+function P = magma_product(A, B)
+    P.elements = [];
+    
+    for i = 1:length(A.elements)
+        for j = 1:length(B.elements)
+            P.elements = [P.elements; A.elements(i), B.elements(j)];
+        end
+    end
+    
+    P.op = @(x,y) [A.op(x(1), y(1)), B.op(x(2), y(2))];
+end
+\end{lstlisting}
+
+\subsection*{Coproducto}
+
+O coproducto existe e é o \emph{magma livre} gerado por $A\sqcup B$, impondo as
+relações já válidas em $A$ e em $B$. Denota-se informalmente por
+\[
+A\ast_{\mathbf{Mag}} B.
+\]
+
+\paragraph{Comentário computacional:}
+uma implementação completa exigiria representar \emph{termos formais} e impor
+relações de equivalência; isso é possível, mas já não é simples em
+\texttt{MATLAB/Octave}. Por isso, aqui apenas indicamos a construção teórica.
+
+\subsection*{Pullback}
+
+Dados morfismos $f:A\to C$ e $g:B\to C$, o pullback é
+\[
+P=\{(a,b)\in A\times B \mid f(a)=g(b)\},
+\]
+com a operação herdada do produto.
+
+\paragraph{Código MATLAB/Octave:}
+\begin{lstlisting}[language=Matlab]
+function P = pullback(A, B, f, g)
+    P.elements = [];
+    
+    for i = 1:length(A.elements)
+        for j = 1:length(B.elements)
+            if f(A.elements(i)) == g(B.elements(j))
+                P.elements = [P.elements; A.elements(i), B.elements(j)];
+            end
+        end
+    end
+    
+    P.op = @(x,y) [A.op(x(1), y(1)), B.op(x(2), y(2))];
+end
+\end{lstlisting}
+
+\subsection*{Pushout}
+
+Dados $f:C\to A$ e $g:C\to B$, o pushout é obtido como quociente do coproducto
+$A\ast_{\mathbf{Mag}} B$ pela menor congruência que identifica
+\[
+i_A(f(c)) \sim i_B(g(c)), \qquad c\in C.
+\]
+
+\paragraph{Comentário computacional:}
+como no coproducto, uma implementação completa requer manipulação de classes de
+equivalência e congruências.
+
+\subsection*{Equalizador}
+
+Dados $f,g:A\to B$, o equalizador é
+\[
+E=\{a\in A \mid f(a)=g(a)\}.
+\]
+
+\paragraph{Código MATLAB/Octave:}
+\begin{lstlisting}[language=Matlab]
+function E = equalizer(A, f, g)
+    E.elements = [];
+    
+    for i = 1:length(A.elements)
+        a = A.elements(i);
+        if f(a) == g(a)
+            E.elements = [E.elements a];
+        end
+    end
+    
+    E.op = A.op;
+end
+\end{lstlisting}
+
+\subsection*{Coequalizador}
+
+Dados $f,g:A\to B$, o coequalizador é o quociente
+\[
+B/{\sim},
+\]
+onde $\sim$ é a menor congruência tal que
+\[
+f(a)\sim g(a),\qquad a\in A.
+\]
+
+\paragraph{Código simplificado MATLAB/Octave:}
+\begin{lstlisting}[language=Matlab]
+function classes = coequalizer(A, f, g)
+    classes = {};
+    
+    for i = 1:length(A.elements)
+        classes{end+1} = [f(A.elements(i)), g(A.elements(i))];
+    end
+end
+\end{lstlisting}
+
+\paragraph{Observação:}
+este código é apenas ilustrativo; não constrói o quociente completo, apenas
+regista as identificações que deveriam gerar a congruência.
+
+\section*{2. Categoria \(\mathbf{DIMag}\)}
+
+Um objecto é $(M,\ast,\circ)$, com duas operações binárias.
+
+\subsection*{Produto}
+
+O produto de $(A,\ast_A,\circ_A)$ e $(B,\ast_B,\circ_B)$ é
+\[
+A\times B
+\]
+com
+\[
+(a,b)\ast(a',b')=(a\ast_A a',\, b\ast_B b'),
+\]
+\[
+(a,b)\circ(a',b')=(a\circ_A a',\, b\circ_B b').
+\]
+
+\paragraph{Código MATLAB/Octave:}
+\begin{lstlisting}[language=Matlab]
+function P = dimag_product(A, B)
+    P.elements = [];
+    
+    for i = 1:length(A.elements)
+        for j = 1:length(B.elements)
+            P.elements = [P.elements; A.elements(i), B.elements(j)];
+        end
+    end
+    
+    P.op1 = @(x,y) [A.op1(x(1), y(1)), B.op1(x(2), y(2))];
+    P.op2 = @(x,y) [A.op2(x(1), y(1)), B.op2(x(2), y(2))];
+end
+\end{lstlisting}
+
+\subsection*{Coproducto, Pushout e Coequalizador}
+
+Existem e são construídos como objectos livres/quocientes por congruências,
+agora compatíveis com \emph{duas} operações.
+
+\subsection*{Pullback}
+
+\[
+P=\{(a,b)\in A\times B\mid f(a)=g(b)\},
+\]
+com ambas as operações herdadas.
+
+\subsection*{Equalizador}
+
+\[
+E=\{a\in A\mid f(a)=g(a)\},
+\]
+subdouble magma de $A$.
+
+\section*{3. Categoria \(\mathbf{Mon}\)}
+
+\subsection*{Produto}
+
+Se $(M,\ast,e_M)$ e $(N,\cdot,e_N)$ são monóides, então o produto é
+\[
+M\times N
+\]
+com
+\[
+(m,n)\bullet(m',n')=(m\ast m',\, n\cdot n'),
+\qquad
+e_{M\times N}=(e_M,e_N).
+\]
+
+\paragraph{Código MATLAB/Octave:}
+\begin{lstlisting}[language=Matlab]
+function P = monoid_product(M, N)
+    P.elements = [];
+    
+    for i = 1:length(M.elements)
+        for j = 1:length(N.elements)
+            P.elements = [P.elements; M.elements(i), N.elements(j)];
+        end
+    end
+    
+    P.op = @(x,y) [M.op(x(1), y(1)), N.op(x(2), y(2))];
+    P.e = [M.e, N.e];
+end
+\end{lstlisting}
+
+\subsection*{Coproducto}
+
+O coproducto é o produto livre de monóides,
+\[
+M\ast_{\mathbf{Mon}} N.
+\]
+
+\paragraph{Comentário computacional:}
+em exemplos finitos simples, pode-se representar palavras alternadas; mas, em
+geral, a implementação é já substancialmente mais pesada.
+
+\subsection*{Pullback}
+
+Dados $f:M\to P$ e $g:N\to P$,
+\[
+M\times_P N=\{(m,n)\in M\times N\mid f(m)=g(n)\},
+\]
+com operação e unidade herdadas.
+
+\subsection*{Pushout}
+
+É o quociente do coproducto pela menor congruência de monóides que identifica
+as imagens de cada elemento do objecto intermédio.
+
+\subsection*{Equalizador}
+
+\[
+E=\{m\in M\mid f(m)=g(m)\},
+\]
+submonóide de $M$.
+
+\subsection*{Coequalizador}
+
+Quociente de $N$ pela menor congruência de monóides que força
+$f(m)\sim g(m)$ para todo $m\in M$.
+
+\section*{4. Categoria \(\mathbf{OrdMon}\)}
+
+Um objecto é $(M,\ast,e,\le)$, onde $(M,\ast,e)$ é monóide e a multiplicação é
+monótona em cada variável.
+
+\subsection*{Produto}
+
+O produto de dois monóides ordenados é
+\[
+M\times N
+\]
+com ordem produto:
+\[
+(m,n)\le(m',n') \iff m\le_M m' \text{ e } n\le_N n',
+\]
+e multiplicação componente a componente.
+
+\paragraph{Código MATLAB/Octave:}
+\begin{lstlisting}[language=Matlab]
+function P = ordmon_product(M, N)
+    P.elements = [];
+    
+    for i = 1:length(M.elements)
+        for j = 1:length(N.elements)
+            P.elements = [P.elements; M.elements(i), N.elements(j)];
+        end
+    end
+    
+    P.op = @(x,y) [M.op(x(1), y(1)), N.op(x(2), y(2))];
+    P.e = [M.e, N.e];
+    P.leq = @(x,y) M.leq(x(1),y(1)) && N.leq(x(2),y(2));
+end
+\end{lstlisting}
+
+\subsection*{Coproducto}
+
+Existe, mas a sua descrição explícita é mais técnica: trata-se do monóide
+ordenado livre gerado por $M\sqcup N$, impondo as relações de operação e de
+ordem já existentes.
+
+\subsection*{Pullback, Equalizador}
+
+Definem-se como subestruturas do produto, respeitando tanto a operação como a
+ordem.
+
+\subsection*{Pushout, Coequalizador}
+
+Obtêm-se por quocientes ordenados adequados, forçando as identificações
+necessárias.
+
+\section*{5. Categoria \(\mathbf{Lat}\)}
+
+\subsection*{Produto}
+
+Se $L$ e $M$ são reticulados, então
+\[
+L\times M
+\]
+com
+\[
+(\ell,m)\wedge(\ell',m')=(\ell\wedge\ell',\, m\wedge m'),
+\]
+\[
+(\ell,m)\vee(\ell',m')=(\ell\vee\ell',\, m\vee m').
+\]
+
+\paragraph{Código MATLAB/Octave:}
+\begin{lstlisting}[language=Matlab]
+function P = lattice_product(L, M)
+    P.elements = [];
+    
+    for i = 1:length(L.elements)
+        for j = 1:length(M.elements)
+            P.elements = [P.elements; L.elements(i), M.elements(j)];
+        end
+    end
+    
+    P.meet = @(x,y) [L.meet(x(1), y(1)), M.meet(x(2), y(2))];
+    P.join = @(x,y) [L.join(x(1), y(1)), M.join(x(2), y(2))];
+end
+\end{lstlisting}
+
+\subsection*{Coproducto}
+
+Existe e é o reticulado livre sobre $L\sqcup M$, impondo as relações já válidas
+em $L$ e em $M$.
+
+\subsection*{Pullback}
+
+Dados $f:L\to K$ e $g:M\to K$,
+\[
+P=\{(\ell,m)\in L\times M \mid f(\ell)=g(m)\},
+\]
+subreticulado de $L\times M$.
+
+\subsection*{Pushout}
+
+É o quociente do coproducto pela menor congruência que identifica as imagens
+correspondentes.
+
+\subsection*{Equalizador}
+
+\[
+E=\{x\in L\mid f(x)=g(x)\},
+\]
+subreticulado de $L$.
+
+\subsection*{Coequalizador}
+
+Quociente pela menor congruência de reticulados que identifica $f(x)$ e $g(x)$.
+
+\section*{6. Categoria \(\mathbf{DLat}\)}
+
+As construções são análogas às de $\mathbf{Lat}$, mas dentro da subcategoria dos
+reticulados distributivos.
+
+\subsection*{Produto}
+
+O produto cartesiano de dois reticulados distributivos continua a ser
+distributivo, logo o produto é dado por operações componente a componente.
+
+\subsection*{Coproducto}
+
+Existe em $\mathbf{DLat}$ e é o reticulado distributivo livre sobre
+$L\sqcup M$ com as relações internas de $L$ e de $M$.
+
+\subsection*{Pullback, Equalizador}
+
+Continuam a ser subreticulados do produto.
+
+\subsection*{Pushout, Coequalizador}
+
+Continuam a ser quocientes por congruências apropriadas.
+
+\section*{7. Categoria \(\mathbf{Bool}\)}
+
+\subsection*{Produto}
+
+Se $B_1$ e $B_2$ são álgebras booleanas, então
+\[
+B_1\times B_2
+\]
+com operações definidas componente a componente:
+\[
+(x_1,x_2)\wedge(y_1,y_2)=(x_1\wedge y_1,\, x_2\wedge y_2),
+\]
+\[
+(x_1,x_2)\vee(y_1,y_2)=(x_1\vee y_1,\, x_2\vee y_2),
+\]
+\[
+\neg(x_1,x_2)=(\neg x_1,\neg x_2).
+\]
+
+\paragraph{Código MATLAB/Octave:}
+\begin{lstlisting}[language=Matlab]
+function P = bool_product(B1, B2)
+    P.elements = [];
+    
+    for i = 1:length(B1.elements)
+        for j = 1:length(B2.elements)
+            P.elements = [P.elements; B1.elements(i), B2.elements(j)];
+        end
+    end
+    
+    P.meet = @(x,y) [B1.meet(x(1), y(1)), B2.meet(x(2), y(2))];
+    P.join = @(x,y) [B1.join(x(1), y(1)), B2.join(x(2), y(2))];
+    P.compl = @(x) [B1.compl(x(1)), B2.compl(x(2))];
+end
+\end{lstlisting}
+
+\subsection*{Coproducto, Pushout, Coequalizador}
+
+Existem e são obtidos por construções livres e quocientes booleanos.
+
+\subsection*{Pullback, Equalizador}
+
+São subálgebras booleanas do produto.
+
+\section*{8. Funtores e transformações naturais}
+
+\subsection*{(p) \(\mathbf{DIMag}\) e \(\mathbf{Mag}\)}
+
+Existem dois funtores covariantes naturais:
+\[
+U_1:\mathbf{DIMag}\to \mathbf{Mag},
+\qquad
+U_1(M,\ast,\circ)=(M,\ast),
+\]
+\[
+U_2:\mathbf{DIMag}\to \mathbf{Mag},
+\qquad
+U_2(M,\ast,\circ)=(M,\circ).
+\]
+
+Também existe o funtor diagonal:
+\[
+\Delta:\mathbf{Mag}\to \mathbf{DIMag},
+\qquad
+\Delta(M,\ast)=(M,\ast,\ast).
+\]
+
+Temos isomorfismos naturais
+\[
+U_1\circ \Delta \cong \mathrm{Id}_{\mathbf{Mag}},
+\qquad
+U_2\circ \Delta \cong \mathrm{Id}_{\mathbf{Mag}}.
+\]
+
+\paragraph{Código MATLAB/Octave:}
+\begin{lstlisting}[language=Matlab]
+function M = forget_first(D)
+    M.elements = D.elements;
+    M.op = D.op1;
+end
+
+function M = forget_second(D)
+    M.elements = D.elements;
+    M.op = D.op2;
+end
+
+function D = diagonal_magma(M)
+    D.elements = M.elements;
+    D.op1 = M.op;
+    D.op2 = M.op;
+end
+\end{lstlisting}
+
+\subsection*{(q) \(\mathbf{Lat}\) e \(\mathbf{DLat}\)}
+
+Existe o funtor de inclusão:
+\[
+I:\mathbf{DLat}\hookrightarrow \mathbf{Lat}.
+\]
+
+Também existe um reflector distributivo:
+\[
+D:\mathbf{Lat}\to \mathbf{DLat},
+\]
+que envia um reticulado $L$ no seu maior quociente distributivo
+\[
+D(L)=L/\theta_{\mathrm{dist}},
+\]
+onde $\theta_{\mathrm{dist}}$ é a menor congruência que força a distributividade.
+
+Há uma transformação natural
+\[
+q:\mathrm{Id}_{\mathbf{Lat}} \Rightarrow I\circ D,
+\]
+em que $q_L$ é a projecção canónica no quociente distributivo.
+
+\paragraph{Comentário:}
+o exemplo ``$\mathbf{Lat}\to \mathbf{DLat}$ restringindo aos distributivos''
+não define um funtor em toda a categoria $\mathbf{Lat}$, porque nem todo
+reticulado é distributivo. O que existe naturalmente é a inclusão ou então o
+quociente reflector.
+
+\subsection*{(r) \(\mathbf{DLat}\) e \(\mathbf{Bool}\)}
+
+Existe o funtor de esquecimento
+\[
+J:\mathbf{Bool}\to \mathbf{DLat},
+\]
+que vê uma álgebra booleana apenas como reticulado distributivo.
+
+Se estivermos a trabalhar com reticulados distributivos limitados, podemos
+definir o functor
+\[
+Z:\mathbf{DLat}\to \mathbf{Bool},
+\]
+por
+\[
+Z(L)=\{a\in L \mid a \text{ é complementado em }L\}.
+\]
+
+Em reticulados distributivos, o conjunto dos elementos complementados forma uma
+álgebra booleana.
+
+Há então uma transformação natural
+\[
+\iota: J\circ Z \Rightarrow \mathrm{Id}_{\mathbf{DLat}},
+\]
+cujas componentes são as inclusões do centro booleano em $L$.
+
+\subsection*{(s) \(\mathbf{OrdMon}\) e \(\mathbf{Mon}\)}
+
+Existe o funtor de esquecimento
+\[
+U:\mathbf{OrdMon}\to \mathbf{Mon},
+\qquad
+U(M,\ast,e,\le)=(M,\ast,e).
+\]
+
+Existe também o funtor de ordem discreta
+\[
+\mathrm{Disc}:\mathbf{Mon}\to \mathbf{OrdMon},
+\]
+definido por
+\[
+x\le_{\mathrm{disc}} y \iff x=y.
+\]
+
+Temos um isomorfismo natural
+\[
+U\circ \mathrm{Disc}\cong \mathrm{Id}_{\mathbf{Mon}}.
+\]
+
+\paragraph{Código MATLAB/Octave:}
+\begin{lstlisting}[language=Matlab]
+function M = forget_order(OrdM)
+    M.elements = OrdM.elements;
+    M.op = OrdM.op;
+    M.e = OrdM.e;
+end
+
+function OrdM = discrete_order(M)
+    OrdM = M;
+    OrdM.leq = @(x,y) (x == y);
+end
+\end{lstlisting}
+
+\section*{9. Exemplo completo em MATLAB/Octave}
+
+Segue-se um exemplo simples de uso para o produto de magmas.
+
+\begin{lstlisting}[language=Matlab]
+A.elements = [0 1];
+A.op = @(x,y) mod(x+y,2);
+
+B.elements = [0 1];
+B.op = @(x,y) mod(x*y,2);
+
+P = magma_product(A,B);
+
+disp(P.op([1 1],[1 0]))
+\end{lstlisting}
+
+Neste caso:
+\begin{itemize}
+    \item em $A$, a operação é a soma módulo $2$;
+    \item em $B$, a operação é o produto módulo $2$;
+    \item no produto, a operação é feita componente a componente.
+\end{itemize}
+
+\section*{10. Observações finais}
+
+\begin{itemize}
+    \item Em $\mathbf{Mag}$, $\mathbf{DIMag}$, $\mathbf{Mon}$, $\mathbf{Lat}$,
+    $\mathbf{DLat}$ e $\mathbf{Bool}$, os \textbf{limites} (produtos, pullbacks,
+    equalizadores) são tipicamente dados por subestruturas de produtos.
+
+    \item Os \textbf{colimites} (coproductos, pushouts, coequalizadores) são
+    construídos por objectos livres e quocientes por congruências.
+
+    \item Em $\mathbf{OrdMon}$ o mesmo princípio continua válido, embora os
+    colimites sejam tecnicamente mais delicados devido à presença simultânea da
+    operação e da ordem.
+
+    \item Os exemplos em \texttt{MATLAB/Octave} apresentados aqui são
+    simplificados e servem sobretudo para ilustrar os casos finitos mais básicos.
+
+    \item Em contexto teórico, os funtores mais naturais entre as categorias
+    pedidas são:
+    \[
+    U_1,U_2:\mathbf{DIMag}\to \mathbf{Mag},
+    \qquad
+    \Delta:\mathbf{Mag}\to \mathbf{DIMag},
+    \]
+    \[
+    I:\mathbf{DLat}\hookrightarrow \mathbf{Lat},
+    \qquad
+    D:\mathbf{Lat}\to \mathbf{DLat},
+    \]
+    \[
+    J:\mathbf{Bool}\to \mathbf{DLat},
+    \qquad
+    Z:\mathbf{DLat}\to \mathbf{Bool},
+    \]
+    \[
+    U:\mathbf{OrdMon}\to \mathbf{Mon},
+    \qquad
+    \mathrm{Disc}:\mathbf{Mon}\to \mathbf{OrdMon}.
+    \]
+\end{itemize}
+
+\end{document}

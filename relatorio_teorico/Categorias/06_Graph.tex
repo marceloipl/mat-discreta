@@ -1,0 +1,30 @@
+% ============================================================
+\section{Graph (Directed Graphs)}
+A categoria de grafos direcionados é essencial para modelar redes, fluxos e transições de estado.
+Um objeto nesta categoria é constituído por um conjunto de vértices e arestas com direcionalidade explícita.
+
+\subsection{Objetos}
+Em MATLAB, os grafos são naturalmente modelados pelas suas matrizes de adjacência.
+O valor da matriz na posição $(i,j)$ indica a presença de uma aresta direcionada do nó $i$ para o nó $j$.
+
+\begin{lstlisting}[caption={Representação de um Grafo Direcionado}]
+% Matriz de adjacência (Vértices = 3, Arestas = 2)
+n = 3;
+M = [0 1 0; 0 0 0; 0 1 0];
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos são homomorfismos de grafos: funções entre vértices que mapeiam arestas válidas no domínio para arestas válidas no codomínio.
+Se existe uma aresta $i \to j$, tem de existir uma aresta $f(i) \to f(j)$.
+
+\begin{lstlisting}[caption={Verificação de Homomorfismo de Grafos}]
+% f mapeia vértices do domínio para o codomínio
+isHomomorphism = true;
+[I, J] = find(M_domain);
+for k = 1:length(I)
+    if ~M_codomain(f(I(k)), f(J(k)))
+        isHomomorphism = false;
+        break;
+    end
+end
+\end{lstlisting}

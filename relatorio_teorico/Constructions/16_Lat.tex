@@ -1,0 +1,46 @@
+\section{Lat (Reticulados Finitos)}
+
+As construções na categoria dos reticulados finitos (\textbf{Lat}) focam-se na preservação da estrutura algébrica fechada. O objetivo principal é garantir que os novos objetos criados mantêm operações bem definidas de ínfimo ($\wedge$) e supremo ($\vee$), respeitando a comutatividade, associatividade, absorção e idempotência.
+
+\subsection{Fundamentação Teórica}
+As principais construções universais implementadas para esta categoria são:
+\begin{itemize}
+    \item \textbf{Produtos:} O produto cartesiano $A \times B$ de dois reticulados forma um novo reticulado cujas operações são aplicadas componente a componente: $(a_1, b_1) \wedge (a_2, b_2) = (a_1 \wedge_A a_2, b_1 \wedge_B b_2)$, ocorrendo o mesmo de forma análoga para o supremo ($\vee$).
+    \item \textbf{Equalizadores:} Dado um par de homomorfismos de reticulados $f, g: A \to B$, o equalizador é o subconjunto $E = \{x \in A \mid f(x) = g(x)\}$. Como $f$ e $g$ preservam as operações, este subconjunto é automaticamente fechado para $\wedge$ e $\vee$, formando um sub-reticulado exato de $A$.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+Em MATLAB, a construção do produto de dois reticulados exige o mapeamento dos pares de elementos para um novo índice linear. As tabelas de operação (\emph{meet} e \emph{join}) são geradas calculando as matrizes independentes componente a componente.
+
+\begin{lstlisting}[caption={Construção do Produto de Reticulados (Lat)}]
+function [MeetP, JoinP] = lattice_product(MeetA, JoinA, MeetB, JoinB)
+    nA = size(MeetA, 1);
+    nB = size(MeetB, 1);
+    nP = nA * nB; % O tamanho do produto cartesiano
+    
+    MeetP = zeros(nP, nP);
+    JoinP = zeros(nP, nP);
+    
+    % Função anónima para mapear o par (a, b) para um índice 1D (1 a nP)
+    idx = @(a, b) (a - 1) * nB + b;
+    
+    for a1 = 1:nA
+        for b1 = 1:nB
+            x = idx(a1, b1); % Índice linear do primeiro par
+            for a2 = 1:nA
+                for b2 = 1:nB
+                    y = idx(a2, b2); % Índice linear do segundo par
+                    
+                    % Calcula o resultado de A e B independentemente
+                    res_meet = idx(MeetA(a1, a2), MeetB(b1, b2));
+                    res_join = idx(JoinA(a1, a2), JoinB(b1, b2));
+                    
+                    % Preenche as matrizes de operação do novo reticulado
+                    MeetP(x, y) = res_meet;
+                    JoinP(x, y) = res_join;
+                end
+            end
+        end
+    end
+end
+\end{lstlisting}

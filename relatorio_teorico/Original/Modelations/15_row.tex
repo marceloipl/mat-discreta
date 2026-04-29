@@ -1,0 +1,36 @@
+\section{Row (Matrizes Linha)}
+\label{sec:row}
+
+\subsection{Definição da Categoria}
+
+\subsubsection{Categoria $\mathbf{Row}$}
+
+\begin{definition}
+    Os objetos de $\mathbf{Row}$ são matrizes linha, interpretadas como coleções de vetores.
+    Os morfismos são aplicações lineares compatíveis com a estrutura de matrizes linha, isto é, para duas matrizes linha $R_1$ e $R_2$, um morfismo $f: R_1 \to R_2$ é uma aplicação linear representada por uma matriz $A$ tal que $f(v) = A \cdot v$.
+\end{definition}
+
+\begin{remark}
+    As matrizes linha são interpretadas como vetores linha, e os morfismos são transformações lineares padrão.
+\end{remark}
+
+\subsection{Implementação Computacional}
+
+\begin{lstlisting}[style=matlab]
+% Definição de uma matriz linha
+Row = struct();
+Row.vectors = [1 2; 3 4]; % Vetores linha
+
+% Verificação de morfismo entre matrizes linha
+MorphismRow = @(R1, R2) @(A) ...
+    all(size(A, 2) == size(R1.vectors, 2)) && ...
+    all(size(A, 1) == size(R2.vectors, 1));
+\end{lstlisting}
+
+\subsection{Transformações Naturais}
+\begin{lstlisting}[style=matlab]
+function ok = check_row_morphism(R1, R2, A)
+    ok = all(size(A, 2) == size(R1.vectors, 2)) && ...
+         all(size(A, 1) == size(R2.vectors, 1));
+end
+\end{lstlisting}

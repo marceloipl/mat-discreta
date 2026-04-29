@@ -1,0 +1,42 @@
+\section{DIMag (Dimagmas Finitos)}
+\label{sec:dimag}
+
+\subsection{Definição da Categoria}
+
+\subsubsection{Categoria $\mathbf{DIMag}$}
+
+\begin{definition}
+    Os objetos de $\mathbf{DIMag}$ são dimagmas finitos, ou seja, conjuntos finitos equipados com duas operações binárias.
+    Os morfismos são aplicações que preservam ambas as operações, isto é, para dois dimagmas $(D, \cdot, \ast)$ e $(E, \odot, \otimes)$, um morfismo $f: D \to E$ satisfaz $f(a \cdot b) = f(a) \odot f(b)$ e $f(a \ast b) = f(a) \otimes f(b)$ para todo $a, b \in D$.
+\end{definition}
+
+\begin{remark}
+    As duas operações binárias são independentes e não são impostos axiomas adicionais.
+\end{remark}
+
+\subsection{Implementação Computacional}
+
+\begin{lstlisting}[style=matlab]
+% Definição de um dimagma
+DIMag = struct();
+DIMag.set = {1, 2, 3}; % Conjunto finito
+DIMag.op1 = @(a, b) mod(a + b, 3); % Primeira operação binária
+DIMag.op2 = @(a, b) mod(a * b, 3); % Segunda operação binária
+
+% Verificação de morfismo entre dimagmas
+MorphismDIMag = @(D1, D2) @(f) ...
+    all(arrayfun(@(a, b) ...
+        D2.op1(f(a), f(b)) == f(D1.op1(a, b)) && ...
+        D2.op2(f(a), f(b)) == f(D1.op2(a, b)), ...
+        D1.set, D1.set));
+\end{lstlisting}
+
+\subsection{Transformações Naturais}
+\begin{lstlisting}[style=matlab]
+function ok = check_morphism(D1, D2, f)
+    ok = all(arrayfun(@(a, b) ...
+        D2.op1(f(a), f(b)) == f(D1.op1(a, b)) && ...
+        D2.op2(f(a), f(b)) == f(D1.op2(a, b)), ...
+        D1.set, D1.set));
+end
+\end{lstlisting}

@@ -1,0 +1,124 @@
+
+\documentclass[11pt,a4paper]{article}
+
+% --- PACOTES ESSENCIAIS ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[portuguese]{babel}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+% --- CONFIGURAÇÃO DO LISTINGS COM SUPORTE A ACENTOS ---
+\lstset{
+    language=Matlab,
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+             {ã}{{\~a}}1 {õ}{{\~o}}1 {ç}{{\c{c}}}1
+             {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+             {Ã}{{\~A}}1 {Õ}{{\~O}}1 {Ç}{{\c{C}}}1
+             {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+             {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+             {º}{{\textordmasculine}}1 {ª}{{\textordfeminine}}1
+}
+
+\begin{document}
+
+\section*{Functores em MATLAB: Ação nos Morfismos e Transições}
+
+Na teoria das categorias, um functor deve mapear não apenas os objetos, mas também os morfismos, garantindo a preservação das identidades e da composição. Este documento isola as implementações functoriais referentes às funções de produto categórico e transformações entre as categorias estudadas.
+
+% ---------------------------------------------------------
+\section{Bifunctor de Produto para PreOrd, Rel e Graph}
+Para as categorias \textbf{PreOrd}, \textbf{Rel} e \textbf{Graph}, a estrutura base (matriz de adjacência) dita que o domínio do produto é construído via produto de Kronecker. A ação do bifunctor de produto nos morfismos $\times: \mathcal{C} \times \mathcal{C} \to \mathcal{C}$ recebe dois morfismos $f: A_1 \to A_2$ e $g: B_1 \to B_2$, e retorna o morfismo produto $f \times g$.
+
+\begin{lstlisting}[caption={Ação do Bifunctor de Produto nos Morfismos (PreOrd, Rel, Graph)}]
+function h = functor_product_morphism(f, g, size_codom_B)
+    % f e g sao vetores que representam os morfismos das categorias base.
+    % h e o morfismo resultante no espaco do produto tensorial/Kronecker.
+    
+    nA_dom = length(f);
+    nB_dom = length(g);
+    
+    % Pre-alocacao do vetor de morfismo resultante
+    h = zeros(1, nA_dom * nB_dom);
+    
+    for i = 1:nA_dom
+        for j = 1:nB_dom
+            % Indice no dominio do produto (A1 x B1)
+            idx_dom = (i - 1) * nB_dom + j;
+            
+            % Indice no codominio do produto (A2 x B2)
+            idx_codom = (f(i) - 1) * size_codom_B + g(j);
+            
+            h(idx_dom) = idx_codom;
+        end
+    end
+end
+\end{lstlisting}
+
+% ---------------------------------------------------------
+\section{Bifunctor de Produto para Endomapas (End)}
+Para a categoria \textbf{End}, o bifunctor atua paralelamente. Como a representação de objetos em MATLAB usa vetores lineares (e não matrizes), a combinação dos morfismos segue a mesma lógica do espaço vetorial plano.
+
+\begin{lstlisting}[caption={Ação do Bifunctor de Produto nos Morfismos de Endomapas}]
+function h_endo = functor_endomap_morphism(f, g, nB_codom)
+    % Identico ao produto de grafos, mas aplicado a preservacao da 
+    % dinamica equivariante dos endomapas.
+    nA = length(f);
+    nB = length(g);
+    h_endo = zeros(1, nA * nB);
+    
+    for i = 1:nA
+        for j = 1:nB
+            idx_dom = (i-1)*nB + j;
+            val_codom = (f(i)-1)*nB_codom + g(j);
+            h_endo(idx_dom) = val_codom;
+        end
+    end
+end
+\end{lstlisting}
+
+% ---------------------------------------------------------
+\section{Functores de Transição entre Categorias}
+Estes functores mapeiam objetos e morfismos de uma categoria para outra, alterando o domínio semântico ou a estrutura da representação.
+
+\subsection{Functor Esqueçido $U: \mathbf{PreOrd} \to \mathbf{Rel}$}
+Este functor mapeia uma pré-ordem para uma relação ordinária, "esquecendo" as provas de reflexividade e transitividade. Em MATLAB, isto é uma transferência direta de dados.
+
+\begin{lstlisting}[caption={Functor U: PreOrd -> Rel}]
+function R = functor_forgetful_PreOrd2Rel(P)
+    % Acao nos objetos: Mapeia a estrutura matricial sem alteracoes
+    R.matrix = P.matrix;
+    R.n_elements = P.n_elements;
+    
+    % Acao nos morfismos: A identidade atua no espaco vetorial.
+    % Qualquer funcao monotona de PreOrd e, por definicao,
+    % uma funcao que preserva a relacao em Rel.
+end
+\end{lstlisting}
+
+\subsection{Functor Dinâmico $F: \mathbf{End} \to \mathbf{Graph}$}
+Este functor mapeia a evolução temporal de um endomapa (representado como vetor) para uma topologia espacial (um grafo direcionado representado por uma matriz).
+
+\begin{lstlisting}[caption={Functor F: End -> Graph}]
+function G = functor_End2Graph(E)
+    % Acao nos Objetos: Transforma vetor dinamico em Matriz de Adjacencia
+    n = length(E);
+    M = zeros(n, n);
+    for i = 1:n
+        M(i, E(i)) = 1;
+    end
+    G.matrix = M;
+    G.n_vertices = n;
+    
+    % Acao nos Morfismos:
+    % O mesmo vetor f que age como morfismo em End continuara 
+    % a ser um homomorfismo perfeitamente valido no Grafo G gerado.
+end
+\end{lstlisting}
+
+\end{document}

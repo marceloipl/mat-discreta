@@ -1,0 +1,102 @@
+% ============================================================
+\section{Funtor \texorpdfstring{$H: End \to Graph$}{H: End -> Graph}}
+\label{sec:functor-end-graph}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{End}$ (modelo MATLAB/Octave)]
+Os objetos são pares $(X, \varphi)$ onde $X$ é um conjunto finito e $\varphi: X \to X$ é uma endoaplicação. Em MATLAB, representa-se $X = \{1, \ldots, n\}$ implicitamente pelo seu cardinal $n$, e $\varphi$ como um vetor de comprimento $n$ com entradas em $\{1, \ldots, n\}$. Um morfismo $f: (X_1, \varphi_1) \to (X_2, \varphi_2)$ é uma aplicação que comuta com as endoaplicações: $f \circ \varphi_1 = \varphi_2 \circ f$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{End}$}]
+% Objeto: conjunto {1,2,3} com endoaplicacao phi(1)=2, phi(2)=3, phi(3)=1
+phi = [2, 3, 1];
+
+% Verificacao de morfismo f: (X1,phi1) -> (X2,phi2)
+% f comuta com as endoaplicacoes se f(phi1(x)) == phi2(f(x)) para todo x
+f    = [1, 2, 3];   % exemplo de morfismo candidato
+ok   = all(f(phi1) == phi2(f));  % deve ser true
+\end{lstlisting}
+
+\begin{definition}[Categoria $\mathbf{Graph}$ (modelo MATLAB/Octave)]
+Os objetos são grafos dirigidos descritos por um conjunto de vértices $V$, um conjunto de arestas $A$, e dois mapas $s, t: A \to V$ que indicam, respetivamente, a origem e o destino de cada aresta. Um morfismo de grafos é um par $(f_V, f_A)$ que preserva a estrutura de incidência: $f_V \circ s = s' \circ f_A$ e $f_V \circ t = t' \circ f_A$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{Graph}$}]
+% Grafo dirigido com 3 vertices e 3 arestas
+Vertices = [1, 2, 3];
+Arestas  = [1, 2, 3];
+Origem   = [1, 2, 3];   % s(a_i) = i
+Destino  = [2, 3, 1];   % t(a_i) = phi(i)
+
+% Verificacao de morfismo de grafos (fV, fA)
+comuta_s = isequal(fV(Origem1(fA)), Origem2);   % fV o s1 = s2 o fA
+comuta_t = isequal(fV(Destino1(fA)), Destino2); % fV o t1 = t2 o fA
+\end{lstlisting}
+
+\subsection{Funtor Covariante \texorpdfstring{$H: End \to Graph$}{H: End -> Graph}}
+
+O funtor $H$ constrói canonicamente, a partir de qualquer endoaplicação $\varphi: X \to X$, um grafo dirigido em que cada elemento de $X$ é simultaneamente vértice e aresta, com a origem dada pela identidade e o destino dado por $\varphi$.
+
+\begin{itemize}
+    \item \textbf{Nos objetos:} Uma endoaplicação $\varphi$ de tamanho $n$ transforma-se num grafo onde:
+    \begin{itemize}
+        \item Os \textbf{vértices} ($V$) são os elementos $\{1, \ldots, n\}$;
+        \item As \textbf{arestas} ($A$) são indexadas também por $\{1, \ldots, n\}$;
+        \item A função \textbf{origem} ($s$) é a identidade: a aresta $i$ sai do vértice $i$;
+        \item A função \textbf{destino} ($t$) é a aplicação $\varphi$: a aresta $i$ entra no vértice $\varphi(i)$.
+    \end{itemize}
+    \item \textbf{Nos morfismos:} Um morfismo $f: (X_1, \varphi_1) \to (X_2, \varphi_2)$ em $\mathbf{End}$ (que comuta com as endoaplicações) traduz-se num homomorfismo de grafos $(f_V, f_A) = (f, f)$ que mapeia vértices e arestas pelo mesmo mapa $f$, preservando a estrutura de incidência.
+\end{itemize}
+
+\begin{lstlisting}[style=matlab, caption={Funtor $H$ aplicado a uma endoaplicação $\varphi: \{1,2,3\} \to \{1,2,3\}$}]
+% Endoaplicacao phi: ciclo fechado
+phi = [2, 3, 1];
+
+% Traducao para grafo dirigido
+Vertices = 1:length(phi);
+Arestas  = 1:length(phi);
+Origem   = Vertices;   % s(i) = i  (identidade)
+Destino  = phi;        % t(i) = phi(i)
+% Resultado: grafo com ciclo dirigido 1->2->3->1
+\end{lstlisting}
+
+\begin{proposition}
+O funtor $H: \mathbf{End} \to \mathbf{Graph}$ satisfaz as seguintes propriedades:
+\begin{itemize}
+    \item $H(\mathrm{id}_X)$ é o homomorfismo de grafos identidade;
+    \item $H(g \circ f) = H(g) \circ H(f)$ (preservação da composição);
+    \item Pontos fixos de $\varphi$ correspondem a laços no grafo resultante ($s(a) = t(a)$).
+\end{itemize}
+\end{proposition}
+
+\subsection{Transformações Naturais \texorpdfstring{$\gamma: H_1 \Rightarrow H_2$}{gamma: H1 => H2}}
+
+Dados dois funtores paralelos $H_1, H_2: \mathbf{End} \to \mathbf{Graph}$, uma transformação natural $\gamma: H_1 \Rightarrow H_2$ é uma família de homomorfismos de grafos,
+\[
+    \gamma_{(X,\varphi)} : H_1(X, \varphi) \to H_2(X, \varphi), \quad \text{para cada objeto } (X,\varphi) \in \mathbf{End},
+\]
+tal que para cada morfismo $f: (X_1, \varphi_1) \to (X_2, \varphi_2)$ o seguinte quadrado comuta:
+\[
+    H_2(f) \circ \gamma_{(X_1,\varphi_1)} \;=\; \gamma_{(X_2,\varphi_2)} \circ H_1(f).
+\]
+Considerando $H_1$ como o funtor de passo único (arestas $x \to \varphi(x)$) e $H_2$ como o funtor de passo duplo (arestas $\varphi(x) \to \varphi(\varphi(x))$), a transformação natural $\gamma: H_1 \Rightarrow H_2$ tem componentes dadas pelo homomorfismo de grafos onde os vértices avançam de acordo com $\varphi$ e as arestas se mantêm, comutando o diagrama de incidência.
+
+\begin{lstlisting}[style=matlab, caption={Verificação da transformação natural $\gamma: H_1 \Rightarrow H_2$ em $\mathbf{End} \to \mathbf{Graph}$}]
+X   = 1:4;
+phi = [2, 3, 3, 1];
+
+% Funtor H1: grafo de passo unico
+Origem1  = X;       Destino1 = phi;
+
+% Funtor H2: grafo de passo duplo
+Origem2  = phi;     Destino2 = phi(phi);
+
+% Componentes da transformacao natural gamma
+gamma_V = phi;   % transformacao dos vertices: v -> phi(v)
+gamma_E = X;     % transformacao das arestas: identidade nos indices
+
+% Validacao da comutatividade dos diagramas de incidencia
+comuta_origem  = isequal(gamma_V(Origem1),  Origem2(gamma_E));  % true
+comuta_destino = isequal(gamma_V(Destino1), Destino2(gamma_E)); % true
+\end{lstlisting}

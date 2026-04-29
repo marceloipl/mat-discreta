@@ -1,0 +1,89 @@
+% ============================================================
+\section{Funtor \texorpdfstring{$G: Par \to Rel$}{G: Par -> Rel}}
+\label{sec:functor-par-rel}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{Par}$ (modelo MATLAB/Octave)]
+Os objetos são conjuntos finitos representados pelo seu cardinal $n$. Um morfismo parcial $f: n \rightharpoonup m$ é um vetor de comprimento $n$ com entradas em $\{0, 1, \ldots, m\}$, onde $0$ indica que o elemento não tem imagem definida.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{Par}$}]
+n = 3;  m = 4;
+% f(1)=2, f(2)=indefinido, f(3)=1
+f = [2, 0, 1];
+\end{lstlisting}
+
+\begin{definition}[Categoria $\mathbf{Rel}$ (modelo MATLAB/Octave)]
+Os objetos são conjuntos finitos. Um morfismo $R: n \to m$ é uma relação binária $R \subseteq \{1,\ldots,n\} \times \{1,\ldots,m\}$, representada por uma matriz booleana $m \times n$ onde a entrada $(i,j)$ vale $1$ se e só se $(j, i) \in R$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{Rel}$}]
+% Relacao R ⊆ {1,2,3} x {1,2,3,4}: matriz booleana 4x3
+M_rel = [0, 0, 1;   % f(3)=1
+         1, 0, 0;   % f(1)=2
+         0, 0, 0;
+         0, 0, 0];
+\end{lstlisting}
+
+\subsection{Funtor Covariante \texorpdfstring{$G: Par \to Rel$}{G: Par -> Rel}}
+
+O funtor $G$ transforma aplicações parciais nas suas relações gráficas associadas. Qualquer função parcial pode ser vista como uma relação binária cujo grafo omite os pares correspondentes a elementos sem imagem definida.
+
+\begin{itemize}
+    \item \textbf{Nos objetos:} $G(n) = n$. O conjunto mantém-se inalterado.
+    \item \textbf{Nos morfismos:} Um morfismo parcial $f: n \rightharpoonup m$ é mapeado para a relação binária $R_f = \{(x,\, f(x)) \mid f(x) \neq 0\}$. Qualquer elemento indefinido não gera uma entrada com valor $1$ na coluna correspondente da matriz booleana.
+\end{itemize}
+
+\begin{lstlisting}[style=matlab, caption={Funtor $G$ aplicado a uma aplicação parcial $f: 3 \rightharpoonup 4$}]
+f = [2, 0, 1];   % f(1)=2, f(2)=indefinido, f(3)=1
+n = length(f);
+m = max(f);      % cardinal do codominio
+
+% Construcao da matriz relacional correspondente
+M_rel = zeros(m, n);
+for j = 1:n
+    if f(j) ~= 0
+        M_rel(f(j), j) = 1;
+    end
+end
+% Resultado: M_rel = [0,0,1; 1,0,0; 0,0,0; 0,0,0]
+\end{lstlisting}
+
+\begin{proposition}
+O funtor $G: \mathbf{Par} \to \mathbf{Rel}$ satisfaz as seguintes propriedades:
+\begin{itemize}
+    \item $G(\mathrm{id}_n)$ é a matriz identidade $n \times n$ (aplicação total que preserva todos os elementos);
+    \item $G$ preserva a composição de aplicações parciais: $G(g \circ f) = G(g) \circ_{\mathbf{Rel}} G(f)$, onde a composição em $\mathbf{Rel}$ é a composição relacional;
+    \item $G$ é fiel: aplicações parciais distintas produzem relações distintas.
+\end{itemize}
+\end{proposition}
+
+\subsection{Transformações Naturais \texorpdfstring{$\beta: G_1 \Rightarrow G_2$}{beta: G1 => G2}}
+
+Dados dois funtores paralelos $G_1, G_2: \mathbf{Par} \to \mathbf{Rel}$, uma transformação natural $\beta: G_1 \Rightarrow G_2$ é uma família de morfismos em $\mathbf{Rel}$,
+\[
+    \beta_n : G_1(n) \to G_2(n), \quad \text{para cada objeto } n \in \mathbf{Par},
+\]
+tal que para cada morfismo $f: n \rightharpoonup m$ o seguinte quadrado comuta:
+\[
+    G_2(f) \circ \beta_n \;=\; \beta_m \circ G_1(f).
+\]
+Considerando $G_1$ como o funtor que mapeia a aplicação parcial para o seu grafo exato (matriz esparsa) e $G_2$ como o funtor que mapeia para a relação universal (matriz totalmente preenchida a $1$), a transformação natural $\beta: G_1 \Rightarrow G_2$ verifica que o grafo exato é uma sub-relação da relação universal.
+
+\begin{lstlisting}[style=matlab, caption={Verificação da transformação natural $\beta: G_1 \Rightarrow G_2$ em $\mathbf{Par} \to \mathbf{Rel}$}]
+n = 3;  m = 4;
+f = [2, 0, 1];   % aplicacao parcial
+
+% Funtor G1: grafo exato da aplicacao parcial
+M_G1 = zeros(m, n);
+for x = 1:length(f)
+    if f(x) ~= 0, M_G1(f(x), x) = 1; end
+end
+
+% Funtor G2: relacao universal
+M_G2 = ones(m, n);
+
+% Validacao: G1 e sub-relacao de G2 (condicao de naturalidade)
+beta_n = all((M_G1 & M_G2) == M_G1, 'all');  % Retorna 1 (true)
+\end{lstlisting}

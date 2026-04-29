@@ -1,12 +1,12 @@
 % ============================================================
-\section{Funtor End $\rightarrow$ Trees}
+\section{Funtor \texorpdfstring{$F: End \to Trees$}{F: End -> Trees}}
 \label{sec:functor-end-trees}
 
 \subsection{Fundamentação Teórica}
 
 O funtor $F: \mathbf{End} \to \mathbf{Trees}$ constrói, a partir de uma endomapa $\varphi: X \to X$, uma árvore binária de antecessores: cada elemento $x \in X$ tem como pai $\varphi(x)$ (se $x$ não for ponto fixo), ou a raiz virtual, caso contrário. Este funtor é definido na subcategoria de endomapas com grau de entrada no máximo 2 (condição necessária para a estrutura binária).
 
-\subsection{Funtor Covariante End $\rightarrow$ Trees}
+\subsection{Funtor Covariante \texorpdfstring{$F: End \to Trees$}{F: End -> Trees}}
 
 \begin{definition}[Funtor covariante $F: \mathbf{End} \to \mathbf{Trees}$]
 Dado $(X, \varphi) \in \mathbf{End}$ com $X = \{1,\ldots,n\}$, constrói-se a \emph{árvore de antecessores} de $\varphi$: o pai de $x$ é $\varphi(x)$ se $\varphi(x) \neq x$, e a raiz virtual $r = n{+}1$ se $x$ for ponto fixo. Os irmãos são ordenados por índice crescente (no máximo dois por nó). Dado $f: (X_1, \varphi_1) \to (X_2, \varphi_2)$, o morfismo induzido é $F(f) = [f,\,r_2]$.

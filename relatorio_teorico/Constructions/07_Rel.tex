@@ -1,0 +1,22 @@
+% ============================================================
+\section{Rel (Relations)}
+As construções na categoria de relações focam-se em combinar e intersetar conexões genéricas. O foco principal é garantir que a conectividade relacional seja transportada de forma consistente para as novas estruturas, mesmo na ausência de restrições algébricas adicionais.
+
+\subsection{Fundamentação Teórica}
+As principais construções universais implementadas para Rel são:
+\begin{itemize}
+    \item \textbf{Produtos:} O produto cartesiano $A \times B$ equipado com a relação onde $(a,b) \sim (a',b')$ se e só se $a \sim_A a'$ e $b \sim_B b'$.
+    \item \textbf{Equalizadores:} Sub-relação correspondente aos elementos onde os dois morfismos paralelos são iguais.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+O produto tensorial (ou de Kronecker) aplica-se perfeitamente para combinar estas relações de forma vetorial em MATLAB.
+
+\begin{lstlisting}[caption={Construção do Produto de Relações}]
+function P = rel_product(MA, MB)
+    % Produto relacional via produto de Kronecker
+    P_matrix = kron(MA, MB);
+    P.matrix = P_matrix;
+    P.n_elements = size(P_matrix, 1);
+end
+\end{lstlisting}

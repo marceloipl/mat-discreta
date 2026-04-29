@@ -1,5 +1,5 @@
 % ============================================================
-\section{Funtor $P: Fin \to Sub$}
+\section{Funtor \texorpdfstring{$P: Fin \to Sub$}{P: Fin -> Sub}}
 \label{sec:functor-fin-sub}
 
 \subsection{Descrição das Categorias}
@@ -14,7 +14,7 @@ is_sub = all(ismember(A, B));  % verifica se A esta contido em B
 incl   = ismember(B, A);       % vector logico da inclusao
 \end{lstlisting}
 
-\subsection{Funtor Covariante $P: Fin \to Sub$ (Conjunto das Partes)}
+\subsection{Funtor Covariante \texorpdfstring{$P: Fin \to Sub$}{P: Fin -> Sub} (Conjunto das Partes)}
 
 O \emph{funtor potência} $P: \mathbf{Fin} \to \mathbf{Sub}$ envia cada conjunto finito $n$ ao conjunto das suas partes $\mathcal{P}(n) = \{S \subseteq \{1,\ldots,n\}\}$, e cada aplicação total $f: n \to m$ à aplicação
 \[
@@ -38,11 +38,11 @@ end
 Este funtor preserva inclusões: se $S \subseteq T$ então $f(S) \subseteq f(T)$, pelo que está bem definido em $\mathbf{Sub}$ como codomínio.
 \end{remark}
 
-\subsection{Funtor de Esquecimento $U: Sub \to Fin$}
+\subsection{Funtor de Esquecimento \texorpdfstring{$U: Sub \to Fin$}{U: Sub -> Fin}}
 
 O funtor de esquecimento $U: \mathbf{Sub} \to \mathbf{Fin}$ envia cada objeto de $\mathbf{Sub}$ (um subconjunto $A \subseteq B$) ao conjunto finito $A$, ignorando a estrutura de inclusão, e cada morfismo (inclusão $A \hookrightarrow B$) à correspondente aplicação total em $\mathbf{Fin}$.
 
-\subsection{Funtor Contravariante $P^*: Fin^{\mathrm{op}} \to Sub$ (Imagem Inversa)}
+\subsection{Funtor Contravariante \texorpdfstring{$P^*: Fin^{\mathrm{op}} \to Sub$}{P*: Fin\^op -> Sub} (Imagem Inversa)}
 
 O \emph{funtor imagem inversa} $P^*: \mathbf{Fin}^{\mathrm{op}} \to \mathbf{Sub}$ envia cada aplicação $f: n \to m$ à aplicação
 \[
@@ -56,7 +56,7 @@ function preimg = inverse_image(f, T)
 end
 \end{lstlisting}
 
-\subsection{Transformações Naturais entre Funtores $Fin \to Sub$}
+\subsection{Transformações Naturais entre Funtores \texorpdfstring{$Fin \to Sub$}{Fin -> Sub}}
 
 Dados dois funtores $F, G: \mathbf{Fin} \to \mathbf{Sub}$, uma transformação natural $\eta: F \Rightarrow G$ consiste numa família de morfismos em $\mathbf{Sub}$,
 \[

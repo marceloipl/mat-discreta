@@ -1,0 +1,23 @@
+% ============================================================
+\section{PreOrd (Preorders)}
+As construções na categoria de pré-ordens baseiam-se na preservação da relação de ordem onde ciclos e equivalências podem coexistir. O foco principal é garantir que as novas estruturas criadas mantenham rigidamente as propriedades de reflexividade e transitividade originais.
+
+\subsection{Fundamentação Teórica}
+As principais construções universais implementadas para esta categoria são:
+\begin{itemize}
+    \item \textbf{Produtos:} O produto cartesiano $A \times B$ equipado com a ordem do produto, onde $(a,b) \le (a',b')$ se e só se $a \le_A a'$ e $b \le_B b'$.
+    \item \textbf{Equalizadores:} Dado um par de morfismos, o equalizador identifica o sub-conjunto onde as funções coincidem, herdando a estrutura de pré-ordem do domínio original.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+Em MATLAB, à semelhança dos Posets, a construção do produto de pré-ordens pode ser otimizada recorrendo ao produto de Kronecker das matrizes de adjacência.
+
+\begin{lstlisting}[caption={Construção do Produto de Pré-ordens}]
+function P = preord_product(MA, MB)
+    % MA e MB são matrizes de adjacência de pré-ordens
+    P_matrix = kron(MA, MB);
+    % O resultado é a matriz de adjacência da nova Pré-ordem
+    P.matrix = P_matrix;
+    P.n_elements = size(P_matrix, 1);
+end
+\end{lstlisting}

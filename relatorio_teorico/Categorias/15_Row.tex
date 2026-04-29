@@ -1,0 +1,30 @@
+\section{Row (Matrizes Linha)}
+A categoria $\mathbf{Row}$ interpreta matrizes linha como coleções de vetores e define morfismos compatíveis com essa estrutura. Trata-se de uma categoria que surge naturalmente no contexto da álgebra linear computacional, onde a representação por linhas é frequente em ambientes como MATLAB e Octave.
+
+\subsection{Objetos}
+Os objetos de $\mathbf{Row}$ são matrizes linha, interpretadas como coleções de vetores linha. Em MATLAB, um objeto é representado por uma \texttt{struct} cujo campo \texttt{vectors} contém a matriz onde cada linha é um vetor da coleção. O número de colunas determina a dimensão do espaço onde esses vetores residem.
+
+\begin{lstlisting}[caption={Representação de uma coleção de vetores linha}]
+% Definicao de uma matriz linha (colecao de dois vetores em R^2)
+Row         = struct();
+Row.vectors = [1 2;  % Primeiro vetor linha
+               3 4]; % Segundo vetor linha
+% Row.vectors(i,:) acede ao i-esimo vetor da colecao
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos em $\mathbf{Row}$ são aplicações lineares compatíveis com a estrutura de matrizes linha. Dados dois objetos $R_1$ e $R_2$, um morfismo $f: R_1 \to R_2$ é representado por uma matriz $A$ tal que $f(v) = A \cdot v$, onde as dimensões devem ser compatíveis: o número de colunas de $A$ deve coincidir com o número de colunas de $R_1$, e o número de linhas de $A$ deve coincidir com o número de linhas de $R_2$.
+
+\begin{lstlisting}[caption={Verificação de morfismo entre matrizes linha}]
+% Construtor de verificador de morfismo entre R1 e R2
+% A e a matriz que representa a transformacao linear f(v) = A*v
+MorphismRow = @(R1, R2) @(A) ...
+    all(size(A, 2) == size(R1.vectors, 2)) && ...
+    all(size(A, 1) == size(R2.vectors, 1));
+
+% Funcao auxiliar equivalente (forma explicita)
+function ok = check_row_morphism(R1, R2, A)
+    ok = all(size(A, 2) == size(R1.vectors, 2)) && ...
+         all(size(A, 1) == size(R2.vectors, 1));
+end
+\end{lstlisting}

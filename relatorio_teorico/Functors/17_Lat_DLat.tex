@@ -1,0 +1,117 @@
+% ============================================================
+\section{Funtor \texorpdfstring{$I: DLat \hookrightarrow Lat$\ e\ $D: Lat \to DLat$}{I: DLat -> Lat e D: Lat -> DLat}}
+\label{sec:functor-lat-dlat}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{Lat}$ (modelo MATLAB/Octave)]
+Um objeto é um reticulado finito $(L, \wedge, \vee)$, ou seja, um conjunto finito com duas operações binárias de encontro (\emph{meet}) e junção (\emph{join}). Em MATLAB, representa-se por uma \texttt{struct} com campos \texttt{elements}, \texttt{meet} e \texttt{join}.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto em $\mathbf{Lat}$}]
+L.elements = [0, 1];
+L.meet = @(x, y) min(x, y);   % encontro
+L.join = @(x, y) max(x, y);   % juncao
+\end{lstlisting}
+
+\begin{definition}[Categoria $\mathbf{DLat}$ (modelo MATLAB/Octave)]
+Um objeto é um reticulado distributivo finito $(L, \wedge, \vee)$, onde as operações satisfazem adicionalmente a lei distributiva:
+\[
+    x \wedge (y \vee z) = (x \wedge y) \vee (x \wedge z).
+\]
+A representação em MATLAB é idêntica à de $\mathbf{Lat}$, acrescentando a verificação da distributividade.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Verificação da distributividade em $\mathbf{DLat}$}]
+function ok = is_distributive(L)
+    ok = true;
+    for x = L.elements
+        for y = L.elements
+            for z = L.elements
+                lhs = L.meet(x, L.join(y, z));
+                rhs = L.join(L.meet(x, y), L.meet(x, z));
+                if lhs ~= rhs, ok = false; return; end
+            end
+        end
+    end
+end
+\end{lstlisting}
+
+\subsection{Funtor de Inclusão \texorpdfstring{$I: DLat \hookrightarrow Lat$}{I: DLat -> Lat}}
+
+Existe o funtor de inclusão covariante:
+\[
+    I: \mathbf{DLat} \hookrightarrow \mathbf{Lat},
+\]
+que vê cada reticulado distributivo simplesmente como um reticulado, esquecendo a propriedade adicional de distributividade. Nos morfismos, $I$ atua como a identidade: qualquer homomorfismo de reticulados distributivos é também um homomorfismo de reticulados.
+
+\begin{lstlisting}[style=matlab, caption={Funtor de inclusão $I: \mathbf{DLat} \hookrightarrow \mathbf{Lat}$}]
+function L = inclusion_DLat_to_Lat(DL)
+    % I: esquece a propriedade de distributividade
+    L.elements = DL.elements;
+    L.meet = DL.meet;
+    L.join = DL.join;
+end
+\end{lstlisting}
+
+\subsection{Reflector Distributivo \texorpdfstring{$D: Lat \to DLat$}{D: Lat -> DLat}}
+
+Existe também um reflector distributivo:
+\[
+    D: \mathbf{Lat} \to \mathbf{DLat},
+\]
+que envia um reticulado $L$ no seu maior quociente distributivo
+\[
+    D(L) = L / \theta_{\mathrm{dist}},
+\]
+onde $\theta_{\mathrm{dist}}$ é a menor congruência que força a distributividade.
+
+\begin{remark}
+A restrição de $\mathbf{Lat}$ aos reticulados distributivos não define um funtor em toda a categoria $\mathbf{Lat}$, porque nem todo o reticulado é distributivo. O que existe naturalmente é a inclusão $I$ ou então o quociente reflector $D$.
+\end{remark}
+
+\subsection{Transformações Naturais \texorpdfstring{$q: \mathrm{Id}_{\mathbf{Lat}} \Rightarrow I \circ D$}{q: Id -> I . D}}
+
+Existe uma transformação natural
+\[
+    q: \mathrm{Id}_{\mathbf{Lat}} \Rightarrow I \circ D,
+\]
+em que a componente $q_L$ é a projeção canónica de $L$ no seu quociente distributivo $D(L)$:
+\[
+    q_L: L \twoheadrightarrow L/\theta_{\mathrm{dist}} = D(L).
+\]
+A naturalidade decorre do facto de que, para qualquer morfismo $f: L \to M$ em $\mathbf{Lat}$, o morfismo $D(f)$ está bem definido no quociente e o diagrama de naturalidade comuta.
+
+\begin{lstlisting}[style=matlab, caption={Projeção canónica $q_L: L \to D(L)$ (esquema simplificado)}]
+function [classes, proj] = distributive_quotient(L)
+    % Calcula as classes de equivalencia da menor congruencia
+    % que forca a distributividade.
+    % proj(i) indica o indice da classe do elemento L.elements(i).
+    n = length(L.elements);
+    proj = 1:n;  % inicialmente, cada elemento e a sua propria classe
+    changed = true;
+    while changed
+        changed = false;
+        for x = 1:n
+            for y = 1:n
+                for z = 1:n
+                    lhs = proj(L.meet(L.elements(x), ...
+                               L.join(L.elements(y), L.elements(z))) + 1);
+                    rhs_l = proj(L.meet(L.elements(x), L.elements(y)) + 1);
+                    rhs_r = proj(L.meet(L.elements(x), L.elements(z)) + 1);
+                    rhs = proj(L.join(L.elements(rhs_l - 1), ...
+                               L.elements(rhs_r - 1)) + 1);
+                    if lhs ~= rhs
+                        % fundir as duas classes
+                        old = max(lhs, rhs);
+                        new = min(lhs, rhs);
+                        proj(proj == old) = new;
+                        changed = true;
+                    end
+                end
+            end
+        end
+    end
+    classes = unique(proj);
+end
+\end{lstlisting}

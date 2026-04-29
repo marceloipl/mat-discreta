@@ -1,12 +1,12 @@
 % ============================================================
-\section{Funtor $F: Graph \to Rel$}
+\section{Funtor \texorpdfstring{$F: Graph \to Rel$}{F: Graph -> Rel}}
 \label{sec:functor-graph-rel}
 
 \subsection{Fundamentação Teórica}
 
 Em $\mathbf{Graph}$, os objetos são grafos dirigidos descritos por um conjunto de vértices $V$, um conjunto de arestas $A$, e dois mapas $s, t: A \to V$ (origem e destino). Um morfismo de grafos é um par $(f_V, f_A)$ que preserva a estrutura de incidência: $f_V \circ s = s' \circ f_A$ e $f_V \circ t = t' \circ f_A$. Em $\mathbf{Rel}$, os objetos são conjuntos finitos e os morfismos são relações binárias. O funtor $F: \mathbf{Graph} \to \mathbf{Rel}$ colapsa a distinção entre arestas e vértices, interpretando cada grafo como a relação binária de alcançabilidade em um passo.
 
-\subsection{Funtor Covariante $F: \mathbf{Graph} \to \mathbf{Rel}$}
+\subsection{Funtor Covariante \texorpdfstring{$F: Graph \to Rel$}{F: Graph -> Rel}}
 
 \begin{definition}[Funtor covariante $F: \mathbf{Graph} \to \mathbf{Rel}$]
 O funtor $F$ atua da seguinte forma:

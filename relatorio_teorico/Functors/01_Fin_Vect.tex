@@ -1,5 +1,5 @@
 % ============================================================
-\section{Funtor $F: Fin \to Vect$}
+\section{Funtor \texorpdfstring{$F: Fin \to Vect$}{F: Fin -> Vect}}
 \label{sec:functor-fin-vect}
 
 \subsection{Descrição das Categorias}
@@ -22,7 +22,7 @@ d = 3;               % objecto: C^3
 L = [1 0 0; 0 1 0];  % morfismo: aplicacao linear C^3 -> C^2
 \end{lstlisting}
 
-\subsection{Funtor Covariante $F: Fin \to Vect$ (Funtor Livre)}
+\subsection{Funtor Covariante \texorpdfstring{$F: Fin \to Vect$}{F: Fin -> Vect} (Funtor Livre)}
 
 O \emph{funtor livre} $F: \mathbf{Fin} \to \mathbf{Vect}$ envia cada conjunto finito $n$ ao espaço vetorial $\mathbb{C}^n$ gerado pelos seus elementos como base canónica, e cada aplicação total $f: n \to m$ à aplicação linear $F(f): \mathbb{C}^n \to \mathbb{C}^m$ definida na base canónica por
 \[
@@ -49,11 +49,11 @@ O funtor livre $F$ satisfaz as seguintes propriedades:
 \end{itemize}
 \end{proposition}
 
-\subsection{Funtor de Esquecimento $U: Vect \to Fin$}
+\subsection{Funtor de Esquecimento \texorpdfstring{$U: Vect \to Fin$}{U: Vect -> Fin}}
 
 O funtor de esquecimento $U: \mathbf{Vect} \to \mathbf{Fin}$ envia cada espaço vetorial de dimensão $d$ ao conjunto finito de índices $\{1,\ldots,d\}$ (a base canónica), esquecendo a estrutura linear. Note-se que este processo requer a escolha de uma base, pelo que $U$ é bem definido apenas após fixar bases em cada objeto.
 
-\subsection{Transformações Naturais $\eta: F \Rightarrow G$}
+\subsection{Transformações Naturais \texorpdfstring{$\eta: F \Rightarrow G$}{eta: F => G}}
 
 Dados dois funtores $F, G: \mathbf{Fin} \to \mathbf{Vect}$, uma transformação natural $\eta: F \Rightarrow G$ é uma família de morfismos em $\mathbf{Vect}$,
 \[

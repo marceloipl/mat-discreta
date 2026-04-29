@@ -1,0 +1,38 @@
+\section{Vect (Espaços Vetoriais Finitos sobre \texorpdfstring{$\mathbb{C}$}{C})}
+A categoria $\mathbf{Vect}$ modela espaços vetoriais de dimensão finita sobre o corpo dos números complexos. É uma das categorias mais ricas da álgebra linear, cujos morfismos (aplicações lineares) são completamente caracterizados por matrizes quando se fixam bases, tornando-a particularmente adequada para implementação computacional em MATLAB.
+
+\subsection{Objetos}
+Os objetos de $\mathbf{Vect}$ são espaços vetoriais de dimensão finita sobre $\mathbb{C}$. Em MATLAB, um objeto é representado por uma \texttt{struct} que armazena a dimensão, a base canónica e as operações de adição e multiplicação por escalar. A dimensão é finita e a base pode ser representada explicitamente como uma matriz cujas colunas são os vetores da base.
+
+\begin{lstlisting}[caption={Representação de um espaço vetorial de dimensão 2 sobre $\mathbb{C}$}]
+% Definicao de um espaco vetorial
+Vect            = struct();
+Vect.dim        = 2;            % Dimensao do espaco vetorial
+Vect.basis      = [1 0; 0 1];  % Vetores da base (colunas)
+Vect.add        = @(u, v) u + v;  % Adicao de vetores
+Vect.scalarMult = @(c, v) c * v;  % Multiplicacao por escalar complexo
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos em $\mathbf{Vect}$ são aplicações lineares entre espaços vetoriais. Dados $V$ e $W$, uma aplicação $f: V \to W$ é um morfismo se e só se
+\[
+    f(u + v) = f(u) + f(v)
+    \quad \text{e} \quad
+    f(c \cdot v) = c \cdot f(v), \quad \forall\, u, v \in V,\; c \in \mathbb{C}.
+\]
+Após fixar bases, cada aplicação linear é representada por uma matriz $A$ de dimensão $\dim(W) \times \dim(V)$. A verificação valida as dimensões da matriz e a linearidade relativamente à adição dos vetores da base.
+
+\begin{lstlisting}[caption={Verificação de aplicação linear (morfismo em $\mathbf{Vect}$)}]
+% Construtor de verificador de morfismo (aplicacao linear) entre V1 e V2
+MorphismVect = @(V1, V2) @(A) ...
+    all(size(A) == [V2.dim, V1.dim]) && ...
+    isequal(V2.add(A * V1.basis(:,1), A * V1.basis(:,2)), ...
+            A * V1.add(V1.basis(:,1), V1.basis(:,2)));
+
+% Funcao auxiliar equivalente (forma explicita)
+function ok = check_linear_map(V1, V2, A)
+    ok = all(size(A) == [V2.dim, V1.dim]) && ...
+         isequal(V2.add(A * V1.basis(:,1), A * V1.basis(:,2)), ...
+                 A * V1.add(V1.basis(:,1), V1.basis(:,2)));
+end
+\end{lstlisting}

@@ -1,0 +1,31 @@
+% ============================================================
+\section{Rel (Relations)}
+A categoria de relações é a base para modelar qualquer tipo de conectividade genérica ou base de dados relacionais.
+Um objeto nesta categoria define-se por um conjunto finito e uma relação binária arbitrária (sem exigência de reflexividade, simetria ou transitividade).
+
+\subsection{Objetos}
+No ambiente MATLAB, representamos estas estruturas através de matrizes de adjacência booleanas simples.
+A ausência de restrições algébricas torna a sua instanciação direta e computacionalmente leve.
+
+\begin{lstlisting}[caption={Representação de uma Relação Arbitrária}]
+% Matriz de adjacência para uma relação genérica
+n = 3;
+M = [0 1 0;
+0 0 1; 1 0 0];
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos nesta categoria são funções que preservam a relação.
+Um mapeamento $f$ é válido se, para quaisquer elementos $i, j$, a existência de uma relação $i \sim j$ implicar a relação $f(i) \sim f(j)$.
+
+\begin{lstlisting}[caption={Algoritmo de Verificação de Preservação Relacional}]
+% f é o vetor de mapeamento
+isMorphism = true;
+[I, J] = find(M_domain);
+for k = 1:length(I)
+    if ~M_codomain(f(I(k)), f(J(k)))
+        isMorphism = false;
+        break;
+    end
+end
+\end{lstlisting}

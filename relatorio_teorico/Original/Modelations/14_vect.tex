@@ -1,0 +1,41 @@
+\section{Vect (Espaços Vetoriais Finitos sobre $\mathbb{C}$)}
+\label{sec:vect}
+
+\subsection{Definição da Categoria}
+
+\subsubsection{Categoria $\mathbf{Vect}$}
+
+\begin{definition}
+    Os objetos de $\mathbf{Vect}$ são espaços vetoriais de dimensão finita sobre o corpo dos números complexos.
+    Os morfismos são aplicações lineares entre espaços vetoriais, isto é, para dois espaços vetoriais $V$ e $W$, um morfismo $f: V \to W$ satisfaz $f(u + v) = f(u) + f(v)$ e $f(c \cdot v) = c \cdot f(v)$ para todo $u, v \in V$ e $c \in \mathbb{C}$.
+\end{definition}
+
+\begin{remark}
+    A dimensão é finita, e a base pode ser representada explicitamente.
+\end{remark}
+
+\subsection{Implementação Computacional}
+
+\begin{lstlisting}[style=matlab]
+% Definição de um espaço vetorial
+Vect = struct();
+Vect.dim = 2; % Dimensão do espaço vetorial
+Vect.basis = [1 0; 0 1]; % Vetores da base
+Vect.add = @(u, v) u + v; % Adição de vetores
+Vect.scalarMult = @(c, v) c * v; % Multiplicação por escalar
+
+% Verificação de morfismo (aplicação linear)
+MorphismVect = @(V1, V2) @(A) ...
+    all(size(A) == [V2.dim, V1.dim]) && ...
+    isequal(V2.add(A*V1.basis(:,1), A*V1.basis(:,2)), ...
+            A*V1.add(V1.basis(:,1), V1.basis(:,2)));
+\end{lstlisting}
+
+\subsection{Transformações Naturais}
+\begin{lstlisting}[style=matlab]
+function ok = check_linear_map(V1, V2, A)
+    ok = all(size(A) == [V2.dim, V1.dim]) && ...
+         isequal(V2.add(A*V1.basis(:,1), A*V1.basis(:,2)), ...
+                 A*V1.add(V1.basis(:,1), V1.basis(:,2)));
+end
+\end{lstlisting}

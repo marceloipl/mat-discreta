@@ -7,6 +7,11 @@
 \usepackage{lmodern}          % Fonte Vectorial de alta qualidade
 \usepackage{amsthm} % Pacote para teoremas e ambientes matemáticos
 
+% --- Silenciar o aviso do microtype ---
+\usepackage{silence}
+\WarningFilter{latex}{Command \showhyphens has changed}
+\usepackage{microtype}
+
 % --- 2. Pacotes de Layout e Estética ---
 \usepackage[margin=2.5cm]{geometry} % Margens equilibradas
 \usepackage{titlesec}               % Personalização de títulos
@@ -58,6 +63,10 @@
     extendedchars=true,      % Permite caracteres estendidos
     % MAPA DE ACENTOS PARA O CÓDIGO (Resolve o erro de compilação)
     literate={á}{{\'a}}1 {ã}{{\~a}}1 {à}{{\`a}}1 {é}{{\'e}}1 {ê}{{\^e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {õ}{{\~o}}1 {ú}{{\'u}}1 {ç}{{\c{c}}}1 {Á}{{\'A}}1 {Ã}{{\~A}}1 {À}{{\`A}}1 {É}{{\'E}}1 {Ê}{{\^E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Õ}{{\~O}}1 {Ú}{{\'U}}1 {Ç}{{\c{C}}}1
+    {⊆}{{$\subseteq$}}1
+    {∈}{{$\in$}}1
+    {×}{{$\times$}}1
+    {→}{{$\to$}}1,
 }
 
 % --- 4. Personalização Visual ---
@@ -107,44 +116,80 @@ Nesta secção, detalhamos como cada estrutura matemática é representada atrav
 \input{Categorias/03_Par}
 \input{Categorias/04_Simp}
 
+\input{Categorias/05_End}
+\input{Categorias/06_Graph}
+\input{Categorias/07_Rel}
+\input{Categorias/08_PreOrd}
+
 \input{Categorias/09_Partial_Orders}
 \input{Categorias/10_EqRel}
 \input{Categorias/11_Mon}
 
-\input{Categorias/16_DLat}
-\input{Categorias/17_Bool}
-\input{Categorias/18_OrdMon}
-\input{Categorias/19_Trees}
-\input{Categorias/20_Turing_Machines}
-\input{Categorias/21_Struct}
+\input{Categorias/12_mag}
+\input{Categorias/13_Dimag}
+\input{Categorias/14_Vect}
+\input{Categorias/15_Row}
+
+\input{Categorias/16_Lat.tex}
+
+\input{Categorias/17_DLat.tex}
+\input{Categorias/18_Bool}
+\input{Categorias/19_OrdMon}
+
+\input{Categorias/20_Trees}
+\input{Categorias/21_Turing_Machines}
+\input{Categorias/22_Struct}
 
 
 \chapter{Construções e Funtores}
 Aqui demonstramos a capacidade de gerar novas estruturas (limites e colimites) e a relação entre diferentes categorias.
 
+% -------- Construções --------
 \input{Constructions/01_Fin}
 \input{Constructions/02_Sub}
 \input{Constructions/03_Par}
 \input{Constructions/04_Simp}
 
+\input{Constructions/05_End}
+\input{Constructions/06_Graph}
+\input{Constructions/07_Rel}
+\input{Constructions/08_PreOrd}
+
 \input{Constructions/09_Partial_Orders}
 \input{Constructions/10_EqRel}
 \input{Constructions/11_Mon}
 
-\input{Constructions/16_DLat}
-\input{Constructions/17_Bool}
-\input{Constructions/18_OrdMon}
-\input{Constructions/19_Trees}
-\input{Constructions/20_Turing_Machines}
-\input{Constructions/21_Struct}
+\input{Constructions/16_Lat}
 
+\input{Constructions/17_DLat}
+\input{Constructions/18_Bool}
+\input{Constructions/19_OrdMon}
+
+\input{Constructions/20_Trees}
+\input{Constructions/21_Turing_Machines}
+\input{Constructions/22_Struct}
+
+% -------- Funtores --------
 \input{Functors/01_Fin_Vect}
 \input{Functors/02_Fin_Sub}
 \input{Functors/03_Fin_Par}
 
+\input{Functors/04_Sub_Rel}
+\input{Functors/05_Par_Rel}
+\input{Functors/06_End_Graph}
+
+\input{Functors/07_PreOrd_PartialOrders}
+\input{Functors/08_Mon_Fin}
+\input{Functors/09_Struct_Fin}
+
 \input{Functors/10_Rel_Fin}
 \input{Functors/11_Simp_PreOrd}
 \input{Functors/12_Graph_Rel}
+
+\input{Functors/16_Dimag_Mag}
+\input{Functors/17_Lat_DLat}
+\input{Functors/18_DLat_Bool}
+\input{Functors/19_OrdMon_Mon}
 
 \input{Functors/20_Turing_Struct}
 \input{Functors/21_End_Mon}

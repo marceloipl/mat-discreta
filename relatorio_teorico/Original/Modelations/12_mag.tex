@@ -1,0 +1,36 @@
+\section{Mag (Magmas Finitos)}
+\label{sec:mag}
+
+\subsection{Definição da Categoria}
+
+\subsubsection{Categoria $\mathbf{Mag}$}
+
+\begin{definition}
+    Os objetos de $\mathbf{Mag}$ são magmas finitos, ou seja, conjuntos finitos equipados com uma operação binária sem axiomas adicionais.
+    Os morfismos são aplicações que preservam a estrutura do magma, isto é, para dois magmas $(M, \cdot)$ e $(N, \ast)$, um morfismo $f: M \to N$ satisfaz $f(a \cdot b) = f(a) \ast f(b)$ para todo $a, b \in M$.
+\end{definition}
+
+\begin{remark}
+    Não são impostos axiomas adicionais na operação binária (associatividade, comutatividade, etc.).
+\end{remark}
+
+\subsection{Implementação Computacional}
+
+\begin{lstlisting}[style=matlab]
+% Definição de um magma
+Mag = struct();
+Mag.set = {1, 2, 3}; % Conjunto finito
+Mag.op = @(a, b) mod(a + b, 3); % Operação binária
+
+% Verificação de morfismo entre magmas
+MorphismMag = @(M1, M2) @(f) ...
+    all(arrayfun(@(a, b) M2.op(f(a), f(b)) == f(M1.op(a, b)), M1.set, M1.set));
+\end{lstlisting}
+
+\subsection{Transformações Naturais}
+% Exemplo de lugar para implementação de transformações naturais
+\begin{lstlisting}[style=matlab]
+function ok = check_morphism(M1, M2, f)
+    ok = all(arrayfun(@(a, b) M2.op(f(a), f(b)) == f(M1.op(a, b)), M1.set, M1.set));
+end
+\end{lstlisting}

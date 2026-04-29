@@ -1,0 +1,30 @@
+% ============================================================
+\section{PreOrd (Preorders)}
+A categoria de pré-ordens é fundamental para modelar hierarquias e sistemas de estados onde ciclos ou equivalências são permitidos.
+Um objeto nesta categoria define-se por um conjunto finito e uma relação binária que respeita a reflexividade e a transitividade, não exigindo antissimetria.
+
+\subsection{Objetos}
+No ambiente MATLAB, a forma mais eficiente de representar estas relações, tal como nos Posets, é através de matrizes de adjacência booleanas.
+Esta estrutura permite-nos validar as propriedades algébricas de reflexividade e transitividade recorrendo a álgebra matricial.
+
+\begin{lstlisting}[caption={Representação de uma Pré-ordem (1 e 2 são equivalentes, 3 é maior)}]
+% Matriz de adjacência para uma pré-ordem
+n = 3;
+M = [1 1 1; 1 1 1; 0 0 1];
+\end{lstlisting}
+
+\subsection{Morfismos}
+Os morfismos nesta categoria são funções monótonas (preservam a ordem).
+Um mapeamento $f$ é válido se, para quaisquer elementos $i, j$, a condição $i \le j$ implicar obrigatoriamente $f(i) \le f(j)$.
+
+\begin{lstlisting}[caption={Algoritmo de Verificação de Monotonia para PreOrd}]
+% f é um vetor onde o índice é o domínio e o valor é a imagem
+isMorphism = true;
+[I, J] = find(M_domain);
+for k = 1:length(I)
+    if ~M_codomain(f(I(k)), f(J(k)))
+        isMorphism = false;
+        break;
+    end
+end
+\end{lstlisting}
