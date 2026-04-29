@@ -1,0 +1,207 @@
+\babel@toc {portuguese}{}\relax 
+\contentsline {chapter}{\numberline {1}Introdução}{6}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Modelação de Categorias}{7}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Fin (Conjuntos Finitos e Aplicações Totais)}{7}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Objetos}{7}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Morfismos}{7}{subsection.2.1.2}%
+\contentsline {section}{\numberline {2.2}Sub (Conjuntos Finitos e Inclusões)}{7}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Objetos}{7}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Morfismos}{8}{subsection.2.2.2}%
+\contentsline {section}{\numberline {2.3}Par (Aplicações Parciais)}{8}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Objetos}{8}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Morfismos}{8}{subsection.2.3.2}%
+\contentsline {section}{\numberline {2.4}Simp (Categoria Simplicial)}{8}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Objetos}{8}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Morfismos}{8}{subsection.2.4.2}%
+\contentsline {section}{\numberline {2.5}End (Endomaps)}{9}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Objetos}{9}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Morfismos}{9}{subsection.2.5.2}%
+\contentsline {section}{\numberline {2.6}Graph (Directed Graphs)}{9}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Objetos}{9}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Morfismos}{10}{subsection.2.6.2}%
+\contentsline {section}{\numberline {2.7}Rel (Relations)}{10}{section.2.7}%
+\contentsline {subsection}{\numberline {2.7.1}Objetos}{10}{subsection.2.7.1}%
+\contentsline {subsection}{\numberline {2.7.2}Morfismos}{10}{subsection.2.7.2}%
+\contentsline {section}{\numberline {2.8}PreOrd (Preorders)}{11}{section.2.8}%
+\contentsline {subsection}{\numberline {2.8.1}Objetos}{11}{subsection.2.8.1}%
+\contentsline {subsection}{\numberline {2.8.2}Morfismos}{11}{subsection.2.8.2}%
+\contentsline {section}{\numberline {2.9}Partial Orders (Posets)}{11}{section.2.9}%
+\contentsline {subsection}{\numberline {2.9.1}Objetos}{12}{subsection.2.9.1}%
+\contentsline {subsection}{\numberline {2.9.2}Morfismos}{12}{subsection.2.9.2}%
+\contentsline {section}{\numberline {2.10}EqRel (Relações de Equivalência)}{12}{section.2.10}%
+\contentsline {subsection}{\numberline {2.10.1}Objetos}{12}{subsection.2.10.1}%
+\contentsline {subsection}{\numberline {2.10.2}Morfismos}{13}{subsection.2.10.2}%
+\contentsline {section}{\numberline {2.11}Mon (Monoides Finitos)}{13}{section.2.11}%
+\contentsline {subsection}{\numberline {2.11.1}Objetos}{13}{subsection.2.11.1}%
+\contentsline {subsection}{\numberline {2.11.2}Morfismos}{13}{subsection.2.11.2}%
+\contentsline {section}{\numberline {2.12}Mag (Magmas Finitos)}{13}{section.2.12}%
+\contentsline {subsection}{\numberline {2.12.1}Objetos}{14}{subsection.2.12.1}%
+\contentsline {subsection}{\numberline {2.12.2}Morfismos}{14}{subsection.2.12.2}%
+\contentsline {section}{\numberline {2.13}DIMag (Dimagmas Finitos)}{14}{section.2.13}%
+\contentsline {subsection}{\numberline {2.13.1}Objetos}{14}{subsection.2.13.1}%
+\contentsline {subsection}{\numberline {2.13.2}Morfismos}{15}{subsection.2.13.2}%
+\contentsline {section}{\numberline {2.14}Vect (Espaços Vetoriais Finitos sobre $\mathbb {C}$)}{15}{section.2.14}%
+\contentsline {subsection}{\numberline {2.14.1}Objetos}{15}{subsection.2.14.1}%
+\contentsline {subsection}{\numberline {2.14.2}Morfismos}{16}{subsection.2.14.2}%
+\contentsline {section}{\numberline {2.15}Row (Matrizes Linha)}{16}{section.2.15}%
+\contentsline {subsection}{\numberline {2.15.1}Objetos}{16}{subsection.2.15.1}%
+\contentsline {subsection}{\numberline {2.15.2}Morfismos}{17}{subsection.2.15.2}%
+\contentsline {section}{\numberline {2.16}Lat (Reticulados Finitos)}{17}{section.2.16}%
+\contentsline {subsection}{\numberline {2.16.1}Objetos}{17}{subsection.2.16.1}%
+\contentsline {subsection}{\numberline {2.16.2}Morfismos}{18}{subsection.2.16.2}%
+\contentsline {section}{\numberline {2.17}DLat (Latices Distributivos)}{18}{section.2.17}%
+\contentsline {subsection}{\numberline {2.17.1}Objetos}{19}{subsection.2.17.1}%
+\contentsline {subsection}{\numberline {2.17.2}Morfismos}{19}{subsection.2.17.2}%
+\contentsline {section}{\numberline {2.18}Bool (Álgebras de Boolean)}{19}{section.2.18}%
+\contentsline {subsection}{\numberline {2.18.1}Objetos}{19}{subsection.2.18.1}%
+\contentsline {subsection}{\numberline {2.18.2}Morfismos}{19}{subsection.2.18.2}%
+\contentsline {section}{\numberline {2.19}OrdMon (Monoides Ordenados)}{19}{section.2.19}%
+\contentsline {subsection}{\numberline {2.19.1}Objetos}{19}{subsection.2.19.1}%
+\contentsline {subsection}{\numberline {2.19.2}Morfismos}{20}{subsection.2.19.2}%
+\contentsline {section}{\numberline {2.20}Trees (Árvores Binárias)}{20}{section.2.20}%
+\contentsline {subsection}{\numberline {2.20.1}Objetos}{20}{subsection.2.20.1}%
+\contentsline {paragraph}{1. Representação por Array de Progenitores:}{20}{paragraph*.2}%
+\contentsline {paragraph}{2. Representação Recursiva:}{20}{paragraph*.3}%
+\contentsline {subsection}{\numberline {2.20.2}Morfismos}{21}{subsection.2.20.2}%
+\contentsline {section}{\numberline {2.21}Turing Machines (Máquinas de Turing)}{21}{section.2.21}%
+\contentsline {subsection}{\numberline {2.21.1}Objetos}{21}{subsection.2.21.1}%
+\contentsline {subsection}{\numberline {2.21.2}Morfismos}{22}{subsection.2.21.2}%
+\contentsline {section}{\numberline {2.22}Struct (Conjuntos Estruturados)}{23}{section.2.22}%
+\contentsline {subsection}{\numberline {2.22.1}Objetos}{23}{subsection.2.22.1}%
+\contentsline {subsection}{\numberline {2.22.2}Morfismos}{24}{subsection.2.22.2}%
+\contentsline {chapter}{\numberline {3}Construções e Funtores}{25}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Construções em Fin}{25}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Fundamentação Teórica}{25}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Implementação Computacional}{25}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Construções em Sub}{26}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Fundamentação Teórica}{26}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Implementação Computacional}{26}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Construções em Par}{27}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Fundamentação Teórica}{27}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Implementação Computacional}{27}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}Construções em Simp}{27}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Fundamentação Teórica}{27}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Implementação Computacional}{28}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}End (Endomaps)}{28}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Fundamentação Teórica}{28}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Implementação Computacional}{28}{subsection.3.5.2}%
+\contentsline {section}{\numberline {3.6}Graph (Directed Graphs)}{29}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Fundamentação Teórica}{29}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {3.6.2}Implementação Computacional}{29}{subsection.3.6.2}%
+\contentsline {section}{\numberline {3.7}Rel (Relations)}{29}{section.3.7}%
+\contentsline {subsection}{\numberline {3.7.1}Fundamentação Teórica}{30}{subsection.3.7.1}%
+\contentsline {subsection}{\numberline {3.7.2}Implementação Computacional}{30}{subsection.3.7.2}%
+\contentsline {section}{\numberline {3.8}PreOrd (Preorders)}{30}{section.3.8}%
+\contentsline {subsection}{\numberline {3.8.1}Fundamentação Teórica}{30}{subsection.3.8.1}%
+\contentsline {subsection}{\numberline {3.8.2}Implementação Computacional}{30}{subsection.3.8.2}%
+\contentsline {section}{\numberline {3.9}Partial Orders (Posets)}{31}{section.3.9}%
+\contentsline {subsection}{\numberline {3.9.1}Fundamentação Teórica}{31}{subsection.3.9.1}%
+\contentsline {subsection}{\numberline {3.9.2}Implementação Computacional}{31}{subsection.3.9.2}%
+\contentsline {section}{\numberline {3.10}EqRel (Relações de Equivalência)}{31}{section.3.10}%
+\contentsline {subsection}{\numberline {3.10.1}Fundamentação Teórica}{31}{subsection.3.10.1}%
+\contentsline {subsection}{\numberline {3.10.2}Implementação Computacional}{32}{subsection.3.10.2}%
+\contentsline {section}{\numberline {3.11}Mon (Monoides Finitos)}{32}{section.3.11}%
+\contentsline {subsection}{\numberline {3.11.1}Fundamentação Teórica}{32}{subsection.3.11.1}%
+\contentsline {subsection}{\numberline {3.11.2}Implementação Computacional}{32}{subsection.3.11.2}%
+\contentsline {section}{\numberline {3.12}Lat (Reticulados Finitos)}{33}{section.3.12}%
+\contentsline {subsection}{\numberline {3.12.1}Fundamentação Teórica}{33}{subsection.3.12.1}%
+\contentsline {subsection}{\numberline {3.12.2}Implementação Computacional}{33}{subsection.3.12.2}%
+\contentsline {section}{\numberline {3.13}Bool (Álgebras de Boolean)}{34}{section.3.13}%
+\contentsline {subsection}{\numberline {3.13.1}Fundamentação Teórica}{34}{subsection.3.13.1}%
+\contentsline {subsection}{\numberline {3.13.2}Implementação Computacional}{34}{subsection.3.13.2}%
+\contentsline {section}{\numberline {3.14}OrdMon (Monoides Ordenados)}{34}{section.3.14}%
+\contentsline {subsection}{\numberline {3.14.1}Fundamentação Teórica}{35}{subsection.3.14.1}%
+\contentsline {subsection}{\numberline {3.14.2}Implementação Computacional}{35}{subsection.3.14.2}%
+\contentsline {section}{\numberline {3.15}Trees (Árvores Binárias)}{35}{section.3.15}%
+\contentsline {subsection}{\numberline {3.15.1}Fundamentação Teórica}{35}{subsection.3.15.1}%
+\contentsline {subsection}{\numberline {3.15.2}Implementação Computacional}{36}{subsection.3.15.2}%
+\contentsline {section}{\numberline {3.16}Turing Machines (Máquinas de Turing)}{37}{section.3.16}%
+\contentsline {subsection}{\numberline {3.16.1}Fundamentação Teórica}{37}{subsection.3.16.1}%
+\contentsline {subsection}{\numberline {3.16.2}Implementação Computacional}{38}{subsection.3.16.2}%
+\contentsline {section}{\numberline {3.17}Struct (Conjuntos Estruturados)}{39}{section.3.17}%
+\contentsline {subsection}{\numberline {3.17.1}Fundamentação Teórica}{39}{subsection.3.17.1}%
+\contentsline {subsection}{\numberline {3.17.2}Implementação Computacional}{39}{subsection.3.17.2}%
+\contentsline {section}{\numberline {3.18}Funtor $F: Fin \to Vect$}{41}{section.3.18}%
+\contentsline {subsection}{\numberline {3.18.1}Descrição das Categorias}{41}{subsection.3.18.1}%
+\contentsline {subsection}{\numberline {3.18.2}Funtor Covariante $F: Fin \to Vect$ (Funtor Livre)}{42}{subsection.3.18.2}%
+\contentsline {subsection}{\numberline {3.18.3}Funtor de Esquecimento $U: Vect \to Fin$}{42}{subsection.3.18.3}%
+\contentsline {subsection}{\numberline {3.18.4}Transformações Naturais $\eta : F \Rightarrow G$}{42}{subsection.3.18.4}%
+\contentsline {section}{\numberline {3.19}Funtor $P: Fin \to Sub$}{43}{section.3.19}%
+\contentsline {subsection}{\numberline {3.19.1}Descrição das Categorias}{43}{subsection.3.19.1}%
+\contentsline {subsection}{\numberline {3.19.2}Funtor Covariante $P: Fin \to Sub$ (Conjunto das Partes)}{43}{subsection.3.19.2}%
+\contentsline {subsection}{\numberline {3.19.3}Funtor de Esquecimento $U: Sub \to Fin$}{43}{subsection.3.19.3}%
+\contentsline {subsection}{\numberline {3.19.4}Funtor Contravariante $P^*: Fin^{\mathrm {op}} \to Sub$ (Imagem Inversa)}{44}{subsection.3.19.4}%
+\contentsline {subsection}{\numberline {3.19.5}Transformações Naturais entre Funtores $Fin \to Sub$}{44}{subsection.3.19.5}%
+\contentsline {section}{\numberline {3.20}Funtor $I: Fin \to Par$}{44}{section.3.20}%
+\contentsline {subsection}{\numberline {3.20.1}Descrição das Categorias}{44}{subsection.3.20.1}%
+\contentsline {subsection}{\numberline {3.20.2}Composição em Par}{44}{subsection.3.20.2}%
+\contentsline {subsection}{\numberline {3.20.3}Funtor de Inclusão $I: Fin \to Par$}{45}{subsection.3.20.3}%
+\contentsline {subsection}{\numberline {3.20.4}Transformações Naturais entre Funtores $Fin \to Par$}{45}{subsection.3.20.4}%
+\contentsline {section}{\numberline {3.21}Funtor $F: Sub \to Rel$}{46}{section.3.21}%
+\contentsline {subsection}{\numberline {3.21.1}Descrição das Categorias}{46}{subsection.3.21.1}%
+\contentsline {subsection}{\numberline {3.21.2}Funtor Covariante $F: Sub \to Rel$}{46}{subsection.3.21.2}%
+\contentsline {subsection}{\numberline {3.21.3}Transformações Naturais $\alpha : F_1 \Rightarrow F_2$}{47}{subsection.3.21.3}%
+\contentsline {section}{\numberline {3.22}Funtor $G: Par \to Rel$}{47}{section.3.22}%
+\contentsline {subsection}{\numberline {3.22.1}Descrição das Categorias}{47}{subsection.3.22.1}%
+\contentsline {subsection}{\numberline {3.22.2}Funtor Covariante $G: Par \to Rel$}{48}{subsection.3.22.2}%
+\contentsline {subsection}{\numberline {3.22.3}Transformações Naturais $\beta : G_1 \Rightarrow G_2$}{48}{subsection.3.22.3}%
+\contentsline {section}{\numberline {3.23}Funtor $H: End \to Graph$}{49}{section.3.23}%
+\contentsline {subsection}{\numberline {3.23.1}Descrição das Categorias}{49}{subsection.3.23.1}%
+\contentsline {subsection}{\numberline {3.23.2}Funtor Covariante $H: End \to Graph$}{50}{subsection.3.23.2}%
+\contentsline {subsection}{\numberline {3.23.3}Transformações Naturais $\gamma : H_1 \Rightarrow H_2$}{51}{subsection.3.23.3}%
+\contentsline {section}{\numberline {3.24}Funtor $F: Rel \to Fin$}{51}{section.3.24}%
+\contentsline {subsection}{\numberline {3.24.1}Fundamentação Teórica}{51}{subsection.3.24.1}%
+\contentsline {subsection}{\numberline {3.24.2}Funtor Covariante $F: Rel \to Fin$}{52}{subsection.3.24.2}%
+\contentsline {subsection}{\numberline {3.24.3}Funtor Contravariante --- Análise de Existência}{53}{subsection.3.24.3}%
+\contentsline {subsection}{\numberline {3.24.4}Transformações Naturais}{53}{subsection.3.24.4}%
+\contentsline {section}{\numberline {3.25}Funtor $F: Simp \to PreOrd$}{54}{section.3.25}%
+\contentsline {subsection}{\numberline {3.25.1}Fundamentação Teórica}{54}{subsection.3.25.1}%
+\contentsline {subsection}{\numberline {3.25.2}Funtor Covariante $F: Simp \to PreOrd$}{54}{subsection.3.25.2}%
+\contentsline {subsection}{\numberline {3.25.3}Funtor Contravariante --- Análise de Existência}{55}{subsection.3.25.3}%
+\contentsline {subsection}{\numberline {3.25.4}Transformações Naturais}{55}{subsection.3.25.4}%
+\contentsline {section}{\numberline {3.26}Funtor $F: Graph \to Rel$}{56}{section.3.26}%
+\contentsline {subsection}{\numberline {3.26.1}Fundamentação Teórica}{56}{subsection.3.26.1}%
+\contentsline {subsection}{\numberline {3.26.2}Funtor Covariante $F: Graph \to Rel$}{56}{subsection.3.26.2}%
+\contentsline {subsection}{\numberline {3.26.3}Funtor Contravariante --- Análise de Existência}{57}{subsection.3.26.3}%
+\contentsline {subsection}{\numberline {3.26.4}Transformações Naturais}{58}{subsection.3.26.4}%
+\contentsline {section}{\numberline {3.27}Funtor $U_1, U_2: DIMag \to Mag$}{58}{section.3.27}%
+\contentsline {subsection}{\numberline {3.27.1}Descrição das Categorias}{58}{subsection.3.27.1}%
+\contentsline {subsection}{\numberline {3.27.2}Funtores Covariantes $U_1, U_2: DIMag \to Mag$}{59}{subsection.3.27.2}%
+\contentsline {subsection}{\numberline {3.27.3}Funtor Diagonal $\Delta : Mag \to DIMag$}{59}{subsection.3.27.3}%
+\contentsline {subsection}{\numberline {3.27.4}Transformações Naturais $\eta : U_1 \Rightarrow U_2$}{60}{subsection.3.27.4}%
+\contentsline {section}{\numberline {3.28}Funtor $I: DLat \DOTSB \lhook \joinrel \rightarrow Lat$\ e\ $D: Lat \to DLat$}{60}{section.3.28}%
+\contentsline {subsection}{\numberline {3.28.1}Descrição das Categorias}{60}{subsection.3.28.1}%
+\contentsline {subsection}{\numberline {3.28.2}Funtor de Inclusão $I: DLat \DOTSB \lhook \joinrel \rightarrow Lat$}{61}{subsection.3.28.2}%
+\contentsline {subsection}{\numberline {3.28.3}Reflector Distributivo $D: Lat \to DLat$}{61}{subsection.3.28.3}%
+\contentsline {subsection}{\numberline {3.28.4}Transformações Naturais $q: \mathrm {Id}_{\mathbf {Lat}} \Rightarrow I \circ D$}{62}{subsection.3.28.4}%
+\contentsline {section}{\numberline {3.29}Funtor $Z: Lat \to Bool$}{63}{section.3.29}%
+\contentsline {subsection}{\numberline {3.29.1}Descrição das Categorias}{63}{subsection.3.29.1}%
+\contentsline {subsection}{\numberline {3.29.2}Funtor Covariante $Z: DLat \to Bool$ (Centro Booleano)}{63}{subsection.3.29.2}%
+\contentsline {subsection}{\numberline {3.29.3}Funtor de Esquecimento $J: Bool \to DLat$}{64}{subsection.3.29.3}%
+\contentsline {subsection}{\numberline {3.29.4}Transformações Naturais $\iota : J \circ Z \Rightarrow \mathrm {Id}_{\mathbf {DLat}}$}{65}{subsection.3.29.4}%
+\contentsline {section}{\numberline {3.30}Funtor $F: Turing Machines \to Struct$}{65}{section.3.30}%
+\contentsline {subsection}{\numberline {3.30.1}Fundamentação Teórica}{65}{subsection.3.30.1}%
+\contentsline {subsection}{\numberline {3.30.2}Funtor Covariante $F: Turing Machines \to Struct$}{65}{subsection.3.30.2}%
+\contentsline {subsection}{\numberline {3.30.3}Funtor Contravariante --- Análise de Existência}{66}{subsection.3.30.3}%
+\contentsline {subsection}{\numberline {3.30.4}Transformações Naturais}{66}{subsection.3.30.4}%
+\contentsline {section}{\numberline {3.31}Funtor $F: End \to Mon$}{67}{section.3.31}%
+\contentsline {subsection}{\numberline {3.31.1}Fundamentação Teórica}{67}{subsection.3.31.1}%
+\contentsline {subsection}{\numberline {3.31.2}Funtor Covariante $F: End \to Mon$}{67}{subsection.3.31.2}%
+\contentsline {subsection}{\numberline {3.31.3}Funtor Contravariante --- Análise de Existência}{68}{subsection.3.31.3}%
+\contentsline {subsection}{\numberline {3.31.4}Transformações Naturais}{68}{subsection.3.31.4}%
+\contentsline {subsubsection}{Translação por $k_0$ iterações}{68}{subsubsection*.4}%
+\contentsline {subsubsection}{Adjunção com $U: \mathbf {Mon} \to \mathbf {End}$}{68}{subsubsection*.5}%
+\contentsline {section}{\numberline {3.32}Funtor $F: End \to Trees$}{69}{section.3.32}%
+\contentsline {subsection}{\numberline {3.32.1}Fundamentação Teórica}{69}{subsection.3.32.1}%
+\contentsline {subsection}{\numberline {3.32.2}Funtor Covariante $F: End \to Trees$}{69}{subsection.3.32.2}%
+\contentsline {subsection}{\numberline {3.32.3}Funtor Contravariante --- Análise de Existência}{70}{subsection.3.32.3}%
+\contentsline {subsection}{\numberline {3.32.4}Transformações Naturais}{70}{subsection.3.32.4}%
+\contentsline {subsubsection}{Translação por $k_0$ iterações}{70}{subsubsection*.6}%
+\contentsline {subsubsection}{Adjunção com $U: \mathbf {Trees} \to \mathbf {End}$}{70}{subsubsection*.7}%
+\contentsline {section}{\numberline {3.33}Funtor $F: End \to Turing Machines$}{71}{section.3.33}%
+\contentsline {subsection}{\numberline {3.33.1}Fundamentação Teórica}{71}{subsection.3.33.1}%
+\contentsline {subsection}{\numberline {3.33.2}Funtor Covariante $F: End \to Turing Machines$}{71}{subsection.3.33.2}%
+\contentsline {subsection}{\numberline {3.33.3}Funtor Contravariante --- Análise de Existência}{72}{subsection.3.33.3}%
+\contentsline {subsection}{\numberline {3.33.4}Transformações Naturais}{72}{subsection.3.33.4}%
+\contentsline {subsubsection}{Translação por $k_0$ iterações}{72}{subsubsection*.8}%
+\contentsline {subsubsection}{Composto com $F_{\mathrm {TM} \to \mathrm {Struct}}$}{72}{subsubsection*.9}%
