@@ -1,0 +1,21 @@
+\section{Row (Matrizes Linha)}
+\label{sec:row}
+
+Nesta categoria, os objetos são matrizes linha, interpretadas como coleções de vetores. Os morfismos são aplicações lineares compatíveis com a estrutura de matrizes linha.
+
+\subsection{Objetos}
+Os objetos são representados como matrizes linha, onde cada linha é um vetor.
+
+\subsection{Morfismos}
+Um morfismo $f: R_1 \to R_2$ é uma aplicação linear representada por uma matriz $A$ de dimensão $|R_2| \times |R_1|$, tal que $f(v) = A \cdot v$ para todo $v \in R_1$.
+
+\begin{lstlisting}[style=matlab, caption={Exemplo de Matriz Linha e Morfismo}]
+	% Definição de uma matriz linha R1
+	R1.vectors = [1 2; 3 4];
+	
+	% Definição de uma matriz linha R2
+	R2.vectors = [1 0; 0 1];
+	
+	% Morfismo f: R1 -> R2 (matriz identidade)
+	A = [1 0; 0 1];
+\end{lstlisting}

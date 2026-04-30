@@ -1,0 +1,45 @@
+\section{Funtor $H: End \to Struct$}
+\label{sec:functor-end-struct}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{End}$ (modelo MATLAB/Octave)]
+Um objeto é um endomorfismo $f: X \to X$ em $\mathbf{Fin}$, representado por um vetor de índices onde $f(i)$ é a imagem de $i$. Um morfismo entre endomorfismos $(X, f)$ e $(Y, g)$ é uma função $\phi: X \to Y$ tal que $\phi \circ f = g \circ \phi$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{End}$}]
+X = 1:3;
+f = [2, 3, 1]; % endomorfismo: f(1)=2, f(2)=3, f(3)=1
+\end{lstlisting}
+
+\begin{definition}[Categoria $\mathbf{Struct}$ (modelo MATLAB/Octave)]
+Como definido anteriormente.
+\end{definition}
+
+\subsection{Funtor Covariante $H: End \to Struct$ (Endomorfismo como Conjunto Estruturado)}
+
+O funtor $H: \mathbf{End} \to \mathbf{Struct}$ envia cada endomorfismo $(X, f)$ a um conjunto estruturado $(X, R_f)$, onde $R_f$ é a relação binária definida por $(x, y) \in R_f$ se $f(x) = y$. Os morfismos em $\mathbf{End}$ são mapeados para morfismos em $\mathbf{Struct}$ que preservam a relação $R_f$.
+
+\begin{lstlisting}[style=matlab, caption={Funtor $H$ aplicado a um endomorfismo}]
+function S = end_to_struct(X, f)
+    S.set = X;
+    n = length(X);
+    R = zeros(n, n);
+    for i = 1:n
+        R(i, f(i)) = 1;
+    end
+    S.rel = R;
+end
+\end{lstlisting}
+
+\begin{proposition}
+O funtor $H$ satisfaz as seguintes propriedades:
+\begin{itemize}
+    \item $H(\mathrm{id}_{(X,f)}) = \mathrm{id}_{H(X,f)}$;
+    \item $H$ preserva a composição de morfismos.
+\end{itemize}
+\end{proposition}
+
+\subsection{Transformações Naturais}
+
+Uma transformação natural $\eta: H \Rightarrow K$ entre funores $H, K: \mathbf{End} \to \mathbf{Struct}$ seria uma família de morfismos $\eta_{(X,f)}: H(X,f) \to K(X,f)$ que comutam com os morfismos em $\mathbf{End}$. Por exemplo, $\eta_{(X,f)}$ poderia ser a identidade se $H = K$.

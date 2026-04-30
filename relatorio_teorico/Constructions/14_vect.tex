@@ -1,0 +1,44 @@
+\section{Construções em Vect (Espaços Vetoriais Finitos sobre $\mathbb{C}$)}
+
+A categoria \textbf{Vect} consiste em espaços vetoriais de dimensão finita sobre os números complexos. Os morfismos são transformações lineares. Esta categoria é completa e cocompleta.
+
+\subsection{Fundamentação Teórica}
+\begin{itemize}
+    \item \textbf{Produto ($V \times W$):} Produto cartesiano dos espaços vetoriais, com a estrutura de espaço vetorial definida componente a componente.
+    \item \textbf{Coproduto ($V \oplus W$):} Soma direta dos espaços vetoriais.
+    \item \textbf{Equalizador:} Núcleo da transformação linear $f - g$.
+    \item \textbf{Coequalizador:} Espaço quociente de $V$ pelo subespaço gerado por $\{f(v) - g(v) \mid v \in V\}$.
+    \item \textbf{Pullback:} Subespaço de $V \times W$ definido por $\{(v, w) \mid f(v) = g(w)\}$.
+    \item \textbf{Pushout:} Soma direta módulo a relação de equivalência gerada por $(f(v), -g(v))$ para todo $v \in U$.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+\begin{lstlisting}[caption={Construções Universais em Vect}]
+% Produto e Projeções
+% V e W são matrizes cujas linhas são vetores
+prod_basis = [V; zeros(size(W, 1), size(V, 2)), W];
+proj_V = [eye(size(V, 1)), zeros(size(V, 1), size(W, 1))];
+proj_W = [zeros(size(W, 1), size(V, 1)), eye(size(W, 1))];
+
+% Coproduto (Soma Direta)
+coprod_basis = blkdiag(V, W);
+inj_V = [eye(size(V, 1)); zeros(size(W, 1), size(V, 1))];
+inj_W = [zeros(size(V, 1), size(W, 1)); eye(size(W, 1))];
+
+% Equalizador (Núcleo de f - g)
+A = f - g;
+[~, ~, V_eq] = svd(A);
+eq_basis = V_eq(:, size(V, 2) - rank(A) + 1:end);
+
+% Coequalizador (Espaço Quociente)
+B = [f - g];
+[Q, ~] = qr(B, 'vector');
+coeq_basis = Q(:, rank(B) + 1:end);
+
+% Pullback
+[U, S, V_pb] = svd([f -g]);
+pb_basis = V_pb(:, size(S, 2) - rank(S) + 1:end);
+
+% Pushout (Soma Direta módulo relação)
+% Requer a definição de um espaço quociente
+\end{lstlisting}

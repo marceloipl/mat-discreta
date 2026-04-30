@@ -1,0 +1,47 @@
+\section{Construções em Row (Matrizes Linha)}
+
+A categoria \textbf{Row} consiste em matrizes linha (vetores linha) sobre um corpo (aqui, $\mathbb{C}$). Os morfismos são aplicações lineares compatíveis com a estrutura de vetor linha.
+
+\subsection{Fundamentação Teórica}
+\begin{itemize}
+    \item \textbf{Produto ($V \times W$):} Produto cartesiano das matrizes linha, resultando em uma matriz linha concatenada.
+    \item \textbf{Coproduto ($V \oplus W$):} Soma direta das matrizes linha, resultando em uma matriz linha com a concatenação dos vetores.
+    \item \textbf{Equalizador:} Subespaço das matrizes linha $v$ tais que $f(v) = g(v)$.
+    \item \textbf{Coequalizador:} Espaço quociente das matrizes linha pela relação $f(v) \sim g(v)$.
+    \item \textbf{Pullback:} Subconjunto de $V \times W$ onde $f(v) = g(w)$, com a estrutura de matriz linha concatenada.
+    \item \textbf{Pushout:} Soma direta módulo a relação gerada por $(f(v), -g(v))$.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+\begin{lstlisting}[caption={Construções Universais em Row}]
+% Produto (Concatenação de vetores linha)
+prod_row = @(v, w) [v, w];
+
+% Projeções
+proj_V = @(vw) vw(:, 1:size(V, 2));
+proj_W = @(vw) vw(:, size(V, 2) + 1:end);
+
+% Coproduto (Soma Direta)
+coprod_row = @(v, w) [v, w];
+
+% Injeções
+inj_V = @(v) [v, zeros(1, size(W, 2))];
+inj_W = @(w) [zeros(1, size(V, 2)), w];
+
+% Equalizador
+eq_indices = find(arrayfun(@(i) isequal(f(V(i, :)), g(V(i, :))), 1:size(V, 1)));
+eq_row = V(eq_indices, :);
+
+% Coequalizador (Espaço Quociente)
+B = [f(V) - g(V)];
+[Q, ~] = qr(B', 'vector');
+coeq_row = Q(:, rank(B) + 1:end)';
+
+% Pullback
+A = [f; -g];
+[~, ~, V_pb] = svd(A);
+pb_row = V_pb(:, size(A, 2) - rank(A) + 1:end)';
+
+% Pushout (Soma Direta módulo relação)
+% Requer a definição de um espaço quociente
+\end{lstlisting}

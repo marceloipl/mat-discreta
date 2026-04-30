@@ -1,0 +1,50 @@
+\section{Funtor $F: Rel \to PreOrd$}
+\label{sec:functor-rel-preord}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{Rel}$ (modelo MATLAB/Octave)]
+Um objeto é um conjunto finito $X$ representado por um vetor de índices. Um morfismo $R: X \to Y$ é uma relação binária representada por uma matriz booleana $m \times n$, onde $R(i,j) = 1$ se $(x_i, y_j) \in R$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{Rel}$}]
+X = 1:3;                     % objeto: conjunto {1,2,3}
+R = [1 0 1; 0 1 0; 1 1 0];   % morfismo: relação binária
+\end{lstlisting}
+
+\begin{definition}[Categoria $\mathbf{PreOrd}$ (modelo MATLAB/Octave)]
+Um objeto é um conjunto finito $X$ com uma relação de pré-ordem $\leq$ representada por uma matriz booleana $n \times n$ (reflexiva e transitiva). Um morfismo $f: (X, \leq_X) \to (Y, \leq_Y)$ é uma função monotónica, representada por um vetor de índices, tal que $x_1 \leq_X x_2 \implies f(x_1) \leq_Y f(x_2)$.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{PreOrd}$}]
+X = 1:3;                     % objeto: conjunto {1,2,3}
+leq_X = [1 1 1; 0 1 1; 0 0 1]; % pré-ordem: reflexiva e transitiva
+f = [2, 3, 1];               % morfismo: função monotónica
+\end{lstlisting}
+
+\subsection{Funtor Covariante $F: Rel \to PreOrd$ (Fechamento Reflexivo-Transitivo)}
+
+O funtor $F: \mathbf{Rel} \to \mathbf{PreOrd}$ envia cada conjunto $X$ a si próprio, e cada relação binária $R: X \to X$ à sua fecho reflexivo e transitivo $R^*$, transformando-a numa pré-ordem. Para morfismos entre objetos distintos, $F$ não está definido, pois $\mathbf{Rel}$ e $\mathbf{PreOrd}$ têm morfismos com semânticas diferentes.
+
+\begin{lstlisting}[style=matlab, caption={Fechamento reflexivo-transitivo}]
+function leq = reflexive_transitive_closure(R)
+    n = size(R, 1);
+    leq = R | eye(n); % Fecho reflexivo
+    % Fecho transitivo (algoritmo de Warshall)
+    for k = 1:n
+        leq = leq | (leq(:, k) & leq(k, :));
+    end
+end
+\end{lstlisting}
+
+\begin{proposition}
+O funtor $F$ satisfaz as seguintes propriedades:
+\begin{itemize}
+    \item $F(\mathrm{id}_X) = \mathrm{id}_X$ (a pré-ordem identidade);
+    \item $F$ preserva a estrutura de pré-ordem para relações já reflexivas e transitivas.
+\end{itemize}
+\end{proposition}
+
+\subsection{Transformações Naturais}
+
+Não há transformações naturais não triviais entre funores $F, G: \mathbf{Rel} \to \mathbf{PreOrd}$ que não sejam a identidade, devido à natureza rígida do fecho reflexivo-transitivo.

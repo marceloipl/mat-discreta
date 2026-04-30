@@ -1,0 +1,45 @@
+\section{Construções em Mag (Magmas Finitos)}
+
+A categoria \textbf{Mag} consiste em magmas finitos, ou seja, conjuntos finitos equipados com uma operação binária. Esta categoria é completa e cocompleta, permitindo a existência de todos os limites e colimites finitos.
+
+\subsection{Fundamentação Teórica}
+\begin{itemize}
+    \item \textbf{Produto ($A \times B$):} O objeto resultante é o produto cartesiano dos conjuntos subjacentes, com a operação binária definida componente a componente: $(a_1, b_1) \cdot (a_2, b_2) = (a_1 \cdot_A a_2, b_1 \cdot_B b_2)$. As projeções são as projeções canónicas do produto cartesiano.
+    \item \textbf{Coproduto ($A \sqcup B$):} União disjunta dos conjuntos subjacentes. A operação binária é definida por casos, preservando a estrutura de cada magma nos subconjuntos correspondentes.
+    \item \textbf{Equalizador:} Subconjunto do domínio onde os morfismos $f$ e $g$ coincidem, equipado com a operação restrita.
+    \item \textbf{Coequalizador:} Espaço quociente do domínio pela relação de equivalência gerada por $f(a) \sim g(a)$, com a operação induzida no quociente.
+    \item \textbf{Pullback:} Subconjunto de $A \times B$ onde $f(a) = g(b)$, com a operação definida componente a componente.
+    \item \textbf{Pushout:} Construído como o quociente da união disjunta $A \sqcup B$ pela relação de equivalência gerada por $(f(a), g(a))$ para todo $a \in C$.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+\begin{lstlisting}[caption={Construções Universais em Mag}]
+% Produto e Projeções
+% A e B são estruturas com campos 'set' (conjunto) e 'op' (tabela da operação)
+prod_set = combvec(A.set, B.set)';
+prod_op = @(x, y) [A.op(x(1), y(1)), B.op(x(2), y(2))];
+
+% Projeções
+proj_A = @(x) x(:, 1);
+proj_B = @(x) x(:, 2);
+
+% Equalizador
+eq_indices = find(arrayfun(@(i) isequal(f(A.set(i)), g(A.set(i))), 1:length(A.set)));
+eq_set = A.set(eq_indices);
+eq_op = @(x, y) A.op(x, y); % Restrição da operação
+
+% Coequalizador (usando componentes conexas)
+edges = [f(A.set); g(A.set)]';
+G = graph(edges(:, 1), edges(:, 2));
+coeq_set = conncomp(G);
+coeq_op = @(x, y) ...; % Operação induzida no quociente
+
+% Pullback
+[X, Y] = ndgrid(1:length(A.set), 1:length(B.set));
+pb_indices = find(arrayfun(@(i) isequal(f(A.set(X(i))), g(B.set(Y(i)))), 1:numel(X)));
+pb_set = [A.set(X(pb_indices)), B.set(Y(pb_indices))];
+pb_op = @(x, y) [A.op(x(1), y(1)), B.op(x(2), y(2))];
+
+% Pushout (simplificado)
+% Requer a definição de uma relação de equivalência e quociente
+\end{lstlisting}

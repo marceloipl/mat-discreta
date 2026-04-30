@@ -1,0 +1,52 @@
+\section{Funtor $G: Trees \to Struct$}
+\label{sec:functor-trees-struct}
+
+\subsection{Descrição das Categorias}
+
+\begin{definition}[Categoria $\mathbf{Trees}$ (modelo MATLAB/Octave)]
+Um objeto é uma árvore finita representada por uma estrutura com campos:
+\begin{itemize}
+    \item \texttt{nodes}: vetor de nós;
+    \item \texttt{edges}: matriz $2 \times m$ onde cada coluna é uma aresta $(u, v)$;
+    \item \texttt{root}: nó raiz.
+\end{itemize}
+Um morfismo é uma função entre nós que preserva a estrutura de árvore (ou seja, mapeia a raiz para a raiz e arestas para arestas).
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto e morfismo em $\mathbf{Trees}$}]
+T.nodes = 1:5;
+T.edges = [1 2; 1 3; 2 4; 2 5];
+T.root = 1;
+\end{lstlisting}
+
+\begin{definition}[Categoria $\mathbf{Struct}$ (modelo MATLAB/Octave)]
+Um objeto é um conjunto finito $X$ com uma estrutura adicional (por exemplo, uma relação binária ou uma função). Um morfismo é uma função que preserva a estrutura.
+\end{definition}
+
+\begin{lstlisting}[style=matlab, caption={Objeto em $\mathbf{Struct}$}]
+S.set = 1:5;
+S.rel = [1 2; 1 3; 2 4; 2 5]; % Relação de pai-filho
+\end{lstlisting}
+
+\subsection{Funtor Covariante $G: Trees \to Struct$ (Codificação como Conjunto Estruturado)}
+
+O funtor $G: \mathbf{Trees} \to \mathbf{Struct}$ envia cada árvore $T$ a um conjunto estruturado $(X, R)$, onde $X$ é o conjunto de nós de $T$ e $R$ é a relação de pai-filho (ou seja, $(u, v) \in R$ se $u$ é pai de $v$ em $T$). Os morfismos em $\mathbf{Trees}$ são mapeados para morfismos em $\mathbf{Struct}$ que preservam a relação $R$.
+
+\begin{lstlisting}[style=matlab, caption={Funtor $G$ aplicado a uma árvore}]
+function S = tree_to_struct(T)
+    S.set = T.nodes;
+    S.rel = T.edges';
+end
+\end{lstlisting}
+
+\begin{proposition}
+O funtor $G$ satisfaz as seguintes propriedades:
+\begin{itemize}
+    \item $G(\mathrm{id}_T) = \mathrm{id}_{G(T)}$;
+    \item $G$ preserva a composição de morfismos.
+\end{itemize}
+\end{proposition}
+
+\subsection{Transformações Naturais}
+
+Uma transformação natural $\eta: G \Rightarrow H$ entre funores $G, H: \mathbf{Trees} \to \mathbf{Struct}$ seria uma família de morfismos $\eta_T: G(T) \to H(T)$ que comutam com os morfismos em $\mathbf{Trees}$. Por exemplo, $\eta_T$ poderia ser a identidade se $G = H$.

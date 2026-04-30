@@ -1,0 +1,52 @@
+\section{Construções em DIMag (Dimagmas Finitos)}
+
+A categoria \textbf{DIMag} consiste em conjuntos finitos equipados com duas operações binárias. Os morfismos preservam ambas as operações. Esta categoria também é completa e cocompleta.
+
+\subsection{Fundamentação Teórica}
+\begin{itemize}
+    \item \textbf{Produto ($A \times B$):} Produto cartesiano dos conjuntos subjacentes, com as duas operações definidas componente a componente para cada operação.
+    \item \textbf{Coproduto ($A \sqcup B$):} União disjunta dos conjuntos, com as operações definidas por casos, preservando a estrutura de cada dimagma nos subconjuntos correspondentes.
+    \item \textbf{Equalizador:} Subconjunto do domínio onde os morfismos $f$ e $g$ coincidem para ambas as operações.
+    \item \textbf{Coequalizador:} Espaço quociente do domínio pela relação de equivalência gerada por $f(a) \sim g(a)$, com as operações induzidas no quociente.
+    \item \textbf{Pullback:} Subconjunto de $A \times B$ onde $f_1(a) = g_1(b)$ e $f_2(a) = g_2(b)$, com as operações definidas componente a componente.
+    \item \textbf{Pushout:} Quociente da união disjunta $A \sqcup B$ pela relação de equivalência gerada por $(f_1(a), g_1(a))$ e $(f_2(a), g_2(a))$ para todo $a \in C$.
+\end{itemize}
+
+\subsection{Implementação Computacional}
+\begin{lstlisting}[caption={Construções Universais em DIMag}]
+% Produto e Projeções
+prod_set = combvec(A.set, B.set)';
+prod_op1 = @(x, y) [A.op1(x(1), y(1)), B.op1(x(2), y(2))];
+prod_op2 = @(x, y) [A.op2(x(1), y(1)), B.op2(x(2), y(2))];
+
+% Projeções
+proj_A = @(x) x(:, 1);
+proj_B = @(x) x(:, 2);
+
+% Equalizador
+eq_indices = find(arrayfun(@(i) isequal(f1(A.set(i)), g1(A.set(i))) && ...
+                          isequal(f2(A.set(i)), g2(A.set(i))), 1:length(A.set)));
+eq_set = A.set(eq_indices);
+eq_op1 = @(x, y) A.op1(x, y);
+eq_op2 = @(x, y) A.op2(x, y);
+
+% Coequalizador (usando componentes conexas para cada operação)
+edges1 = [f1(A.set); g1(A.set)]';
+edges2 = [f2(A.set); g2(A.set)]';
+G1 = graph(edges1(:, 1), edges1(:, 2));
+G2 = graph(edges2(:, 1), edges2(:, 2));
+coeq_set = intersect(conncomp(G1), conncomp(G2));
+coeq_op1 = @(x, y) ...; % Operação induzida no quociente
+coeq_op2 = @(x, y) ...;
+
+% Pullback
+[X, Y] = ndgrid(1:length(A.set), 1:length(B.set));
+pb_indices = find(arrayfun(@(i) isequal(f1(A.set(X(i))), g1(B.set(Y(i)))) && ...
+                                   isequal(f2(A.set(X(i))), g2(B.set(Y(i)))), 1:numel(X)));
+pb_set = [A.set(X(pb_indices)), B.set(Y(pb_indices))];
+pb_op1 = @(x, y) [A.op1(x(1), y(1)), B.op1(x(2), y(2))];
+pb_op2 = @(x, y) [A.op2(x(1), y(1)), B.op2(x(2), y(2))];
+
+% Pushout (simplificado)
+% Requer a definição de uma relação de equivalência para ambas as operações
+\end{lstlisting}

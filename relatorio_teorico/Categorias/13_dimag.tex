@@ -1,0 +1,25 @@
+\section{DIMag (Dimagmas Finitos)}
+\label{sec:dimag}
+
+Nesta categoria, os objetos são dimagmas finitos, ou seja, conjuntos finitos equipados com duas operações binárias. Os morfismos são funções que preservam ambas as operações.
+
+\subsection{Objetos}
+Os objetos são representados por um conjunto finito e duas operações binárias. O conjunto é tratado explicitamente como um vetor de elementos, e as operações são funções binárias em MATLAB/Octave.
+
+\subsection{Morfismos}
+Um morfismo $f: D_1 \to D_2$ é uma função que preserva ambas as operações binárias, ou seja, $f(a \cdot b) = f(a) \odot f(b)$ e $f(a \ast b) = f(a) \otimes f(b)$ para todo $a, b \in D_1$. É representado como uma função em MATLAB/Octave que mapeia elementos de $D_1$ para $D_2$.
+
+\begin{lstlisting}[style=matlab, caption={Exemplo de Dimagma e Morfismo}]
+	% Definição de um dimagma D1
+	D1.set = [1, 2, 3];
+	D1.op1 = @(a, b) mod(a + b, 3);
+	D1.op2 = @(a, b) mod(a * b, 3);
+	
+	% Definição de um dimagma D2
+	D2.set = [1, 2];
+	D2.op1 = @(a, b) mod(a + b, 2);
+	D2.op2 = @(a, b) mod(a * b, 2);
+	
+	% Morfismo f: D1 -> D2
+	f = @(x) mod(x, 2) + 1;
+\end{lstlisting}

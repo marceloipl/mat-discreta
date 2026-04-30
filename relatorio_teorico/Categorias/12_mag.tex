@@ -1,0 +1,23 @@
+\section{Mag (Magmas Finitos)}
+
+
+Nesta categoria, os objetos são magmas finitos, ou seja, conjuntos finitos equipados com uma operação binária sem axiomas adicionais. Os morfismos são funções que preservam a operação binária.
+
+\subsection{Objetos}
+Os objetos são representados por um conjunto finito e uma operação binária. O conjunto é tratado explicitamente como um vetor de elementos, e a operação é uma função binária em MATLAB/Octave.
+
+\subsection{Morfismos}
+Um morfismo $f: M_1 \to M_2$ é uma função que preserva a operação binária, ou seja, $f(a \cdot b) = f(a) \ast f(b)$ para todo $a, b \in M_1$. É representado como uma função em MATLAB/Octave que mapeia elementos de $M_1$ para $M_2$.
+
+\begin{lstlisting}[caption={Exemplo de Magma e Morfismo}]
+% Definição de um magma M1
+M1.set = [1, 2, 3];
+M1.op = @(a, b) mod(a + b, 3);
+
+% Definição de um magma M2
+M2.set = [1, 2];
+M2.op = @(a, b) mod(a * b, 2);
+
+% Morfismo f: M1 -> M2
+f = @(x) mod(x, 2) + 1;
+\end{lstlisting}
