@@ -1,0 +1,254 @@
+% ════════════════════════════════════════════════════════════════
+% CAPÍTULO 5 - EDOs DE PRIMEIRA ORDEM
+% ════════════════════════════════════════════════════════════════
+
+\chapter{Equações Diferenciais Ordinárias (EDO) de 1ª Ordem}
+
+% ────────────────────────────────────────────────────────
+\section{Enquadramento Teórico}
+
+\subsection{Introdução às Equações Diferenciais}
+
+Uma \textbf{equação diferencial} é uma equação que relaciona uma função desconhecida com uma ou mais das suas derivadas. As equações diferenciais são a linguagem natural das ciências físicas: descrevem como os sistemas variam no tempo ou no espaço.
+
+\begin{defbox}[title={EDO de Primeira Ordem}]
+  Uma \textbf{equação diferencial ordinária (EDO) de primeira ordem} é uma equação da forma
+  \[
+    F\!\bigl(x,\, y,\, y'\bigr) = 0,
+    \qquad\text{ou equivalentemente}\qquad
+    \frac{\dd y}{\dd x} = f(x, y),
+  \]
+  onde $y = y(x)$ é uma função desconhecida de uma única variável independente $x$, e $y' = \frac{\dd y}{\dd x}$ é a sua derivada primeira.
+\end{defbox}
+
+\begin{notebox}
+  \textbf{Importância Prática:} \\
+  \textbf{Em física:} Lei do arrefecimento de Newton, desintegração radioativa, carga de circuito RC, escoamento de fluidos (lei de Torricelli).\\
+  \textbf{Em engenharia/computação:} Dinâmica populacional, gradiente descendente em Machine Learning, difusão de calor (1-D), cinética de reações químicas.
+\end{notebox}
+
+% Campo de direções
+\begin{center}
+  \begin{tikzpicture}
+    \begin{axis}[
+      width=10cm, height=6cm,
+      xlabel={$x$}, ylabel={$y$},
+      xmin=-0.2, xmax=4.5,
+      ymin=-0.3, ymax=1.8,
+      axis lines=center,
+      tick style={draw=none},
+      xticklabels={}, yticklabels={},
+      title={\small\color{primary}\textbf{Campo de Direções Exemplo:} $\dfrac{\dd y}{\dd x} = y(1-y)$},
+    ]
+      % Linhas de equilíbrio
+      \addplot[color=primary, thick, domain=0:4.4] {1} node[right, font=\tiny] {$y=1$};
+      \addplot[color=accent, thick, domain=0:4.4] {0} node[right, font=\tiny] {$y=0$};
+      % Curva logística por baixo
+      \addplot[color=primary!60!black, very thick, domain=0:4.4, samples=80] { 1/(1 + 19*exp(-x)) };
+      % Solução por cima
+      \addplot[color=gray!70, thick, domain=0:3.0, samples=80] { 1/(1 - (1/3)*exp(-x)) };
+    \end{axis}
+  \end{tikzpicture}
+\end{center}
+
+
+\subsection{Classificação das EDOs de Primeira Ordem}
+
+\begin{defbox}[title={Ordem e Grau}]
+  \begin{itemize}
+    \item A \textbf{ordem} de uma EDO é a ordem da derivada mais elevada que nela aparece.
+    \item O \textbf{grau} é o expoente da derivada de maior ordem (após eliminar frações e radicais).
+  \end{itemize}
+\end{defbox}
+
+\begin{defbox}[title={Linearidade e Autonomia}]
+  \begin{itemize}
+    \item \textbf{Linear:} Uma EDO é linear se puder ser escrita na forma $y' + P(x)\,y = Q(x)$. É \textbf{não linear} nos restantes casos.
+    \item \textbf{Autónoma:} Uma EDO é autónoma se não depender explicitamente de $x$, ou seja, $y' = f(y)$. Admitem \textbf{soluções de equilíbrio} obtidas fazendo $f(y^{*})=0$.
+  \end{itemize}
+\end{defbox}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{0.95\linewidth}{l X X}
+  \toprule
+  \textbf{Categoria} & \textbf{Forma Padrão} & \textbf{Característica Principal} \\
+  \midrule
+  \textbf{Separável} & $g(y)\,\dd y = h(x)\,\dd x$ & Variáveis desacoplam completamente \\
+  \textbf{Linear}    & $y' + P(x)y = Q(x)$ & Resolvida por fator integrante \\
+  \textbf{Exata}     & $M\,\dd x + N\,\dd y = 0$, $M_y=N_x$ & Existe função potencial \\
+  \textbf{Bernoulli} & $y' + P(x)y = Q(x)y^n$ & Linearizada pela substituição $v=y^{1-n}$ \\
+  \textbf{Autónoma}  & $y' = f(y)$ & Sem dependência explícita em $x$ \\
+  \bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection{Soluções: Geral e Particular}
+
+\begin{defbox}[title={Tipos de Soluções}]
+  \begin{itemize}
+    \item A \textbf{solução geral} contém uma constante arbitrária $C$.
+    \item A \textbf{solução particular} obtém-se especificando uma \textbf{condição inicial} $y(x_0) = y_0$.
+    \item Uma \textbf{solução singular} não pode ser obtida da solução geral.
+  \end{itemize}
+\end{defbox}
+
+\begin{thmbox}[title={Existência e Unicidade (Picard--Lindelöf)}]
+  Se $f(x,y)$ e $\frac{\partial f}{\partial y}$ forem contínuas num retângulo contendo $(x_0, y_0)$, então o problema de valor inicial $\frac{\dd y}{\dd x} = f(x,y), \; y(x_0)=y_0$ tem uma solução \textbf{única}.
+\end{thmbox}
+
+\begin{warnbox}
+  \textbf{Aviso de Existência Global:} Não assuma que a solução existe globalmente. O intervalo de existência pode ser finito. Ex: $y' = y^2, y(0)=1 \implies y = 1/(1-x)$, que diverge em $x=1$.
+\end{warnbox}
+
+\subsection{Métodos Analíticos de Resolução}
+
+\subsubsection*{1. Equações Separáveis}
+Uma EDO é separável se $\frac{\dd y}{\dd x} = g(x)h(y)$. 
+\begin{enumerate}
+  \item Reescrever como $\frac{\dd y}{h(y)} = g(x)\,\dd x$.
+  \item Integrar: $\int \frac{\dd y}{h(y)} = \int g(x)\,\dd x + C$.
+\end{enumerate}
+
+\begin{tipbox}
+  Verifique sempre $h(y)=0$ para soluções de equilíbrio antes de separar, pois dividir por $h(y)$ exige $h(y)\neq 0$.
+\end{tipbox}
+
+\subsubsection*{2. Equações Lineares (Fator Integrante)}
+\begin{thmbox}[title={Fator Integrante}]
+  Para $y' + P(x)y = Q(x)$, multiplicamos por $\mu(x) = e^{\int P(x)\,\dd x}$:
+  \[
+    \frac{\dd}{\dd x}\!\bigl[\mu(x)\,y\bigr] = \mu(x)\,Q(x) \implies y = \frac{1}{\mu(x)}\left[\int \mu(x)\,Q(x)\,\dd x + C\right].
+  \]
+\end{thmbox}
+
+\subsection{Aplicações em Engenharia e Física}
+\begin{itemize}
+    \item \textbf{Arrefecimento de Newton:} $\frac{\dd T}{\dd t} = -k(T - T_a)$.
+    \item \textbf{Circuito Elétrico RC:} $RC\,\frac{\dd V}{\dd t} + V = V_s$.
+    \item \textbf{Crescimento Logístico:} $\frac{\dd P}{\dd t} = rP\left(1-\frac{P}{K}\right)$.
+\end{itemize}
+
+\subsection{Estratégias de Verificação e Erros Comuns}
+
+\begin{tipbox}[title={Como Verificar uma Solução}]
+  1. Diferenciar $y(x)$ para obter $y'(x)$. \\
+  2. Substituir na EDO e verificar a igualdade. \\
+  3. Verificar a condição inicial.
+\end{tipbox}
+
+\begin{warnbox}
+  \textbf{Erros Frequentes:} Esquecer a constante $C$ na integração e aplicar a condição inicial antes de ter a solução geral completa.
+\end{warnbox}
+
+% ────────────────────────────────────────────────────────
+\section{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- EDO Separável Básica}
+  Resolver $\dfrac{\dd y}{\dd x} = xy$.
+\end{exbox}
+\begin{solbox}
+  \textbf{Passo 1:} $y=0$ é solução. \\
+  \textbf{Passo 2:} $\frac{\dd y}{y} = x\,\dd x \implies \ln|y| = \frac{x^2}{2} + C$. \\
+  \textbf{Solução geral:} $\boxed{y = A\,e^{x^2/2}, \quad A\in\mathbb{R}.}$
+\end{solbox}
+
+\begin{exbox}{2 --- PVI}
+  Resolver $\dfrac{\dd y}{\dd x} = -2xy^2$, com $y(0) = 1$.
+\end{exbox}
+\begin{solbox}
+  Separar: $\frac{\dd y}{y^2} = -2x\,\dd x \implies -\frac{1}{y} = -x^2 + C$. \\
+  Com $y(0)=1 \implies -1 = 0 + C \implies C = -1$. \\
+  Solução particular: $\boxed{y = \frac{1}{x^2+1}.}$
+\end{solbox}
+
+\begin{exbox}{3 --- Solução Implícita}
+  Resolver $\dfrac{\dd y}{\dd x} = \dfrac{x^2}{1-y^2}$.
+\end{exbox}
+\begin{solbox}
+  $(1-y^2)\,\dd y = x^2\,\dd x \implies y - \frac{y^3}{3} = \frac{x^3}{3} + C$. \\
+  Solução implícita: $\boxed{3y - y^3 = x^3 + K.}$
+\end{solbox}
+
+\begin{exbox}{4 --- Fator Integrante}
+  Resolver $\dfrac{\dd y}{\dd x} - \dfrac{2}{x}\,y = x^2$.
+\end{exbox}
+\begin{solbox}
+  $\mu = e^{\int -2/x\,\dd x} = x^{-2}$. \\
+  $x^{-2}y' - 2x^{-3}y = 1 \implies \frac{\dd}{\dd x}[x^{-2}y] = 1$. \\
+  Integrando: $x^{-2}y = x + C \implies \boxed{y = x^3 + Cx^2.}$
+\end{solbox}
+
+\begin{exbox}{5 --- Arrefecimento de Newton}
+  Componente a $200^\circ\text{C}$ em ambiente a $25^\circ\text{C}$. Após 10 min está a $120^\circ\text{C}$.
+\end{exbox}
+\begin{solbox}
+  $T(t) = 25 + 175e^{-kt}$. De $T(10)=120 \implies 95 = 175e^{-10k} \implies k \approx 0,061$. \\
+  Para $T=50^\circ\text{C}$: $25 = 175e^{-0,061t} \implies t \approx 31,8 \text{ min}$.
+\end{solbox}
+
+\begin{exbox}{6 --- Circuito RC}
+  $R=1\text{k}\Omega, C=1\text{mF}, V_s=5\text{V}, V(0)=0$.
+\end{exbox}
+\begin{solbox}
+  EDO: $V' + V = 5$. Solução: $V(t) = 5(1-e^{-t})\text{V}$.
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\section{Exercícios Práticos}
+
+\begin{exercisebox}{1 --- Separável}
+  Resolver $\dfrac{\dd y}{\dd x} = \dfrac{y}{x}$, com $y(1)=3$.
+\end{exercisebox}
+\begin{solbox}
+  $\frac{\dd y}{y} = \frac{\dd x}{x} \implies y = Ax$. Com $y(1)=3 \implies A=3$. Solução: $\boxed{y=3x.}$
+\end{solbox}
+
+\begin{exercisebox}{2 --- Logística}
+  Resolver $\dfrac{\dd P}{\dd t} = 0,2P(1 - P/500)$, com $P(0) = 50$.
+\end{exercisebox}
+\begin{solbox}
+  Solução da logística: $P(t) = \frac{500}{1+9e^{-0,2t}}$.
+\end{solbox}
+
+\begin{exercisebox}{3 --- Velocidade Terminal}
+  $m\frac{\dd v}{\dd t} = mg - kv, \; v(0)=0$.
+\end{exercisebox}
+\begin{solbox}
+  $v(t) = \frac{mg}{k}(1-e^{-kt/m})$.
+\end{solbox}
+
+\begin{exercisebox}{4 --- Bernoulli}
+  Resolver $y' + y = y^3$.
+\end{exercisebox}
+\begin{solbox}
+  Substituição $v = y^{-2}$. Resulta em $\boxed{y = \pm\frac{1}{\sqrt{1+Ce^{2x}}}.}$
+\end{solbox}
+
+\begin{exercisebox}{5 --- Bateria Adicional}
+  a) $\frac{\dd y}{\dd x} = (1+y^2)\tan x, y(0)=1$. \\
+  b) $y' + y/x = \cos x, y(\pi)=0$.
+\end{exercisebox}
+\begin{solbox}
+  a) $y = \tan(-\ln|\cos x| + \pi/4)$. \\
+  b) $y = \frac{\sin x}{x}$.
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\section{Questões para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Enunciar o teorema de existência e unicidade. Dar um exemplo onde a unicidade falha (ex: $y' = y^{1/3}, y(0)=0$).
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Explicar o papel do fator integrante $\mu(x)$ na transformação da EDO linear numa derivada exata.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q3.} Como determinar a estabilidade de equilíbrios numa EDO autónoma $y' = f(y)$ usando apenas o sinal de $f(y)$?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q4.} Formular a EDO de um tanque onde entra água pura e sai mistura (mistura perfeita).
+\end{oralbox}

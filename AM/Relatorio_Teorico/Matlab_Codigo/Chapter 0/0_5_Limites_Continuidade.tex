@@ -1,0 +1,203 @@
+% ════════════════════════════════════════════════════════════════
+% 0.5 - LIMITES E CONTINUIDADE EM ESPAÇOS MÉTRICOS E TOPOLÓGICOS
+% ════════════════════════════════════════════════════════════════
+
+\section{Limites e Continuidade de Funções}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{notebox}[title={Intuição Geral}]
+  O conceito de \textbf{limite} descreve a ideia fundamental de que, quando os pontos do domínio de uma função se aproximam cada vez mais de um certo valor, as imagens desses pontos também se aproximam de um valor determinado.
+
+  A \textbf{continuidade} não é mais do que a formalização matemática rigorosa da seguinte frase:
+  \begin{center}
+      \textit{``Pequenas variações na entrada produzem apenas pequenas variações na saída.''}
+  \end{center}
+\end{notebox}
+
+\subsubsection*{Definição de Limite em Espaços Métricos}
+
+Sejam $(X,d_X)$ e $(Y,d_Y)$ espaços métricos, com uma função $f : X \to Y$, e seja $a \in X$ um ponto de acumulação.
+
+\begin{defbox}[title={Limite de uma Função ($\varepsilon-\delta$)}]
+  Dizemos que o \textbf{limite de $f(x)$ quando $x$ tende para $a$ é $L$}, denotado por $\lim_{x \to a} f(x) = L$, se para qualquer tolerância de erro no contradomínio ($\varepsilon$), existir uma margem de aproximação no domínio ($\delta$) tal que:
+  \[
+    \forall \varepsilon > 0, \;\exists \delta > 0 : \quad 0 < d_X(x,a) < \delta \implies d_Y(f(x),L) < \varepsilon
+  \]
+\end{defbox}
+
+\begin{notebox}[title={Como Interpretar}]
+  A definição diz-nos que, controlando \emph{o quão perto} $x$ está de $a$ (através do raio $\delta$), conseguimos forçar e controlar \emph{o quão perto} $f(x)$ está do limite $L$ (dentro do erro $\varepsilon$).
+\end{notebox}
+
+\subsubsection*{Continuidade em Espaços Métricos e Topológicos}
+
+\begin{defbox}[title={Continuidade Num Ponto}]
+  Uma função $f:X\to Y$ é \textbf{contínua no ponto $a$} se o limite da função nesse ponto coincidir exatamente com o valor da função no ponto:
+  \[
+    \lim_{x\to a} f(x)=f(a)
+  \]
+  Substituindo na definição $\varepsilon$--$\delta$, temos:
+  \[
+    \forall \varepsilon>0, \;\exists \delta>0 : \quad d_X(x,a)<\delta \implies d_Y(f(x),f(a))<\varepsilon
+  \]
+\end{defbox}
+
+\begin{thmbox}[title={Critério Topológico Global}]
+  Se passarmos de espaços métricos para espaços topológicos mais abstratos $(X,\tau_X)$ e $(Y,\tau_Y)$, a métrica de distância desaparece. 
+  Neste caso, $f:X\to Y$ é contínua se, e só se, a \textbf{imagem inversa de qualquer conjunto aberto for um conjunto aberto}:
+  \[
+    f^{-1}(V) \text{ é aberto em } X, \quad \forall V \subseteq Y \text{ aberto.}
+  \]
+\end{thmbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Continuidade de uma Função Afim}
+  Considere a função $f:\mathbb{R}\to\mathbb{R}$ dada por $f(x)=3x+1$. Mostrar pela definição $\varepsilon-\delta$ que $f$ é contínua em todo o $\mathbb{R}$.
+\end{exbox}
+\begin{solbox}
+  Seja $a \in \mathbb{R}$ um ponto qualquer e $\varepsilon > 0$. Queremos encontrar $\delta > 0$ tal que $|x-a| < \delta \implies |f(x)-f(a)| < \varepsilon$.
+  
+  Analisamos a distância no contradomínio:
+  \[
+    |f(x)-f(a)| = |(3x+1) - (3a+1)| = |3x - 3a| = 3|x-a|
+  \]
+  Como queremos que $3|x-a| < \varepsilon$, basta isolar a distância do domínio, o que nos sugere que $|x-a| < \frac{\varepsilon}{3}$.
+  
+  Portanto, basta tomar \textbf{$\delta = \frac{\varepsilon}{3}$}. Assim, se $|x-a| < \delta$, temos garantidamente:
+  \[
+    |f(x)-f(a)| = 3|x-a| < 3\left(\frac{\varepsilon}{3}\right) = \varepsilon
+  \]
+  Logo, $f$ é contínua em qualquer $a \in \mathbb{R}$. \checkmark
+\end{solbox}
+
+\begin{exbox}{2 --- Limite de uma Função Raiz}
+  Mostrar formalmente que $\lim_{x\to 2} \sqrt{x} = \sqrt{2}$.
+\end{exbox}
+\begin{solbox}
+  Queremos provar que $\forall \varepsilon > 0, \exists \delta > 0 : |x-2| < \delta \implies |\sqrt{x}-\sqrt{2}| < \varepsilon$.
+  
+  Começamos por manipular algebricamente a expressão do contradomínio multiplicando pelo conjugado:
+  \[
+    |\sqrt{x}-\sqrt{2}| = \left| \frac{(\sqrt{x}-\sqrt{2})(\sqrt{x}+\sqrt{2})}{\sqrt{x}+\sqrt{2}} \right| = \frac{|x-2|}{\sqrt{x}+\sqrt{2}}
+  \]
+  Para isolar $|x-2|$, precisamos de minorar o denominador. Se restringirmos $x$ suficientemente perto de $2$, digamos impondo $|x-2| < 1$, então $x \in (1, 3)$. 
+  Isto implica que $\sqrt{x} > \sqrt{1} = 1$, logo:
+  \[
+    \sqrt{x}+\sqrt{2} > 1+\sqrt{2}
+  \]
+  Substituindo na nossa fração, obtemos:
+  \[
+    |\sqrt{x}-\sqrt{2}| = \frac{|x-2|}{\sqrt{x}+\sqrt{2}} < \frac{|x-2|}{1+\sqrt{2}}
+  \]
+  Para garantir que a expressão inteira seja menor que $\varepsilon$, basta tomar:
+  \[
+    \delta = \min\bigl\{1, \, (1+\sqrt{2})\varepsilon\bigr\}
+  \]
+  O limite está provado. \checkmark
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1 --- Verificação com $\varepsilon-\delta$ para Quadráticas}
+  Verifique usando a definição formal $\varepsilon$--$\delta$ que $\lim_{x\to 1}(2x^2+3)=5$.
+\end{exercisebox}
+\begin{solbox}
+  Queremos que $| (2x^2+3) - 5 | < \varepsilon$, o que simplifica para $2|x^2-1| < \varepsilon \iff 2|x-1||x+1| < \varepsilon$.
+  
+  Para limitar o termo $|x+1|$, impomos provisoriamente $\delta \le 1$.
+  Se $|x-1| < 1 \implies 0 < x < 2 \implies 1 < x+1 < 3 \implies |x+1| < 3$.
+  
+  Substituindo esta limitação na nossa equação inicial:
+  \[
+    2|x-1||x+1| < 2|x-1|(3) = 6|x-1|
+  \]
+  Queremos que $6|x-1| < \varepsilon$, ou seja, $|x-1| < \frac{\varepsilon}{6}$.
+  
+  Basta escolher $\delta = \min\left\{1, \frac{\varepsilon}{6}\right\}$. Assim, o limite está provado formalmente.
+\end{solbox}
+
+\begin{exercisebox}{2 --- Continuidade do Módulo}
+  Mostre que a função $f(x)=|x|$ é contínua em todo o $\mathbb{R}$.
+\end{exercisebox}
+\begin{solbox}
+  Queremos mostrar que $\forall a \in \mathbb{R}$, $\lim_{x\to a} |x| = |a|$.
+  
+  Pela propriedade da Desigualdade Triangular Inversa, sabemos que para quaisquer reais $x$ e $a$:
+  \[
+    \bigl| |x| - |a| \bigr| \le |x-a|
+  \]
+  Dado um $\varepsilon > 0$, basta escolher $\delta = \varepsilon$. 
+  Deste modo, se $|x-a| < \delta$, então:
+  \[
+    |f(x) - f(a)| = \bigl| |x| - |a| \bigr| \le |x-a| < \delta = \varepsilon
+  \]
+  Isto prova a continuidade de $f(x)=|x|$ para qualquer ponto do domínio.
+\end{solbox}
+
+\begin{exercisebox}{3 --- Continuidade de Funções por Ramos}
+  Determine se a função $f:\mathbb{R}\to\mathbb{R}$ definida por
+  \[
+    f(x)=\begin{cases}
+    x^2, & x\neq 1\\
+    3, & x=1
+    \end{cases}
+  \]
+  é contínua em $x=1$. Justifique a resposta.
+\end{exercisebox}
+\begin{solbox}
+  Para ser contínua em $x=1$, é estritamente necessário que $\lim_{x \to 1} f(x) = f(1)$.
+  
+  Calculando o limite (que analisa os valores perto de $x=1$, mas não no próprio ponto $x=1$):
+  \[
+    \lim_{x \to 1} f(x) = \lim_{x \to 1} x^2 = 1^2 = 1
+  \]
+  Contudo, a definição da função dita que:
+  \[
+    f(1) = 3
+  \]
+  Como $\lim_{x \to 1} f(x) \neq f(1)$ (uma vez que $1 \neq 3$), concluímos que a função \textbf{não é contínua} em $x=1$. Tem uma descontinuidade removível.
+\end{solbox}
+
+\begin{exercisebox}{4 --- A Curva de Seno do Topólogo}
+  Considere a função $f:\mathbb{R} \to \mathbb{R}$ dada por $f(x)=\sin(1/x)$ para $x\neq 0$, com $f(0)=0$. A função é contínua em $x=0$? Justifique.
+\end{exercisebox}
+\begin{solbox}
+  Para ser contínua em $x=0$, teria de verificar-se $\lim_{x \to 0} \sin(1/x) = 0$.
+  
+  No entanto, à medida que $x \to 0$, o argumento $1/x \to \pm \infty$. A função seno irá oscilar infinitamente entre $-1$ e $1$, cada vez mais rápido, sem nunca se fixar ou convergir para um único valor.
+  
+  Prova rápida por sucessões (Critério de Heine):
+  \begin{itemize}
+      \item Se escolhermos $x_n = \frac{1}{\pi/2 + 2n\pi} \to 0$, $f(x_n) = \sin(\pi/2 + 2n\pi) = 1 \to 1$.
+      \item Se escolhermos $y_n = \frac{1}{n\pi} \to 0$, $f(y_n) = \sin(n\pi) = 0 \to 0$.
+  \end{itemize}
+  Como trajetórias diferentes geram limites diferentes ($1 \neq 0$), o limite $\lim_{x \to 0} f(x)$ não existe. Logo, a função \textbf{não é contínua} em $x=0$.
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Explique, usando a analogia de jogo ou tolerâncias, o que significa intuitivamente a definição formal $\varepsilon-\delta$ do limite de uma função num ponto.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Em que sentido exato é que a \emph{continuidade} é apenas uma versão restrita e ``sem salto'' do conceito geral de limite?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q3.} Justifique o porquê da definição topológica de continuidade (a pré-imagem de um conjunto aberto no contradomínio ter de ser necessariamente um conjunto aberto no domínio) ser matematicamente equivalente à definição $\varepsilon$--$\delta$ clássica quando aplicada em espaços métricos.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q4.} Dê um exemplo prático ou geométrico de uma função descontínua e explique a razão lógica / topológica de ocorrência dessa quebra de continuidade.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q5.} Qual a relação entre a continuidade global de funções e a preservação do limite na convergência de sucessões (Critério de Heine / Teorema de Continuidade por Sucessões)?
+\end{oralbox}

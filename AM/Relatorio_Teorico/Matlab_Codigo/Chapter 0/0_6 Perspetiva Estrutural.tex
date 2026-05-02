@@ -1,0 +1,134 @@
+% ════════════════════════════════════════════════════════════════
+% SECÇÃO - PERSPETIVA ESTRUTURAL
+% ════════════════════════════════════════════════════════════════
+
+\section{Perspetiva Estrutural}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+A perspetiva estrutural da matemática, frequentemente formalizada através da Teoria das Categorias, propõe uma mudança de paradigma: em vez de olharmos para os elementos internos que compõem uma entidade matemática (como os números dentro de um conjunto), focamo-nos nas relações e nas transformações entre essas entidades.
+
+\subsubsection*{1. Objetos (Objects)}
+
+Na teoria das categorias, os objetos são os blocos de construção primários. Do ponto de vista estrutural, não nos interessa o que está ``dentro'' do objeto, mas sim como ele interage com os outros.
+
+\begin{defbox}[title={Objeto}]
+  Um \textbf{objeto} é uma entidade abstrata que pertence a uma determinada ``categoria''.
+\end{defbox}
+
+\textbf{Exemplos de Objetos em Categorias:}
+\begin{itemize}
+  \item Na categoria dos Conjuntos (\textbf{Set}), os objetos são conjuntos (ex: $\{1, 2, 3\}$, $\mathbb{N}$, $\mathbb{R}$).
+  \item Na categoria dos Espaços Vetoriais (\textbf{Vect}), os objetos são espaços vetoriais (ex: $\mathbb{R}^2$, $\mathbb{R}^3$).
+  \item Na categoria dos Espaços Topológicos (\textbf{Top}), os objetos são espaços topológicos.
+\end{itemize}
+
+\begin{notebox}[title={Interpretação Visual}]
+  Geometricamente ou num diagrama, um objeto é representado simplesmente como um ponto (ou um nó).
+\end{notebox}
+
+\subsubsection*{2. Morfismos (Mappings)}
+
+Se os objetos são as entidades, os morfismos são os ``caminhos'' ou transformações estruturais entre eles.
+
+\begin{defbox}[title={Morfismo}]
+  Um \textbf{morfismo} $f$ é uma relação direcional entre um objeto de origem $A$ (domínio) e um objeto de destino $B$ (contradomínio), denotado por $f: A \to B$. Em muitas categorias, estes morfismos são funções que preservam a estrutura matemática dos objetos.
+\end{defbox}
+
+\textbf{Exemplos de Morfismos em Categorias:}
+\begin{itemize}
+  \item Em \textbf{Set}, os morfismos são funções normais entre conjuntos.
+  \item Em \textbf{Vect}, os morfismos são transformações lineares (preservam a adição de vetores e a multiplicação por escalares).
+  \item Em \textbf{Top}, os morfismos são funções contínuas (preservam a estrutura de vizinhança/limites, fundamental em Análise Matemática).
+\end{itemize}
+
+\begin{notebox}[title={Interpretação Visual}]
+  Os morfismos são desenhados como setas direcionadas que ligam um ponto (objeto) a outro.
+\end{notebox}
+
+\subsubsection*{3. Composição}
+
+A verdadeira essência da perspetiva estrutural surge na composição: a capacidade de encadear aplicações de forma consistente.
+
+\begin{defbox}[title={Composição e Axiomas da Categoria}]
+  Dados três objetos $A$, $B$ e $C$, e dois morfismos $f: A \to B$ e $g: B \to C$, existe um morfismo composto único, denotado por $g \circ f: A \to C$ (lê-se ``$g$ após $f$''). 
+  
+  Para que uma estrutura seja uma categoria válida, a composição tem de obedecer a duas regras:
+  \begin{enumerate}
+      \item \textbf{Associatividade:} $h \circ (g \circ f) = (h \circ g) \circ f$.
+      \item \textbf{Identidade:} Para cada objeto $X$, existe um morfismo de identidade $\text{id}_X: X \to X$ tal que, para qualquer $f: A \to B$, temos $f \circ \text{id}_A = f$ e $\text{id}_B \circ f = f$.
+  \end{enumerate}
+\end{defbox}
+
+\textbf{Exemplo Prático:} \\
+Se $A, B, C$ são subconjuntos de $\mathbb{R}$, e $f(x) = x^2$ e $g(y) = y + 1$, então a composição $g(f(x))$ representa o morfismo $g \circ f$ de $A$ para $C$, dado por $(g \circ f)(x) = x^2 + 1$.
+
+\begin{notebox}[title={Interpretação Visual (Diagramas Comutativos)}]
+  A composição é frequentemente visualizada através de diagramas comutativos. Se tivermos uma seta de $A$ para $B$, e de $B$ para $C$, o diagrama ``comuta'' se a seta direta de $A$ para $C$ representar o mesmo ``resultado final'' que percorrer as duas setas anteriores. Forma-se, assim, um triângulo.
+\end{notebox}
+
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Categoria de Caminhos em $\mathbb{R}^2$}
+  Numa categoria onde os objetos são pontos em $\mathbb{R}^2$ e os morfismos são caminhos entre esses pontos:
+  \begin{itemize}
+      \item O que é a identidade $\text{id}_A$?
+      \item O que representa a composição $g \circ f$?
+  \end{itemize}
+\end{exbox}
+\begin{solbox}
+  \textbf{Identidade $\text{id}_A$:} É o caminho constante (permanecer estático no próprio ponto $A$). \\
+  \textbf{Composição $g \circ f$:} É a concatenação dos caminhos. Colocamos o início do caminho $g$ no final do caminho $f$. O resultado final é um novo caminho direto que nos leva de $A$ até $C$, passando obrigatoriamente por $B$.
+\end{solbox}
+
+\begin{exbox}{2 --- Verificação de Associatividade}
+  Verifique a propriedade da associatividade para as seguintes funções em $\mathbb{R}$:
+  \[ f(x) = 2x, \quad g(x) = x+3, \quad h(x) = x^2 \]
+\end{exbox}
+\begin{solbox}
+  Para verificar a associatividade, precisamos de provar que $[h \circ (g \circ f)](x) = [(h \circ g) \circ f](x)$.
+  
+  \textbf{Cálculo do lado esquerdo:}
+  \begin{align*}
+      (g \circ f)(x) &= g(2x) = 2x + 3 \\
+      [h \circ (g \circ f)](x) &= h(2x + 3) = \mathbf{(2x + 3)^2}
+  \end{align*}
+  
+  \textbf{Cálculo do lado direito:}
+  \begin{align*}
+      (h \circ g)(x) &= h(x + 3) = (x + 3)^2 \\
+      [(h \circ g) \circ f](x) &= (h \circ g)(2x) = \mathbf{(2x + 3)^2}
+  \end{align*}
+  
+  Como ambos os caminhos de composição resultam na mesma expressão $\mathbf{(2x + 3)^2}$, a propriedade associativa é verificada. \checkmark
+\end{solbox}
+
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1}
+  Considere a categoria \textbf{Set} (Conjuntos). Sejam os objetos $A = \{1, 2\}$ e $B = \{a, b, c\}$. Quantos morfismos (funções) diferentes existem de $A$ para $B$? E de $B$ para $A$?
+\end{exercisebox}
+\begin{solbox}
+  Em \textbf{Set}, os morfismos são funções.
+  \begin{itemize}
+      \item O número de funções de $A$ para $B$ é dado por $|B|^{|A|}$. Como $|B|=3$ e $|A|=2$, existem $3^2 = \mathbf{9}$ morfismos de $A$ para $B$.
+      \item O número de funções de $B$ para $A$ é dado por $|A|^{|B|}$. Como $|A|=2$ e $|B|=3$, existem $2^3 = \mathbf{8}$ morfismos de $B$ para $A$.
+  \end{itemize}
+\end{solbox}
+
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Explique, por palavras suas, qual é a principal vantagem da mudança de paradigma oferecida pela Teoria das Categorias (foco nos \emph{morfismos}) em comparação com a Teoria de Conjuntos tradicional (foco nos \emph{elementos} internos dos objetos).
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Num diagrama comutativo triangular com os objetos $A$, $B$ e $C$, o que significa matematicamente dizer que o diagrama "comuta"? Utilize o conceito de composição de morfismos na sua resposta.
+\end{oralbox}

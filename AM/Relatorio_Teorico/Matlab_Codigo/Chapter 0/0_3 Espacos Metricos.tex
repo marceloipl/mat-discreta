@@ -1,0 +1,204 @@
+% ════════════════════════════════════════════════════════════════
+% 0.3 - ESPAÇOS MÉTRICOS
+% ════════════════════════════════════════════════════════════════
+
+\section{Espaços Métricos}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+A noção de distância é um dos conceitos mais intuitivos da matemática, mas para ser aplicada a conjuntos abstratos (como conjuntos de funções ou matrizes), precisa de ser formalizada. A estrutura que generaliza o conceito de "distância" chama-se \textbf{espaço métrico}.
+
+\begin{defbox}[title={Métrica e Espaço Métrico}]
+  Seja $X$ um conjunto. Uma \textbf{métrica} em $X$ é uma função
+  \[
+    d: X \times X \to \mathbb{R}
+  \]
+  tal que, para quaisquer $x,y,z \in X$, satisfaz as seguintes três propriedades:
+  \begin{enumerate}[label=(\roman*)]
+      \item \textbf{Positividade:} $d(x,y) \ge 0$ e $d(x,y)=0 \iff x=y$;
+      \item \textbf{Simetria:} $d(x,y) = d(y,x)$;
+      \item \textbf{Desigualdade Triangular:} $d(x,z) \le d(x,y) + d(y,z)$.
+  \end{enumerate}
+  O par $(X,d)$ chama-se \textbf{espaço métrico}.
+\end{defbox}
+
+\begin{defbox}[title={Bolas Abertas e Convergência}]
+  Num espaço métrico $(X,d)$, para um ponto $x\in X$ e um raio $r>0$, define-se a \textbf{bola aberta} centrada em $x$ com raio $r$ como:
+  \[
+    B_r(x) = \{y\in X : d(x,y)<r\}.
+  \]
+
+  Diz-se que uma sequência $(x_n)$ \textbf{converge} para $x$ (denotado por $x_n \to x$) se a distância entre os termos da sequência e $x$ tender para zero. Formalmente:
+  \[
+    \forall \varepsilon > 0, \, \exists N\in\mathbb{N} : n\ge N \implies d(x_n,x) < \varepsilon.
+  \]
+\end{defbox}
+
+\begin{defbox}[title={Continuidade em Espaços Métricos}]
+  Uma função $f:(X,d_X)\to (Y,d_Y)$ é \textbf{contínua} num ponto $x_0$ se a convergência no domínio implicar a convergência no contradomínio:
+  \[
+    \lim_{x\to x_0} d_X(x,x_0)=0 \quad \implies \quad \lim_{x\to x_0} d_Y(f(x),f(x_0)) = 0.
+  \]
+  A formulação clássica equivalente (definição $\varepsilon$--$\delta$) é:
+  \[
+    \forall \varepsilon>0,\ \exists \delta>0: d_X(x,x_0)<\delta \implies d_Y(f(x), f(x_0))<\varepsilon.
+  \]
+\end{defbox}
+
+\begin{notebox}[title={Métricas Importantes}]
+  Dependendo do problema matemático, a forma de medir a distância altera-se. Exemplos notáveis:
+  \begin{itemize}
+      \item \textbf{Métrica Usual (Euclidiana) em $\mathbb{R}^n$:}  
+      \[
+        d_2(x,y)=\|x-y\|_2 = \sqrt{(x_1-y_1)^2+\cdots+(x_n-y_n)^2}
+      \]
+      \item \textbf{Métrica do Supremo em Funções Contínuas $C[a,b]$:}  
+      \[
+        d_\infty(f,g)=\sup_{x\in[a,b]} |f(x)-g(x)|
+      \]
+      \item \textbf{Métrica Discreta:}  
+      \[
+        d(x,y)=
+        \begin{cases}
+        0 & \text{se } x=y,\\
+        1 & \text{se } x\neq y.
+        \end{cases}
+      \]
+  \end{itemize}
+\end{notebox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Convergência na Métrica Usual}
+  Considere o espaço $(\mathbb{R}, d)$ com a métrica usual $d(x,y)=|x-y|$. Mostre que a sequência definida por $x_n = \dfrac{1}{n}$ converge para $0$.
+\end{exbox}
+\begin{solbox}
+  Queremos provar que, para qualquer $\varepsilon>0$, existe um índice $N$ a partir do qual $d(x_n, 0) < \varepsilon$.
+  
+  Seja $\varepsilon>0$. Como $x_n=\dfrac{1}{n}$, a distância a $0$ é:
+  \[
+    d(x_n,0) = \left|\frac{1}{n}-0\right| = \frac{1}{n}
+  \]
+  Para que $\dfrac{1}{n} < \varepsilon$, basta que $n > \dfrac{1}{\varepsilon}$. 
+  
+  Escolhendo um número natural $N > \dfrac{1}{\varepsilon}$ (Garantido pela Propriedade Arquimediana), temos que para qualquer $n \ge N$:
+  \[
+    d(x_n,0) = \frac{1}{n} \le \frac{1}{N} < \varepsilon.
+  \]
+  Fica assim provado que $x_n \to 0$. \checkmark
+\end{solbox}
+
+\begin{exbox}{2 --- Continuidade Extrema na Métrica Discreta}
+  Mostre que \textbf{qualquer} função $f:X\to Y$ é contínua se o domínio $X$ estiver equipado com a métrica discreta.
+\end{exbox}
+\begin{solbox}
+  Lembre-se da definição $\varepsilon$--$\delta$. Para qualquer ponto $x_0\in X$ e qualquer $\varepsilon > 0$, precisamos de encontrar um $\delta > 0$.
+  
+  Como $X$ tem a métrica discreta, as distâncias só podem ser $0$ ou $1$. Vamos escolher $\delta = \dfrac{1}{2}$. 
+  
+  Seja $x \in X$ tal que $d(x, x_0) < \dfrac{1}{2}$. Como na métrica discreta as distâncias são inteiras ($0$ ou $1$), a única forma de a distância ser menor que $0{,}5$ é se for exatamente $0$. Logo, $x = x_0$.
+  
+  Substituindo na função:
+  \[
+    d_Y(f(x), f(x_0)) = d_Y(f(x_0), f(x_0)) = 0 < \varepsilon.
+  \]
+  A condição verifica-se independentemente do comportamento de $f$ ou da métrica de $Y$. Assim, $f$ é sempre contínua! \checkmark
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1 --- A Métrica da "Geometria do Táxi"}
+  Mostre que a função $d_1(x,y)=\sum_{i=1}^n |x_i - y_i|$ define uma métrica válida em $\mathbb{R}^n$.
+\end{exercisebox}
+\begin{solbox}
+  Temos de verificar os três axiomas:
+  \begin{enumerate}
+      \item \textbf{Positividade:} Como o módulo é não negativo, a soma de módulos é $\ge 0$. Além disso, $\sum |x_i - y_i| = 0 \iff \forall i, |x_i - y_i| = 0 \iff x_i = y_i \iff x = y$.
+      \item \textbf{Simetria:} $|x_i - y_i| = |y_i - x_i|$, logo a soma mantém-se igual, $d_1(x,y) = d_1(y,x)$.
+      \item \textbf{Desigualdade Triangular:} Usando a desigualdade triangular dos números reais ($|a+b| \le |a| + |b|$):
+      \[
+        |x_i - z_i| = |(x_i - y_i) + (y_i - z_i)| \le |x_i - y_i| + |y_i - z_i|
+      \]
+      Somando esta desigualdade de $i=1$ a $n$, obtemos imediatamente $d_1(x,z) \le d_1(x,y) + d_1(y,z)$. \checkmark
+  \end{enumerate}
+\end{solbox}
+
+\begin{exercisebox}{2 --- Convergência em Espaços Discretos}
+  No espaço métrico com a métrica discreta, determine todas as sequências que são convergentes.
+\end{exercisebox}
+\begin{solbox}
+  Na métrica discreta ($d(x,y)=1$ se $x \neq y$), para uma sequência $(x_n)$ convergir para um ponto $x$, deve satisfazer: para qualquer $\varepsilon > 0$, $\exists N$ tal que $n \ge N \implies d(x_n, x) < \varepsilon$.
+  
+  Tomemos $\varepsilon = \dfrac{1}{2}$. Para $n \ge N$, teremos $d(x_n, x) < 0{,}5$. Pela natureza desta métrica, isto obriga a que $d(x_n, x) = 0$, ou seja, $x_n = x$.
+  
+  Logo, as \textbf{únicas} sequências convergentes na métrica discreta são as \textbf{sequências eventualmente constantes} (aquelas que, a partir de um certo ponto, fixam-se permanentemente no mesmo valor).
+\end{solbox}
+
+\begin{exercisebox}{3 --- Prova de Continuidade ($\varepsilon-\delta$)}
+  Seja $f:\mathbb{R}\to\mathbb{R}$ dada por $f(x)=|x|$. Mostre que $f$ é contínua em todos os pontos usando a definição $\varepsilon$--$\delta$.
+\end{exercisebox}
+\begin{solbox}
+  Pretendemos mostrar que dado $x_0 \in \mathbb{R}$ e $\varepsilon > 0$, existe $\delta > 0$ tal que $|x - x_0| < \delta \implies |f(x) - f(x_0)| < \varepsilon$.
+  
+  Avaliando a expressão alvo e utilizando a \textit{desigualdade triangular inversa}:
+  \[
+    |f(x) - f(x_0)| = |\,|x| - |x_0|\,| \le |x - x_0|
+  \]
+  Como o nosso objetivo é tornar a expressão menor que $\varepsilon$, basta escolhermos \textbf{$\delta = \varepsilon$}.
+  Assim, se $|x - x_0| < \delta$, garantimos automaticamente que $|f(x) - f(x_0)| \le |x - x_0| < \delta = \varepsilon$. A função é contínua em $\mathbb{R}$.
+\end{solbox}
+
+\begin{exercisebox}{4 --- Limite Uniforme vs. Limite Pontual}
+  Considere o espaço das funções contínuas $(C[0,1], d_\infty)$. Determine se a sequência de funções $f_n(x)=x^n$ converge uniformemente para uma função limite contínua neste espaço métrico.
+\end{exercisebox}
+\begin{solbox}
+  Primeiro, encontramos o limite pontual de $f_n(x)$ quando $n \to \infty$:
+  \[
+    f(x) = \lim_{n\to\infty} x^n = 
+    \begin{cases} 
+      0 & \text{se } 0 \le x < 1 \\ 
+      1 & \text{se } x = 1 
+    \end{cases}
+  \]
+  Para que a sequência convirja no espaço $(C[0,1], d_\infty)$, o limite $f(x)$ \textbf{teria de pertencer} ao espaço (ou seja, teria de ser contínuo), e a distância $d_\infty(f_n, f)$ teria de ir para $0$.
+  
+  No entanto, a função limite $f(x)$ é descontínua em $x=1$. Mais ainda, a distância na métrica do supremo é:
+  \[
+    d_\infty(f_n, f) = \sup_{x \in [0,1)} |x^n - 0| = 1 \neq 0
+  \]
+  \textbf{Conclusão:} A sequência $f_n(x) = x^n$ \textbf{não} converge em $(C[0,1], d_\infty)$, mostrando a diferença fulcral entre convergência pontual e convergência uniforme (em métrica).
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Explique a diferença entre \emph{convergência pontual} de funções e \emph{convergência em métrica} (convergência uniforme) no espaço $C[a,b]$ com a métrica do supremo.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Dê três exemplos de métricas diferentes em $\mathbb{R}^n$ (como a Euclideana, a da "geometria do táxi" e do Máximo) e compare geometricamente como é o aspeto das suas bolas abertas.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q3.} Com base na definição $\varepsilon-\delta$, explique por que razão a escolha da métrica discreta no domínio torna todas as funções matemáticas imediatamente contínuas.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q4.} Descreva geometricamente a desigualdade triangular. Porque é que ela é um axioma estritamente necessário para que uma função possa ser chamada de "distância" credível?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q5.} Num espaço métrico rigoroso, explique por que razão a convergência de uma sequência determina de forma estrita e \emph{única} o seu limite.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q6.} Apresente um exemplo clássico de uma sequência num espaço métrico (como os números racionais com a métrica usual) que, embora os seus termos se aproximem uns dos outros, \emph{não} converge dentro desse próprio espaço, justificando o porquê.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q7.} Explique a relação profunda entre \emph{bolas abertas} e o conceito topológico de \emph{continuidade}, mostrando como a pré-imagem de uma bola aberta atua na vizinhança do domínio.
+\end{oralbox}

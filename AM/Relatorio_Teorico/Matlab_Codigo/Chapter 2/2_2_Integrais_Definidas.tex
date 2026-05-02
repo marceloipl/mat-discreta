@@ -1,0 +1,28 @@
+
+% ────────────────────────────────────────────────────────
+\section{O Integral Definido}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{defbox}[title={Integral de Riemann}]
+  Seja $f:[a,b]\to\mathbb{R}$ limitada. Para uma partição
+  $P=\{a=x_0<x_1<\cdots<x_n=b\}$, a \emph{soma de Riemann} é
+  \[
+    S(f,P) = \sum_{i=1}^n f(c_i)(x_i - x_{i-1}),\quad c_i\in[x_{i-1},x_i].
+  \]
+  Se $S(f,P)$ convergir para um limite $L$ quando a norma da partição
+  $\|P\|\to 0$ (independentemente da escolha de $c_i$), então $f$ é
+  \emph{integrável no sentido de Riemann} e $\displaystyle\int_a^b f(x)\,dx = L$.
+\end{defbox}
+
+\begin{thmbox}[title={Propriedades Principais do Integral Definido}]
+\begin{align*}
+  &\int_a^b [\alpha f+\beta g]\,dx = \alpha\int_a^b f\,dx + \beta\int_a^b g\,dx
+    \quad (\text{linearidade})\\[4pt]
+  &\int_a^b f\,dx = \int_a^c f\,dx + \int_c^b f\,dx
+    \quad (\text{aditividade em } [a,c]\cup[c,b])\\[4pt]
+  &f(x)\geq 0 \implies \int_a^b f\,dx \geq 0
+    \quad (\text{positividade})
+\end{align*}
+\end{thmbox}

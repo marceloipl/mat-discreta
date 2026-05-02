@@ -1,0 +1,168 @@
+% ════════════════════════════════════════════════════════════════
+% 1.4 - CURVAS PARAMÉTRICAS E DERIVAÇÃO
+% ════════════════════════════════════════════════════════════════
+
+\section{Curvas Paramétricas e Derivação}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{notebox}[title={Intuição Geral}]
+  As curvas paramétricas são a ferramenta ideal para descrever \textbf{movimentos} contínuos. Em vez de forçarmos uma variável a depender da outra (como em $y = f(x)$), expressamos ambas as coordenadas como funções de uma terceira variável independente: o parâmetro $t$, que é frequentemente interpretado como o ``tempo''.
+  Assim, a posição de um objeto a cada instante é dada pelo ponto $(x(t), y(t))$. A \emph{derivada} destas funções indica-nos exatamente como a posição está a mudar, ou seja, dá-nos a \textbf{velocidade} do objeto nesse instante.
+\end{notebox}
+
+\begin{defbox}[title={Curva Paramétrica e Vetor Velocidade}]
+  Uma \textbf{curva paramétrica} no plano bidimensional é definida por um par de funções contínuas:
+  \[
+    \gamma(t) = (x(t), y(t)), \quad t \in I
+  \]
+  onde $I$ é um intervalo de números reais.
+  
+  Se as funções $x(t)$ e $y(t)$ forem deriváveis, a \textbf{derivada da curva} (ou vetor velocidade) é obtida derivando cada componente individualmente em ordem a $t$:
+  \[
+    \gamma'(t) = (x'(t), y'(t))
+  \]
+  Este vetor $\gamma'(t)$ é geometricamente \textbf{tangente} à curva geométrica no ponto $\gamma(t)$.
+\end{defbox}
+
+\begin{defbox}[title={Comprimento de uma Curva (Arco)}]
+  Se o vetor velocidade for contínuo e a curva não se cruzar a si própria, o \textbf{comprimento total} $L$ do percurso percorrido entre o instante $t=a$ e $t=b$ é dado pelo integral da norma (tamanho) do vetor velocidade:
+  \[
+    L = \int_a^b \|\gamma'(t)\| \,dt = \int_a^b \sqrt{(x'(t))^2 + (y'(t))^2} \,dt
+  \]
+\end{defbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- A Circunferência Padrão}
+  Considere a curva paramétrica geométrica que descreve uma circunferência de raio 1:
+  \[
+    \gamma(t) = (\cos t, \sin t)
+  \]
+  Calcule a sua derivada e interprete o resultado geometricamente.
+\end{exbox}
+\begin{solbox}
+  Derivando componente a componente:
+  \[
+    \gamma'(t) = (-\sin t, \cos t)
+  \]
+  \textbf{Interpretação:} O vetor velocidade $\gamma'(t)$ é sempre ortogonal ao vetor posição $\gamma(t)$ (o produto interno entre eles é $-\sin t \cos t + \cos t \sin t = 0$), o que confirma que a velocidade é sempre \textbf{tangente} ao círculo. Além disso, a norma do vetor velocidade é:
+  \[
+    \|\gamma'(t)\| = \sqrt{(-\sin t)^2 + (\cos t)^2} = \sqrt{\sin^2 t + \cos^2 t} = \sqrt{1} = 1
+  \]
+  Como a norma é constante e igual a 1, trata-se de um \textbf{movimento circular uniforme}.
+\end{solbox}
+
+\begin{exbox}{2 --- Comprimento de uma Espiral Simples}
+  Determine a expressão integral para o comprimento da espiral definida por $\gamma(t)=(t\cos t, t\sin t)$ entre $t=0$ e $t=a$.
+\end{exbox}
+\begin{solbox}
+  Primeiro, determinamos o vetor velocidade usando a regra do produto em cada componente:
+  \begin{align*}
+      x'(t) &= (\cos t - t\sin t) \\
+      y'(t) &= (\sin t + t\cos t)
+  \end{align*}
+  O comprimento entre $0$ e $a$ é dado por:
+  \[
+    L = \int_0^a \sqrt{(\cos t - t\sin t)^2 + (\sin t + t\cos t)^2} \,dt
+  \]
+  \textbf{Simplificação do interior da raiz:}
+  Expandindo os quadrados perfeitos:
+  \begin{align*}
+      (x')^2 &= \cos^2 t - 2t\cos t\sin t + t^2\sin^2 t \\
+      (y')^2 &= \sin^2 t + 2t\sin t\cos t + t^2\cos^2 t
+  \end{align*}
+  Somando as duas expressões, o termo cruzado anula-se:
+  \[
+    (x')^2 + (y')^2 = (\cos^2 t + \sin^2 t) + t^2(\sin^2 t + \cos^2 t) = 1 + t^2
+  \]
+  \textbf{Resultado final:}
+  A expressão integral simplificada para o comprimento da espiral é:
+  \[
+    \boxed{ L = \int_0^a \sqrt{1+t^2} \,dt }
+  \]
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1 --- Derivação Paramétrica Simples}
+  Derive a curva polinomial $\gamma(t)=(t^2, t^3)$.
+\end{exercisebox}
+\begin{solbox}
+  Basta derivar cada uma das coordenadas em ordem à variável independente $t$:
+  \begin{itemize}
+      \item $x(t) = t^2 \implies x'(t) = 2t$
+      \item $y(t) = t^3 \implies y'(t) = 3t^2$
+  \end{itemize}
+  \textbf{Solução Final:} O vetor velocidade é $\boxed{\gamma'(t) = (2t, 3t^2)}$.
+\end{solbox}
+
+\begin{exercisebox}{2 --- Cálculo Efetivo do Comprimento de Arco}
+  Calcule o comprimento da curva linear $\gamma(t)=(3t, 4t)$ entre $t=0$ e $t=1$.
+\end{exercisebox}
+\begin{solbox}
+  Primeiro, calculamos o vetor velocidade:
+  \[
+    \gamma'(t) = (3, 4)
+  \]
+  A norma deste vetor (a velocidade escalar) é:
+  \[
+    \|\gamma'(t)\| = \sqrt{3^2 + 4^2} = \sqrt{9 + 16} = \sqrt{25} = 5
+  \]
+  O comprimento total é o integral desta norma entre os instantes fornecidos:
+  \[
+    L = \int_0^1 5 \,dt = \Big[ 5t \Big]_0^1 = 5(1) - 5(0) = \mathbf{5}
+  \]
+  \textit{Nota geométrica:} Esta curva descreve um segmento de reta que vai do ponto $(0,0)$ ao ponto $(3,4)$. A distância direta é precisamente 5 (conforme o Teorema de Pitágoras).
+\end{solbox}
+
+\begin{exercisebox}{3 --- Ortogonalidade do Movimento}
+  Mostre que a curva $\gamma(t)=(e^t, e^{-t})$ tem um vetor velocidade perpendicular ao seu \emph{vetor posição} no instante $t=0$.
+\end{exercisebox}
+\begin{solbox}
+  Para provar a perpendicularidade (ortogonalidade), o produto interno (produto escalar) entre o vetor posição e o vetor velocidade em $t=0$ tem de ser igual a zero.
+  
+  \textbf{1. Vetor Posição em $t=0$:}
+  \[
+    \gamma(0) = (e^0, e^{-0}) = (1, 1)
+  \]
+  
+  \textbf{2. Vetor Velocidade em $t=0$:}
+  Derivamos a curva original:
+  \[
+    \gamma'(t) = (e^t, -e^{-t})
+  \]
+  Avaliando no instante $t=0$:
+  \[
+    \gamma'(0) = (e^0, -e^{-0}) = (1, -1)
+  \]
+  
+  \textbf{3. Produto Interno:}
+  Fazendo o produto escalar entre $\gamma(0)$ e $\gamma'(0)$:
+  \[
+    \gamma(0) \cdot \gamma'(0) = (1)(1) + (1)(-1) = 1 - 1 = \mathbf{0}
+  \]
+  Como o produto escalar é zero, os vetores formam um ângulo de $90^\circ$. A afirmação está provada. \checkmark
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Se tivesse de explicar o conceito de "curva paramétrica" a alguém sem formação matemática avançada, que analogia do quotidiano usaria? Como explicaria o papel do parâmetro $t$?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Num movimento parametrizado, o que representa geometricamente e fisicamente o \emph{vetor velocidade}? Como é que ele se relaciona com a curva principal?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q3.} Justifique a fórmula do comprimento de uma curva. Por que razão esta fórmula envolve especificamente a raiz quadrada da soma dos quadrados das derivadas? A que teorema célebre isto remete?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q4.} Qual é a grande vantagem (ou diferença estrutural) de parametrizar uma curva com $t$, em vez de desenhá-la estaticamente através de uma função comum $y = f(x)$? Dê um exemplo de uma forma geométrica que a parametrização resolve facilmente, mas que $y=f(x)$ não consegue.
+\end{oralbox}

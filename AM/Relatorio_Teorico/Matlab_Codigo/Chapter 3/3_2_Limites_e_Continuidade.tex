@@ -1,0 +1,37 @@
+% ────────────────────────────────────────────────────────
+\section{Limites e Continuidade}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{defbox}[title={Limite em $\mathbb{R}^2$}]
+  Diz-se que $\displaystyle\lim_{(x,y)\to(a,b)}f(x,y) = L$ se para todo o
+  $\varepsilon>0$ existe $\delta>0$ tal que
+  \[
+    0 < \sqrt{(x-a)^2+(y-b)^2} < \delta \implies |f(x,y)-L|<\varepsilon.
+  \]
+\end{defbox}
+
+\begin{notebox}[title={Estratégia: Provar que um Limite Não Existe}]
+  Ao contrário de $\mathbb{R}$, em $\mathbb{R}^2$ o limite tem de ser o mesmo
+  ao longo de \emph{todos} os caminhos. Uma estratégia comum para mostrar que
+  um limite \emph{não existe} consiste em exibir dois caminhos que dão valores
+  diferentes.
+\end{notebox}
+
+\begin{defbox}[title={Continuidade em $\mathbb{R}^2$}]
+  $f$ é \emph{contínua} em $(a,b)$ se
+  $\displaystyle\lim_{(x,y)\to(a,b)}f(x,y)=f(a,b)$.
+\end{defbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{4 --- Limite Inexistente}
+  Mostre que $\displaystyle\lim_{(x,y)\to(0,0)}\frac{xy}{x^2+y^2}$ não existe.
+\end{exbox}
+\begin{solbox}
+  Pelo caminho $y=0$: $f(x,0)=0\to 0$.\\
+  Pelo caminho $y=x$: $f(x,x)=\dfrac{x^2}{2x^2}=\dfrac{1}{2}\to\dfrac{1}{2}$.\\
+  Como os limites são diferentes, o limite não existe.
+\end{solbox}
