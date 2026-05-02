@@ -1,0 +1,437 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{bm}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{titlesec}
+
+\titleformat{\chapter}
+  {\normalfont\huge\bfseries}
+  {\thechapter.}
+  {0.5em}
+  {}
+\titlespacing*{\chapter}
+  {0pt}
+  {-15pt}
+  {20pt}
+
+\lstset{
+  inputencoding=utf8,
+  extendedchars=true,
+  literate=
+    {á}{{\'a}}1 {à}{{\`a}}1 {ã}{{\~a}}1 {â}{{\^a}}1
+    {é}{{\'e}}1 {ê}{{\^e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1 {õ}{{\~o}}1 {ô}{{\^o}}1
+    {ú}{{\'u}}1
+    {ç}{{\c{c}}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1
+    {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {Ç}{{\c{C}}}1
+}
+
+\geometry{margin=2.5cm}
+
+% Estilização de blocos de código
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    language=Octave,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    frame=single
+}
+
+\title{Análise Matemática \\ \Large Projeto 3 - Simulação do Percurso Solar (Costa de Sagres)}
+\author{
+    \textbf{Grupo Nº: 2} \\    
+    David Domingues (2022125309) \\
+    Diana Gomes (2019101181) \\
+    Guilherme Baltazar (2025209893) \\
+    Joana Venâncio (2016123347) \\
+    Leonardo Costa (2023137263) \\
+    Marcelo Marques (2022102560) \\
+    Miguel Reis (2024164633) \\ \\
+    Escola Superior de Tecnologia e Gestão \\
+    Instituto Politécnico de Leiria
+}\date{Ano Letivo 2025/2026}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Fundamentação Teórica}
+
+\section{Introdução à Geometria Solar}
+A Terra é modelada como uma esfera unitária $S^2 = \{ \mathbf{x} \in \mathbb{R}^3 : \|\mathbf{x}\| = 1 \}$. Para um observador numa localização específica $\mathbf{p} \in S^2$ (ex: Sagres: $37.0097^\circ$N, $8.9408^\circ$W), a posição do Sol é definida pelo vetor unitário $\mathbf{s}(t)$.
+
+\section{Projeção no Plano Tangente}
+A direção observável do Sol a partir do ponto $\mathbf{p}$ é a projeção de $\mathbf{s}(t)$ no plano tangente a esse ponto, denotado como $T_p(S^2)$. 
+A definição matemática do plano tangente é:
+\begin{equation}
+T_p(S^2) = \{ \mathbf{v} \in \mathbb{R}^3 : \mathbf{v} \cdot \mathbf{p} = 0 \}
+\end{equation}
+A projeção $\mathbf{v}_p(t)$ é obtida removendo a componente de $\mathbf{s}(t)$ que é normal à esfera em $\mathbf{p}$:
+\begin{equation}
+\mathbf{v}_p(t) = \mathbf{s}(t) - (\mathbf{s}(t) \cdot \mathbf{p}) \mathbf{p}
+\end{equation}
+
+\section{Representação em Toro Discretizado}
+Para simular o percurso solar ao longo de um ano, mapeamos as coordenadas temporais (dia $d$ e minuto $m$) num toro $\mathbb{T}^2 = S^1 \times S^1$.
+\begin{itemize}
+    \item $d \in \{1, \dots, 365\}$ (Dias do ano)
+    \item $m \in \{1, \dots, 1440\}$ (Minutos do dia)
+\end{itemize}
+
+\section{Níveis de Aproximação}
+A precisão da simulação depende do modelo utilizado para a declinação solar ($\delta$) e para a Equação do Tempo ($E$):
+\begin{enumerate}
+    \item \textbf{Aproximação Grosseira:} Assume uma órbita circular e declinação constante. $E(d) = 0$.
+    \item \textbf{Média (Linear):} Utiliza um modelo linear para $\delta$ e uma correção de primeira ordem para a Equação do Tempo.
+    \item \textbf{Alta (Segunda Ordem):} Incorpora a excentricidade orbital e uma Equação do Tempo completa de segunda ordem para considerar a velocidade não uniforme da Terra em torno do Sol.
+\end{enumerate}
+
+\chapter{Exemplos Práticos e Implementação}
+
+\section{Script de Simulação em Octave}
+O seguinte código implementa a aproximação de alta ordem e visualiza os resultados numa malha toroidal.
+
+\begin{lstlisting}[language=Octave, caption={Implementação em Octave para Simulação do Percurso Solar}]
+% Coordenadas Geográficas de Sagres
+lat = deg2rad(37.0097);
+lon = deg2rad(-8.9408);
+
+% Malha (Meshgrid) para o Toro (Dias vs Minutos)
+d = 1:5:365;      % Amostragem a cada 5 dias para clareza
+m = 0:30:1410;    % Amostragem a cada 30 minutos
+[D, M] = meshgrid(d, m);
+
+% 1. Aproximação Alta: Equação do Tempo (E em minutos)
+B = (360/365) * (D - 81);
+E = 9.87*sin(deg2rad(2*B)) - 7.53*cos(deg2rad(B)) - 1.5*sin(deg2rad(B));
+
+% 2. Declinação (delta)
+delta = deg2rad(23.45 * sin(deg2rad((360/365)*(284 + D))));
+
+% 3. Tempo Solar e Angulo Horario (xomega)
+solar_time = (M/60) + (E/60); 
+omega = deg2rad(15 * (solar_time - 12));
+
+% 4. Cálculo da Altitude (alpha)
+sin_alpha = sin(lat)*sin(delta) + cos(lat)*cos(delta).*cos(omega);
+alpha = asin(sin_alpha);
+alpha(alpha < 0) = 0; % Noite: define altitude como 0
+
+% 5. Visualização no Toro
+R = 10; r = 4;
+theta = (D/365) * 2 * pi;
+phi = (M/1440) * 2 * pi;
+X = (R + r*cos(phi)) .* cos(theta);
+Y = (R + r*cos(phi)) .* sin(theta);
+Z = r * sin(phi);
+
+surf(X, Y, Z, rad2deg(alpha));
+shading interp; colorbar;
+title('Campo de Altitude Solar num Toro Discretizado');
+\end{lstlisting}
+
+\chapter{Exercícios Práticos}
+
+\section{Exercício 1: Ortogonalidade Vetorial}
+Prove analiticamente que o vetor $\mathbf{v}_p(t) = \mathbf{s}(t) - (\mathbf{s}(t) \cdot \mathbf{p})\mathbf{p}$ é sempre ortogonal a $\mathbf{p}$. 
+\textit{Sugestão: Calcule o produto escalar $\mathbf{v}_p(t) \cdot \mathbf{p}$ e utilize o facto de que $\|\mathbf{p}\|^2 = 1$.}
+
+\subsection{Resolução}
+Queremos provar que
+\[
+\mathbf{v}_p(t)=\mathbf{s}(t)-(\mathbf{s}(t)\cdot \mathbf{p})\mathbf{p}
+\]
+é ortogonal a \(\mathbf{p}\).
+Para isso, calculamos o produto escalar:
+\[
+\mathbf{v}_p(t)\cdot \mathbf{p}
+=\left[\mathbf{s}(t)-(\mathbf{s}(t)\cdot \mathbf{p})\mathbf{p}\right]\cdot \mathbf{p}.
+\]
+Usando a distributividade do produto escalar, obtemos:
+\[
+\mathbf{v}_p(t)\cdot \mathbf{p}
+=\mathbf{s}(t)\cdot \mathbf{p}
+-(\mathbf{s}(t)\cdot \mathbf{p})(\mathbf{p}\cdot \mathbf{p}).
+\]
+Como \(\mathbf{p}\in S^2\), então \(\|\mathbf{p}\|=1\), logo:
+\[
+\mathbf{p}\cdot \mathbf{p}=\|\mathbf{p}\|^2=1.
+\]
+Substituindo:
+\[
+\begin{aligned}
+\mathbf{v}_p(t)\cdot \mathbf{p}
+&=\mathbf{s}(t)\cdot \mathbf{p}
+-(\mathbf{s}(t)\cdot \mathbf{p})\cdot 1.
+\end{aligned}
+\]
+Portanto:
+\[
+\mathbf{v}_p(t)\cdot \mathbf{p}=0.
+\]
+Concluímos que:
+\[
+\mathbf{v}_p(t)\perp \mathbf{p}.
+\]
+
+Assim, o vetor \(\mathbf{v}_p(t)\) pertence ao plano tangente \(T_p(S^2)\).
+\newpage
+\section{Exercício 2: Análise de Sensibilidade}
+Compare a altitude solar $\alpha$ calculada para o solstício de verão ($d=172$) às 12:00h utilizando a aproximação "Grosseira" ($E=0$) e a aproximação "Alta". Qual é o erro em graus?
+
+\subsection{Resolução}
+
+Pretende-se comparar a altitude solar \(\alpha\) no solstício de verão, correspondente a \(d=172\), às \(12:00\), usando duas aproximações.
+A latitude de Sagres é:
+\[
+\varphi = 37.0097^\circ.
+\]
+A altitude solar é dada por:
+\[
+\sin(\alpha)
+=
+\sin(\varphi)\sin(\delta)
++
+\cos(\varphi)\cos(\delta)\cos(\omega),
+\]
+onde \(\delta\) é a declinação solar e \(\omega\) é o ângulo horário.
+No solstício de verão, toma-se aproximadamente:
+\[
+\delta \approx 23.45^\circ.
+\]
+\subsection*{Aproximação Grosseira}
+Na aproximação grosseira, considera-se:
+\[
+E(d)=0.
+\]
+Às \(12:00\), o tempo solar é:
+\[
+t_s=12.
+\]
+Logo:
+\[
+\omega = 15^\circ(t_s-12)=0^\circ.
+\]
+Assim:
+\[
+\begin{aligned}
+\sin(\alpha_g)
+&=
+\sin(37.0097^\circ)\sin(23.45^\circ) \\
+&\quad+
+\cos(37.0097^\circ)\cos(23.45^\circ)\cos(0^\circ).
+\end{aligned}
+\]
+Como \(\cos(0^\circ)=1\), temos:
+\[
+\alpha_g \approx 76.44^\circ.
+\]
+\subsection*{Aproximação Alta}
+Na aproximação alta, usa-se a Equação do Tempo:
+\[
+B=\frac{360}{365}(d-81).
+\]
+Para \(d=172\):
+\[
+B=\frac{360}{365}(172-81)\approx 89.75^\circ.
+\]
+A Equação do Tempo é:
+\[
+E = 9.87\sin(2B)-7.53\cos(B)-1.5\sin(B).
+\]
+Substituindo:
+\[
+\begin{aligned}
+E
+&= 9.87\sin(2B)-7.53\cos(B)-1.5\sin(B) \\
+&\approx -1.39 \text{ minutos}.
+\end{aligned}
+\]
+O tempo solar corrigido é:
+\[
+\begin{aligned}
+t_s
+&= 12+\frac{E}{60} \\
+&\approx 12-\frac{1.39}{60} \\
+&\approx 11.9768.
+\end{aligned}
+\]
+Logo:
+\[
+\begin{aligned}
+\omega
+&= 15^\circ(t_s-12) \\
+&\approx 15^\circ(-0.0232) \\
+&\approx -0.348^\circ.
+\end{aligned}
+\]
+A altitude solar é então:
+\[
+\begin{aligned}
+\sin(\alpha_a)
+&=
+\sin(37.0097^\circ)\sin(23.45^\circ) \\
+&\quad+
+\cos(37.0097^\circ)\cos(23.45^\circ)\cos(-0.348^\circ).
+\end{aligned}
+\]
+Daqui resulta:
+\[
+\alpha_a \approx 76.44^\circ.
+\]
+\subsection*{Erro entre as aproximações}
+O erro absoluto é:
+\[
+\text{Erro}=|\alpha_g-\alpha_a|.
+\]
+Substituindo:
+\[
+\text{Erro}\approx |76.44^\circ-76.44^\circ|.
+\]
+Numericamente:
+\[
+\text{Erro}\approx 0.0007^\circ.
+\]
+Portanto, para o solstício de verão às \(12:00\), a diferença entre a aproximação grosseira e a aproximação alta é praticamente desprezável.
+\newpage
+\section{Exercício 3: Integração no Toro}
+Dada a função de altitude $\alpha(d, m)$, monte o integral duplo sobre o toro para encontrar a altitude solar média durante as horas de sol para o mês de julho.
+
+\subsection{Resolução}
+Pretende-se montar o integral duplo que permite calcular a altitude solar média durante as horas de sol no mês de julho.
+A função de altitude solar é:
+\[
+\alpha=\alpha(d,m),
+\]
+onde:
+\[
+d
+\]
+representa o dia do ano e
+\[
+m
+\]
+representa o minuto do dia.
+O mês de julho corresponde aproximadamente aos dias:
+\[
+d\in[182,212].
+\]
+As horas de sol são aquelas em que a altitude solar é positiva:
+\[
+\alpha(d,m)>0.
+\]
+Assim, define-se o domínio de integração:
+\[
+\begin{aligned}
+D_{\text{sol}}
+&=
+\{(d,m)\in[182,212]\times[0,1440] : \alpha(d,m)>0\}.
+\end{aligned}
+\]
+A altitude solar média durante as horas de sol é dada por:
+\[
+\overline{\alpha}
+=
+\frac{1}{A(D_{\text{sol}})}
+\iint_{D_{\text{sol}}} \alpha(d,m)\,dm\,dd,
+\]
+onde \(A(D_{\text{sol}})\) representa a área do domínio correspondente às horas de sol:
+\[
+A(D_{\text{sol}})
+=
+\iint_{D_{\text{sol}}} 1\,dm\,dd.
+\]
+Portanto:
+\[
+\boxed{
+\overline{\alpha}
+=
+\frac{
+\displaystyle \iint_{D_{\text{sol}}} \alpha(d,m)\,dm\,dd
+}{
+\displaystyle \iint_{D_{\text{sol}}} 1\,dm\,dd
+}
+}
+\]
+Como a variável temporal é representada num toro \(\mathbb{T}^2\), podemos também escrever o integral usando as coordenadas angulares:
+\[
+\theta=\frac{2\pi d}{365},
+\qquad
+\phi=\frac{2\pi m}{1440}.
+\]
+Nesse caso, o domínio correspondente a julho é:
+\[
+\theta\in
+\left[
+\frac{2\pi\cdot 182}{365},
+\frac{2\pi\cdot 212}{365}
+\right].
+\]
+A altitude média pode ser escrita como:
+\[
+\overline{\alpha}
+=
+\frac{
+\displaystyle \iint_{\widetilde{D}_{\text{sol}}}
+\alpha(\theta,\phi)\,d\phi\,d\theta
+}{
+\displaystyle \iint_{\widetilde{D}_{\text{sol}}}
+1\,d\phi\,d\theta
+}.
+\]
+onde:
+\[
+\begin{aligned}
+\widetilde{D}_{\text{sol}}
+&=
+\{(\theta,\phi): \alpha(\theta,\phi)>0\}.
+\end{aligned}
+\]
+Este integral representa a média da altitude solar apenas nos pontos do toro correspondentes ao mês de julho e aos momentos em que o Sol está acima do horizonte.
+
+\chapter{Problemas Sugeridos para a Defesa Oral}
+
+As seguintes questões foram desenhadas para avaliar o domínio do projeto pelo grupo:
+
+\begin{enumerate}
+    \item \textbf{Interpretação Geométrica:} Explique como o mapeamento $(d, m) \to \mathbb{T}^2$ preserva a continuidade do tempo (ou seja, como a transição de 31 de dez para 1 de jan é gerida pela topologia do toro).
+    \item \textbf{Aplicação de Cálculo:} Como usaria o \textit{Gradiente} da função de altitude $\alpha(d, m)$ para encontrar o momento exato do ano em que o sol nasce mais rapidamente em Sagres?
+    \item \textbf{Métodos Numéricos:} No código Octave, utilizámos um \textit{meshgrid}. Discuta como o tamanho do passo de $d$ e $m$ afeta a precisão da simulação e o custo computacional.
+    \item \textbf{Transformação de Coordenadas:} O vetor $\mathbf{s}(t)$ é frequentemente dado em coordenadas equatoriais. Explique as matrizes de rotação necessárias para o transformar no sistema de coordenadas horizontais local no ponto $\mathbf{p}$.
+    \item \textbf{Pensamento Crítico:} Se a órbita da Terra fosse perfeitamente circular, qual nível de aproximação seria suficiente para modelar o percurso do Sol? Justifique com base na Equação do Tempo.
+    \item \textbf{Colaboração com IA:} Identifique uma parte do código Octave fornecido pela IA que exigiu correção manual ou verificação matemática pelo grupo para garantir que seguia as restrições específicas do projeto.
+\end{enumerate}
+
+\end{document}
