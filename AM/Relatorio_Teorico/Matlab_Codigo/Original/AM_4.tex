@@ -1,0 +1,198 @@
+\documentclass[12pt,a4paper]{article}
+
+% Pacotes essenciais
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{listings}
+
+% Configuração para o código MATLAB/Octave ficar bonito
+\lstset{
+    language=Matlab,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{teal},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!5},
+    captionpos=b,
+    showstringspaces=false
+}
+
+% Dados do Documento
+\title{\textbf{Relatório AM}\\ \large Integrais Duplos e Modelação Computacional}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+
+\section{Fundamentos Teóricos}
+
+\subsection{O Conceito de Integral Duplo}
+Enquanto um integral simples calcula a área debaixo de uma curva num gráfico 2D, um integral duplo calcula o volume abaixo de uma superfície num espaço 3D. A notação padrão é dada por:
+\begin{equation}
+    V = \iint_R f(x,y) \,dA
+\end{equation}
+onde $R$ representa a região planar base (o domínio) e $f(x,y)$ a função que dita a altura da superfície em cada ponto $(x,y)$.
+
+\subsection{Definição Formal e Somas de Riemann}
+A construção rigorosa de um integral duplo baseia-se na expansão das Somas de Riemann. Seja $f(x,y)$ uma função definida numa região planar fechada e limitada 
+$R$. Se dividirmos $R$ numa malha de pequenos retângulos de área $\Delta A$, e escolhermos um ponto de amostragem $(x_i^*, y_j^*)$ dentro de cada sub-retângulo, 
+o volume aproximado do sólido abaixo da superfície é a soma dos volumes de vários paralelepípedos:
+\begin{equation}
+    V \approx \sum_{i=1}^{n} \sum_{j=1}^{m} f(x_i^*, y_j^*) \Delta A
+\end{equation}
+O integral duplo é definido como o limite desta soma quando a área dos sub-retângulos tende para zero (ou seja, quando a malha se torna infinitamente fina):
+\begin{equation}
+    \iint_R f(x,y) \,dA = \lim_{\Delta A \to 0} \sum_{i=1}^{n} \sum_{j=1}^{m} f(x_i^*, y_j^*) \Delta A
+\end{equation}
+Computacionalmente, os métodos de integração numérica (como a regra dos trapézios bidimensional usada nos projetos) são aproximações algorítmicas diretas desta mesma Soma de Riemann.
+
+\subsection{Teorema de Fubini, Integração Iterada e Tipos de Regiões}
+O cálculo direto pelo limite da soma de Riemann é impraticável. \\ O Teorema de Fubini é a ponte que permite calcular integrais duplos transformando-os em dois integrais simples sucessivos. 
+Este teorema resolve o problema afirmando que, se a função $f(x,y)$ for contínua na região 
+$R$, o integral duplo pode ser avaliado através de integrais iterados unidimensionais. A complexidade do cálculo depende da geometria da região $R$:
+\begin{itemize}
+    \item \textbf{Regiões do Tipo I (Simples na vertical):} A região é limitada à esquerda e à direita por constantes $x=a$ e $x=b$, e em cima e em baixo por funções 
+	contínuas $y=g_1(x)$ e $y=g_2(x)$. Integra-se primeiro em ordem a $y$:
+    \begin{equation}
+        \iint_R f(x,y) \,dA = \int_{a}^{b} \left[ \int_{g_1(x)}^{g_2(x)} f(x,y) \,dy \right] dx
+    \end{equation}
+    
+    \item \textbf{Regiões do Tipo II (Simples na horizontal):} A região é limitada em cima e em baixo por constantes $y=c$ e $y=d$, e lateralmente por funções 
+	$x=h_1(y)$ e $x=h_2(y)$. Integra-se primeiro em ordem a $x$:
+    \begin{equation}
+        \iint_R f(x,y) \,dA = \int_{c}^{d} \left[ \int_{h_1(y)}^{h_2(y)} f(x,y) \,dx \right] dy
+    \end{equation}
+\end{itemize}
+Dependendo da geometria da região $R$, a capacidade de alterar a ordem de integração (de Tipo I - $dx\,dy$ para Tipo II - $dy\,dx$) é uma competência analítica vital, pois muitas vezes um integral iterado é impossível 
+de resolver analiticamente numa ordem, mas trivial na outra, podendo este processo simplificar drasticamente a resolução do problema.
+
+\subsection{Transformação para Coordenadas Polares}
+Quando a região de integração possui simetria circular ou a função integranda contém termos como $x^2 + y^2$, o uso de coordenadas cartesianas $(x,y)$ gera fronteiras 
+de integração complexas com raízes quadradas. Nestes casos, aplica-se uma transformação geométrica para o sistema de coordenadas polares $(r, \theta)$, onde:
+\begin{equation}
+    x = r \cos\theta \quad \text{e} \quad y = r \sin\theta
+\end{equation}
+Matematicamente, ao deformarmos o espaço bidimensional para um novo sistema de coordenadas, a área dos elementos infinitesimais deforma-se. O fator de escala dessa 
+deformação é dado pelo valor absoluto do determinante Jacobiano da transformação. Para coordenadas polares, o Jacobiano $J$ calcula-se como:
+\begin{equation}
+    J = \begin{vmatrix} 
+    \frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta} \\ 
+    \frac{\partial y}{\partial r} & \frac{\partial y}{\partial \theta} 
+    \end{vmatrix}
+    = \begin{vmatrix} 
+    \cos\theta & -r\sin\theta \\ 
+    \sin\theta & r\cos\theta 
+    \end{vmatrix}
+    = r(\cos^2\theta + \sin^2\theta) = r
+\end{equation}
+Portanto, o elemento de área diferencial muda de $dx\,dy$ para $r \,dr \,d\theta$. O teorema geral da mudança de variáveis estabelece que:
+\begin{equation}
+    \iint_R f(x,y) \,dx\,dy = \iint_{S} f(r\cos\theta, r\sin\theta) \, r \,dr\,d\theta
+\end{equation}
+onde $S$ é a representação da região $R$ no novo plano $r\theta$.
+\\ Em suma, para regiões circulares ou setores esféricos, o sistema cartesiano $(x, y)$ gera formulações complexas. A conversão para coordenadas polares $(r, \theta)$ simplifica a análise matemática. O elemento de área é transformado segundo o Jacobiano da transformação:
+\begin{equation}
+    dA = dx \, dy = r \, dr \, d\theta
+\end{equation}
+
+% ---------------------------------------------------------
+\section{Modelação Computacional e Projetos Interdisciplinares}
+A verdadeira avaliação das competências ocorre quando os conceitos analíticos são traduzidos em algoritmos. Computadores resolvem integrais através de métodos numéricos (somatórios em malhas discretas). Abaixo detalham-se os três projetos de aplicação prática.
+
+\subsection{Projeto 1: Simulação de Difusão de Calor}
+A energia térmica numa superfície planar acumula-se e difunde-se ao longo do tempo. Para calcular o calor total acumulado, integra-se a função de temperatura sobre a área 2D. 
+
+\begin{lstlisting}[caption={Simulação de Difusão de Calor em MATLAB/Octave}]
+% 1. Configuracao do Dominio (Regiao Planar R)
+nx = 50; ny = 50; dx = 0.1; dy = 0.1; 
+T = zeros(nx, ny); 
+T(20:30, 20:30) = 100; % Fonte de calor inicial
+
+% 2. Simulacao da Difusao (Diferencas Finitas)
+alpha = 0.2; 
+for k = 1:50
+    T_nova = T;
+    for i = 2:nx-1
+        for j = 2:ny-1
+            T_nova(i,j) = T(i,j) + alpha * (T(i+1,j) + T(i-1,j) + T(i,j+1) + T(i,j-1) - 4*T(i,j));
+        end
+    end
+    T = T_nova;
+end
+
+% 3. Calculo do Integral Duplo Numerico (Energia Total)
+calor_total = sum(sum(T)) * (dx * dy);
+
+% 4. Visualizacao 3D da Superficie
+surf(T); colormap('hot');
+title(sprintf('Energia Total: %.2f', calor_total));
+\end{lstlisting}
+
+\subsection{Projeto 2: Análise do Movimento Solar e Vetores 3D}
+Para estimar a radiação total capturada por um painel, modela-se o painel como uma região $R$ no espaço e calcula-se o ângulo de incidência do vetor solar. A energia total diária exige integração dupla sobre a área do painel iterada ao longo do tempo.
+
+\begin{lstlisting}[caption={Análise de Incidência Solar em MATLAB/Octave}]
+x = 0:0.1:2; y = 0:0.1:1.5; % Dimensoes do painel
+[X, Y] = meshgrid(x, y);
+normal_painel = [0, 0, 1]; 
+energia_total = 0;
+
+for t = 0:1:12
+    theta = (pi/12) * t; 
+    vetor_sol = [cos(theta), 0, sin(theta)]; 
+    
+    % Intensidade via produto interno (Vetores 3D)
+    intensidade = max(0, dot(normal_painel, vetor_sol));
+    
+    % Funcao densidade de energia f(x,y) (ex: lado sombreado)
+    Sombra = 1 - 0.1 * X; 
+    Energia_XY = intensidade * Sombra;
+    
+    % Integral Duplo iterado (Metodo dos Trapezios)
+    energia_instante = trapz(y, trapz(x, Energia_XY, 2));
+    energia_total = energia_total + energia_instante;
+end
+\end{lstlisting}
+
+\subsection{Projeto 3: Redes Neurais e Descida de Gradiente}
+Ao treinar uma rede neural, otimiza-se uma função de custo $L(w_1, w_2)$ que representa uma superfície no espaço dos parâmetros. A compreensão das derivadas parciais e da topologia de funções de várias variáveis é crucial para o algoritmo de \textit{Gradient Descent}.
+
+\begin{lstlisting}[caption={Otimização em Superfície de Erro (Redes Neurais)}]
+% 1. Espaco de Parametros (Pesos w1, w2)
+[w1, w2] = meshgrid(-5:0.2:5, -5:0.2:5);
+Custo = w1.^2 + 2 * w2.^2; % Funcao de Custo (Superficie 3D)
+
+% 2. Otimizacao via Descida de Gradiente
+peso = [4, 4]; % Ponto inicial
+taxa = 0.1;
+hist_pesos = zeros(21, 2); hist_pesos(1,:) = peso;
+
+for i = 1:20
+    grad = [2*peso(1), 4*peso(2)]; % Derivadas parciais
+    peso = peso - taxa * grad;
+    hist_pesos(i+1,:) = peso;
+end
+
+% 3. Curvas de Nivel no Plano 2D
+contour(w1, w2, Custo, 20); hold on;
+plot(hist_pesos(:,1), hist_pesos(:,2), 'r-o', 'LineWidth', 2);
+title('Descida de Gradiente na Superficie de Custo');
+\end{lstlisting}
+
+
+\end{document}

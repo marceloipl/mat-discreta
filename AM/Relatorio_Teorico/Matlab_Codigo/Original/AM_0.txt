@@ -1,0 +1,927 @@
+% ════════════════════════════════════════════════════════════════
+% 0.1 - TEORIA DE CONJUNTOS
+% ════════════════════════════════════════════════════════════════
+
+\chapter{Conceitos Matemáticos Fundamentais}
+
+% ────────────────────────────────────────────────────────
+\section{Teoria de Conjuntos}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+A teoria de conjuntos de Neumann--Bernays--Gödel (NBG) é uma formalização axiomática que resolve paradoxos clássicos como o de Russell, distinguindo \emph{classes} de \emph{conjuntos}. 
+
+\begin{notebox}[title={Contexto Histórico e Comparação NBG vs.\ ZFC}]
+  \begin{itemize}
+    \item \textbf{ZFC} (Zermelo--Fraenkel + Axioma da Escolha): trabalha só com conjuntos e restringe a formação de conjuntos através de axiomas.
+    \item \textbf{NBG} (von Neumann--Bernays--Gödel): introduz \emph{conjuntos} e \emph{classes}; é conservativo sobre ZFC, mas permite falar de classes próprias (como a classe de todos os conjuntos) sem inconsistência.
+  \end{itemize}
+\end{notebox}
+
+\begin{defbox}[title={Classes e Conjuntos}]
+  \begin{itemize}
+      \item \textbf{Classe:} Coleção de objetos que partilham uma propriedade lógica específica $C = \{ x \mid \varphi(x) \}$.
+      \item \textbf{Conjunto:} É uma classe $X$ tal que existe uma classe $Y$ com $X \in Y$.
+      \item \textbf{Classe própria:} É uma classe que \emph{não} é um conjunto (não pertence a nenhuma outra classe). Ex: Classe universal $V$, Classe de todos os ordinais $\mathrm{Ord}$.
+  \end{itemize}
+\end{defbox}
+
+\begin{thmbox}[title={O Paradoxo de Russell}]
+  A coleção $R = \{x \mid x \notin x\}$ não pode ser um conjunto. Se $R$ fosse um conjunto, teríamos a contradição: $R \in R \iff R \notin R$. Portanto, $R$ é uma classe própria.
+\end{thmbox}
+
+\begin{defbox}[title={Subconjuntos e Operações}]
+  \begin{itemize}
+    \item \textbf{Conjunto das partes:} $\mathcal{P}(A) = \{X \mid X \subseteq A\}$.
+    \item \textbf{União:} $A \cup B = \{x \mid x \in A \lor x \in B\}$
+    \item \textbf{Interseção:} $A \cap B = \{x \mid x \in A \land x \in B\}$
+    \item \textbf{Diferença:} $A \setminus B = \{x \mid x \in A \land x \notin B\}$
+    \item \textbf{Leis de De Morgan:} $(A \cup B)^c = A^c \cap B^c$ e $(A \cap B)^c = A^c \cup B^c$.
+  \end{itemize}
+\end{defbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Identificação e Natureza das Classes}
+  Determine se a classe $B = \{x \mid x \text{ é um número primo}\}$ é um conjunto ou classe própria.
+\end{exbox}
+\begin{solbox}
+  É um \textbf{conjunto}. Como é um subconjunto de $\mathbb{N}$ (garantido pelo Axioma da Separação) e $\mathbb{N}$ é um conjunto pelo Axioma do Infinito, $B$ é suficientemente pequeno para ser um conjunto.
+\end{solbox}
+
+\begin{exbox}{2 --- Operações e De Morgan}
+  Seja $U = \{1,2,3,4,5,6\}$, $A = \{1,2,3\}$ e $B = \{3,4,5\}$. Calcule $(A \cup B)^c$ e verifique De Morgan.
+\end{exbox}
+\begin{solbox}
+  $A \cup B = \{1,2,3,4,5\} \implies (A \cup B)^c = \{6\}$. \\
+  Por outro lado, $A^c = \{4,5,6\}$ e $B^c = \{1,2,6\}$. A interseção $A^c \cap B^c = \{6\}$. A lei verifica-se. \checkmark
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1}
+  Dados $U=\{1,2,\ldots,10\}$, $A=\{1,3,5,7,9\}$ e $B=\{1,2,3,5\}$, determine a diferença simétrica $A \triangle B$.
+\end{exercisebox}
+\begin{solbox}
+  $A \setminus B = \{7,9\}$ e $B \setminus A = \{2\}$. \\
+  A diferença simétrica é $(A \setminus B) \cup (B \setminus A) = \{2,7,9\}$.
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Na teoria NBG, explique a diferença entre \emph{Conjunto} e \emph{Classe}. Dê um exemplo de uma classe própria e justifique por que razão não pode ser um conjunto.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Enuncie o Paradoxo de Russell. Qual é a contradição que ele revela na teoria ingénua de conjuntos e como é que a teoria NBG o resolve?
+\end{oralbox}
+
+
+
+% ════════════════════════════════════════════════════════════════
+% 0.2 - RELAÇÕES DE EQUIVALÊNCIA E CLASSES DE EQUIVALÊNCIA
+% ════════════════════════════════════════════════════════════════
+
+\section{Relações de Equivalência e Classes de Equivalência}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+Uma \textbf{relação} num conjunto $A$ dita as regras que definem quando dois elementos desse conjunto estão relacionados.
+
+\begin{defbox}[title={Relação de Equivalência}]
+  Uma \textbf{relação de equivalência} (frequentemente denotada por $\sim$) é uma relação especial que tem de satisfazer, em simultâneo, três propriedades fundamentais para quaisquer elementos $a, b, c \in A$:
+  \begin{enumerate}
+      \item \textbf{Reflexividade:} $a \sim a$. (Todo o elemento está relacionado consigo mesmo).
+      \item \textbf{Simetria:} Se $a \sim b$, então $b \sim a$. (A relação é recíproca).
+      \item \textbf{Transitividade:} Se $a \sim b$ e $b \sim c$, então $a \sim c$. (A relação transfere-se em cadeia).
+  \end{enumerate}
+\end{defbox}
+
+\begin{warnbox}[title={Nota Importante}]
+  As relações de equivalência só se definem entre elementos do mesmo conjunto. Basta que \textbf{uma} destas três propriedades falhe para que a relação deixe imediatamente de ser de equivalência.
+\end{warnbox}
+
+Quando temos uma relação de equivalência $\sim$ num conjunto $A$, esta divide o conjunto em subgrupos mais pequenos.
+
+\begin{defbox}[title={Classes de Equivalência e Conjunto Quociente}]
+  A \textbf{classe de equivalência} de um elemento $a$, denotada por $[a]$ ou $\overline{a}$, é o grupo de elementos de $A$ que se relacionam com $a$ segundo a regra definida:
+  \[
+      [a] = \{ x \in A \mid x \sim a \}
+  \]
+  A união de todas as classes de equivalência constitui o conjunto inteiro, e classes distintas não têm elementos em comum (são disjuntas). Isto significa que a relação cria uma \textbf{partição} do conjunto $A$. 
+  
+  Ao conjunto formado por todas as classes de equivalência distintas chamamos \textbf{conjunto quociente}, denotado por $A/\sim$.
+\end{defbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Relação Numérica em Conjunto Finito}
+  Considere o conjunto $A = \{2, 4, 6, 8\}$ e a relação $a \sim b$ definida por: \textit{``$a$ e $b$ estão relacionados se a diferença $a - b$ for um múltiplo de 2''}. Verifique se é uma relação de equivalência.
+\end{exbox}
+\begin{solbox}
+  Vamos verificar as propriedades para elementos arbitrários:
+  \begin{itemize}
+      \item \textbf{Reflexiva:} $2 \sim 2$, porque $2 - 2 = 0$, e $0$ é múltiplo de $2$. \checkmark
+      \item \textbf{Simétrica:} Se $2 \sim 4$, então $4 - 2 = 2$ (múltiplo de 2). Logo, $4 \sim 2$. \checkmark
+      \item \textbf{Transitiva:} Se $2 \sim 4$ (pois $2-4=-2$) e $4 \sim 6$ (pois $4-6=-2$), então $2 \sim 6$, porque $2 - 6 = -4$, que é também múltiplo de $2$. \checkmark
+  \end{itemize}
+  Como as três propriedades se verificam, trata-se de facto de uma relação de equivalência.
+\end{solbox}
+
+\begin{exbox}{2 --- O Percurso na Disciplina de PAM}
+  Considere o conjunto de alunos: \\
+  $Grupo = \{\text{David, Diana, Guilherme, Joana, Leonardo, Marcelo, Miguel}\}$. \\
+  Definimos a relação de equivalência $\sim$: \textit{``Dois alunos relacionam-se se têm o mesmo histórico face à cadeira de PAM (ambos a fizeram ou ambos não a fizeram)''}. Determine as classes de equivalência e o conjunto quociente.
+\end{exbox}
+\begin{solbox}
+  Sabendo que David, Guilherme, Joana e Marcelo vieram de PAM, enquanto Diana, Leonardo e Miguel não vieram, a relação particiona o grupo.
+
+  \textbf{Classes de Equivalência:} \\
+  Podemos representar cada classe usando um dos seus elementos (o ``representante'' da classe):
+  \begin{itemize}
+      \item $[\text{David}] = \{\text{David, Guilherme, Joana, Marcelo}\}$ (Classe dos que fizeram PAM)
+      \item $[\text{Diana}] = \{\text{Diana, Leonardo, Miguel}\}$ (Classe dos que não fizeram PAM)
+  \end{itemize}
+  Note-se que podíamos escrever $[\text{Guilherme}]$ em vez de $[\text{David}]$, pois $[\text{Guilherme}] = [\text{David}]$. 
+  
+  O \textbf{conjunto quociente} é o conjunto destas duas classes:
+  \[
+      Grupo/\sim \; = \{ [\text{David}], [\text{Diana}] \}
+  \]
+\end{solbox}
+
+\begin{exbox}{3 --- Resto da Divisão por 3 no Conjunto $\mathbb{Z}$}
+  Considere o conjunto infinito dos números inteiros ($\mathbb{Z}$) e a relação $a \sim b$ definida por: \textit{``$a$ e $b$ têm o mesmo resto quando divididos por 3''}. Matematicamente, isto equivale a dizer que a diferença $a - b$ é um múltiplo de 3 (relação conhecida como congruência módulo 3, $a \equiv b \pmod{3}$). Determine as classes de equivalência.
+\end{exbox}
+\begin{solbox}
+  Ao dividirmos qualquer número inteiro por 3, os únicos restos possíveis são 0, 1 ou 2. Por isso, esta relação gera exatamente três classes de equivalência distintas, particionando o infinito conjunto $\mathbb{Z}$:
+  \begin{itemize}
+      \item $[0] = \{\dots, -6, -3, 0, 3, 6, 9, \dots\}$ (Números com resto 0; múltiplos de 3)
+      \item $[1] = \{\dots, -5, -2, 1, 4, 7, 10, \dots\}$ (Números com resto 1)
+      \item $[2] = \{\dots, -4, -1, 2, 5, 8, 11, \dots\}$ (Números com resto 2)
+  \end{itemize}
+  Qualquer outro inteiro recairá numa destas classes. Por exemplo, o número $4$ pertence à classe do $1$, logo $[4] = [1]$. 
+  
+  O \textbf{conjunto quociente} para esta relação é formado por estas três classes:
+  \[
+      \mathbb{Z}/\sim \; = \{ [0], [1], [2] \}
+  \]
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1}
+  Considere o conjunto de alunos $A = \{\text{Ana, João, Marta, Pedro}\}$. Sabe-se que a Ana e o João nasceram no ano 2000, e a Marta e o Pedro nasceram em 2001. Defina a relação $x \sim y \iff \text{``x e y têm o mesmo ano de nascimento''}$.
+  \begin{enumerate}
+      \item Mostre, usando a definição formal, que esta é uma relação de equivalência.
+      \item Determine as classes de equivalência e o conjunto quociente $A/\sim$.
+  \end{enumerate}
+\end{exercisebox}
+\begin{solbox}
+  \textbf{1. Verificação das Propriedades:}
+  \begin{itemize}
+      \item \textbf{Reflexividade:} Qualquer pessoa $x$ nasceu no mesmo ano que si própria ($x \sim x$). \checkmark
+      \item \textbf{Simetria:} Se a pessoa $x$ nasceu no mesmo ano que $y$, então $y$ nasceu no mesmo ano que $x$ ($x \sim y \implies y \sim x$). \checkmark
+      \item \textbf{Transitividade:} Se $x$ nasceu no mesmo ano que $y$, e $y$ nasceu no mesmo ano que $z$, então $x$ nasceu no mesmo ano que $z$ ($x \sim y \land y \sim z \implies x \sim z$). \checkmark
+  \end{itemize}
+  
+  \textbf{2. Classes de Equivalência e Conjunto Quociente:} \\
+  As classes de equivalência agrupam os alunos pelo ano de nascimento:
+  \begin{itemize}
+      \item $[\text{Ana}] = \{\text{Ana, João}\}$
+      \item $[\text{Marta}] = \{\text{Marta, Pedro}\}$
+  \end{itemize}
+  O conjunto quociente é formado por estas duas classes: 
+  \[
+      A/\sim \; = \{ [\text{Ana}], [\text{Marta}] \}
+  \]
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Usando o Exemplo 2 do relatório (o percurso dos alunos em PAM), explique por que motivo a notação $[\text{David}] = [\text{Guilherme}]$ está correta e relacione isso com a propriedade de \emph{partição} de um conjunto.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} No Exemplo 3, se definíssemos a relação como "resto da divisão por 5" em vez de 3, quantos elementos teria o conjunto quociente $\mathbb{Z}/\sim$ e quais seriam os seus representantes mais simples?
+\end{oralbox}
+
+
+% ════════════════════════════════════════════════════════════════
+% 0.3 - ESPAÇOS MÉTRICOS
+% ════════════════════════════════════════════════════════════════
+
+\section{Espaços Métricos}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+A noção de distância é um dos conceitos mais intuitivos da matemática, mas para ser aplicada a conjuntos abstratos (como conjuntos de funções ou matrizes), precisa de ser formalizada. A estrutura que generaliza o conceito de "distância" chama-se \textbf{espaço métrico}.
+
+\begin{defbox}[title={Métrica e Espaço Métrico}]
+  Seja $X$ um conjunto. Uma \textbf{métrica} em $X$ é uma função
+  \[
+    d: X \times X \to \mathbb{R}
+  \]
+  tal que, para quaisquer $x,y,z \in X$, satisfaz as seguintes três propriedades:
+  \begin{enumerate}[label=(\roman*)]
+      \item \textbf{Positividade:} $d(x,y) \ge 0$ e $d(x,y)=0 \iff x=y$;
+      \item \textbf{Simetria:} $d(x,y) = d(y,x)$;
+      \item \textbf{Desigualdade Triangular:} $d(x,z) \le d(x,y) + d(y,z)$.
+  \end{enumerate}
+  O par $(X,d)$ chama-se \textbf{espaço métrico}.
+\end{defbox}
+
+\begin{defbox}[title={Bolas Abertas e Convergência}]
+  Num espaço métrico $(X,d)$, para um ponto $x\in X$ e um raio $r>0$, define-se a \textbf{bola aberta} centrada em $x$ com raio $r$ como:
+  \[
+    B_r(x) = \{y\in X : d(x,y)<r\}.
+  \]
+
+  Diz-se que uma sequência $(x_n)$ \textbf{converge} para $x$ (denotado por $x_n \to x$) se a distância entre os termos da sequência e $x$ tender para zero. Formalmente:
+  \[
+    \forall \varepsilon > 0, \, \exists N\in\mathbb{N} : n\ge N \implies d(x_n,x) < \varepsilon.
+  \]
+\end{defbox}
+
+\begin{defbox}[title={Continuidade em Espaços Métricos}]
+  Uma função $f:(X,d_X)\to (Y,d_Y)$ é \textbf{contínua} num ponto $x_0$ se a convergência no domínio implicar a convergência no contradomínio:
+  \[
+    \lim_{x\to x_0} d_X(x,x_0)=0 \quad \implies \quad \lim_{x\to x_0} d_Y(f(x),f(x_0)) = 0.
+  \]
+  A formulação clássica equivalente (definição $\varepsilon$--$\delta$) é:
+  \[
+    \forall \varepsilon>0,\ \exists \delta>0: d_X(x,x_0)<\delta \implies d_Y(f(x), f(x_0))<\varepsilon.
+  \]
+\end{defbox}
+
+\begin{notebox}[title={Métricas Importantes}]
+  Dependendo do problema matemático, a forma de medir a distância altera-se. Exemplos notáveis:
+  \begin{itemize}
+      \item \textbf{Métrica Usual (Euclidiana) em $\mathbb{R}^n$:}  
+      \[
+        d_2(x,y)=\|x-y\|_2 = \sqrt{(x_1-y_1)^2+\cdots+(x_n-y_n)^2}
+      \]
+      \item \textbf{Métrica do Supremo em Funções Contínuas $C[a,b]$:}  
+      \[
+        d_\infty(f,g)=\sup_{x\in[a,b]} |f(x)-g(x)|
+      \]
+      \item \textbf{Métrica Discreta:}  
+      \[
+        d(x,y)=
+        \begin{cases}
+        0 & \text{se } x=y,\\
+        1 & \text{se } x\neq y.
+        \end{cases}
+      \]
+  \end{itemize}
+\end{notebox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Convergência na Métrica Usual}
+  Considere o espaço $(\mathbb{R}, d)$ com a métrica usual $d(x,y)=|x-y|$. Mostre que a sequência definida por $x_n = \dfrac{1}{n}$ converge para $0$.
+\end{exbox}
+\begin{solbox}
+  Queremos provar que, para qualquer $\varepsilon>0$, existe um índice $N$ a partir do qual $d(x_n, 0) < \varepsilon$.
+  
+  Seja $\varepsilon>0$. Como $x_n=\dfrac{1}{n}$, a distância a $0$ é:
+  \[
+    d(x_n,0) = \left|\frac{1}{n}-0\right| = \frac{1}{n}
+  \]
+  Para que $\dfrac{1}{n} < \varepsilon$, basta que $n > \dfrac{1}{\varepsilon}$. 
+  
+  Escolhendo um número natural $N > \dfrac{1}{\varepsilon}$ (Garantido pela Propriedade Arquimediana), temos que para qualquer $n \ge N$:
+  \[
+    d(x_n,0) = \frac{1}{n} \le \frac{1}{N} < \varepsilon.
+  \]
+  Fica assim provado que $x_n \to 0$. \checkmark
+\end{solbox}
+
+\begin{exbox}{2 --- Continuidade Extrema na Métrica Discreta}
+  Mostre que \textbf{qualquer} função $f:X\to Y$ é contínua se o domínio $X$ estiver equipado com a métrica discreta.
+\end{exbox}
+\begin{solbox}
+  Lembre-se da definição $\varepsilon$--$\delta$. Para qualquer ponto $x_0\in X$ e qualquer $\varepsilon > 0$, precisamos de encontrar um $\delta > 0$.
+  
+  Como $X$ tem a métrica discreta, as distâncias só podem ser $0$ ou $1$. Vamos escolher $\delta = \dfrac{1}{2}$. 
+  
+  Seja $x \in X$ tal que $d(x, x_0) < \dfrac{1}{2}$. Como na métrica discreta as distâncias são inteiras ($0$ ou $1$), a única forma de a distância ser menor que $0{,}5$ é se for exatamente $0$. Logo, $x = x_0$.
+  
+  Substituindo na função:
+  \[
+    d_Y(f(x), f(x_0)) = d_Y(f(x_0), f(x_0)) = 0 < \varepsilon.
+  \]
+  A condição verifica-se independentemente do comportamento de $f$ ou da métrica de $Y$. Assim, $f$ é sempre contínua! \checkmark
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1 --- A Métrica da "Geometria do Táxi"}
+  Mostre que a função $d_1(x,y)=\sum_{i=1}^n |x_i - y_i|$ define uma métrica válida em $\mathbb{R}^n$.
+\end{exercisebox}
+\begin{solbox}
+  Temos de verificar os três axiomas:
+  \begin{enumerate}
+      \item \textbf{Positividade:} Como o módulo é não negativo, a soma de módulos é $\ge 0$. Além disso, $\sum |x_i - y_i| = 0 \iff \forall i, |x_i - y_i| = 0 \iff x_i = y_i \iff x = y$.
+      \item \textbf{Simetria:} $|x_i - y_i| = |y_i - x_i|$, logo a soma mantém-se igual, $d_1(x,y) = d_1(y,x)$.
+      \item \textbf{Desigualdade Triangular:} Usando a desigualdade triangular dos números reais ($|a+b| \le |a| + |b|$):
+      \[
+        |x_i - z_i| = |(x_i - y_i) + (y_i - z_i)| \le |x_i - y_i| + |y_i - z_i|
+      \]
+      Somando esta desigualdade de $i=1$ a $n$, obtemos imediatamente $d_1(x,z) \le d_1(x,y) + d_1(y,z)$. \checkmark
+  \end{enumerate}
+\end{solbox}
+
+\begin{exercisebox}{2 --- Convergência em Espaços Discretos}
+  No espaço métrico com a métrica discreta, determine todas as sequências que são convergentes.
+\end{exercisebox}
+\begin{solbox}
+  Na métrica discreta ($d(x,y)=1$ se $x \neq y$), para uma sequência $(x_n)$ convergir para um ponto $x$, deve satisfazer: para qualquer $\varepsilon > 0$, $\exists N$ tal que $n \ge N \implies d(x_n, x) < \varepsilon$.
+  
+  Tomemos $\varepsilon = \dfrac{1}{2}$. Para $n \ge N$, teremos $d(x_n, x) < 0{,}5$. Pela natureza desta métrica, isto obriga a que $d(x_n, x) = 0$, ou seja, $x_n = x$.
+  
+  Logo, as \textbf{únicas} sequências convergentes na métrica discreta são as \textbf{sequências eventualmente constantes} (aquelas que, a partir de um certo ponto, fixam-se permanentemente no mesmo valor).
+\end{solbox}
+
+\begin{exercisebox}{3 --- Prova de Continuidade ($\varepsilon-\delta$)}
+  Seja $f:\mathbb{R}\to\mathbb{R}$ dada por $f(x)=|x|$. Mostre que $f$ é contínua em todos os pontos usando a definição $\varepsilon$--$\delta$.
+\end{exercisebox}
+\begin{solbox}
+  Pretendemos mostrar que dado $x_0 \in \mathbb{R}$ e $\varepsilon > 0$, existe $\delta > 0$ tal que $|x - x_0| < \delta \implies |f(x) - f(x_0)| < \varepsilon$.
+  
+  Avaliando a expressão alvo e utilizando a \textit{desigualdade triangular inversa}:
+  \[
+    |f(x) - f(x_0)| = |\,|x| - |x_0|\,| \le |x - x_0|
+  \]
+  Como o nosso objetivo é tornar a expressão menor que $\varepsilon$, basta escolhermos \textbf{$\delta = \varepsilon$}.
+  Assim, se $|x - x_0| < \delta$, garantimos automaticamente que $|f(x) - f(x_0)| \le |x - x_0| < \delta = \varepsilon$. A função é contínua em $\mathbb{R}$.
+\end{solbox}
+
+\begin{exercisebox}{4 --- Limite Uniforme vs. Limite Pontual}
+  Considere o espaço das funções contínuas $(C[0,1], d_\infty)$. Determine se a sequência de funções $f_n(x)=x^n$ converge uniformemente para uma função limite contínua neste espaço métrico.
+\end{exercisebox}
+\begin{solbox}
+  Primeiro, encontramos o limite pontual de $f_n(x)$ quando $n \to \infty$:
+  \[
+    f(x) = \lim_{n\to\infty} x^n = 
+    \begin{cases} 
+      0 & \text{se } 0 \le x < 1 \\ 
+      1 & \text{se } x = 1 
+    \end{cases}
+  \]
+  Para que a sequência convirja no espaço $(C[0,1], d_\infty)$, o limite $f(x)$ \textbf{teria de pertencer} ao espaço (ou seja, teria de ser contínuo), e a distância $d_\infty(f_n, f)$ teria de ir para $0$.
+  
+  No entanto, a função limite $f(x)$ é descontínua em $x=1$. Mais ainda, a distância na métrica do supremo é:
+  \[
+    d_\infty(f_n, f) = \sup_{x \in [0,1)} |x^n - 0| = 1 \neq 0
+  \]
+  \textbf{Conclusão:} A sequência $f_n(x) = x^n$ \textbf{não} converge em $(C[0,1], d_\infty)$, mostrando a diferença fulcral entre convergência pontual e convergência uniforme (em métrica).
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Explique a diferença entre \emph{convergência pontual} de funções e \emph{convergência em métrica} (convergência uniforme) no espaço $C[a,b]$ com a métrica do supremo.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Dê três exemplos de métricas diferentes em $\mathbb{R}^n$ (como a Euclideana, a da "geometria do táxi" e do Máximo) e compare geometricamente como é o aspeto das suas bolas abertas.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q3.} Com base na definição $\varepsilon-\delta$, explique por que razão a escolha da métrica discreta no domínio torna todas as funções matemáticas imediatamente contínuas.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q4.} Descreva geometricamente a desigualdade triangular. Porque é que ela é um axioma estritamente necessário para que uma função possa ser chamada de "distância" credível?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q5.} Num espaço métrico rigoroso, explique por que razão a convergência de uma sequência determina de forma estrita e \emph{única} o seu limite.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q6.} Apresente um exemplo clássico de uma sequência num espaço métrico (como os números racionais com a métrica usual) que, embora os seus termos se aproximem uns dos outros, \emph{não} converge dentro desse próprio espaço, justificando o porquê.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q7.} Explique a relação profunda entre \emph{bolas abertas} e o conceito topológico de \emph{continuidade}, mostrando como a pré-imagem de uma bola aberta atua na vizinhança do domínio.
+\end{oralbox}
+
+
+% ════════════════════════════════════════════════════════════════
+% 1.4 - INTRODUÇÃO À TOPOLOGIA
+% ════════════════════════════════════════════════════════════════
+
+\section{Introdução à Topologia: Espaços, Vizinhanças e Continuidade}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+É perfeitamente normal achar a topologia um pouco abstrata no início. Na matemática escolar, estamos muito habituados à geometria tradicional, onde medimos distâncias exatas, ângulos e comprimentos. A topologia, por outro lado, é frequentemente chamada de \textbf{``geometria da folha de borracha''}.
+
+Ela não se importa com a distância exata entre dois pontos, mas sim com a forma como o espaço está \emph{conectado}. Num espaço topológico, podemos esticar, encolher ou torcer o espaço à vontade. A única coisa que não podemos fazer é \textbf{rasgar} ou \textbf{colar}.
+
+\subsubsection*{Espaços Topológicos e Conjuntos Abertos}
+
+Para falar de proximidade sem usar uma ``fita métrica'', os matemáticos inventaram o conceito de \textbf{conjunto aberto}.
+
+\begin{defbox}[title={Espaço Topológico}]
+  Um \textbf{espaço topológico} é um par $(X, \mathcal{T})$, onde:
+  \begin{itemize}
+    \item $X$ é um conjunto de ``coisas'' (podem ser números, pontos, pessoas, etc.).
+    \item $\mathcal{T}$ (tau) é uma coleção de subconjuntos de $X$ a que chamamos \textbf{conjuntos abertos}.
+  \end{itemize}
+\end{defbox}
+
+Para que $\mathcal{T}$ seja uma topologia válida, tem de obedecer a três regras fundamentais:
+\begin{enumerate}
+  \item \textbf{O todo e o nada estão incluídos:} O conjunto vazio $\emptyset$ e o conjunto total $X$ têm de ser considerados abertos (pertencem a $\mathcal{T}$).
+  \item \textbf{Interseções finitas:} A interseção de um número \emph{finito} de conjuntos abertos é um conjunto aberto.
+  \item \textbf{Uniões arbitrárias:} A união de \emph{qualquer quantidade} de conjuntos abertos é um conjunto aberto.
+\end{enumerate}
+
+\begin{notebox}[title={Intuição: Conjunto Aberto}]
+  Pensa num ``conjunto aberto'' como uma zona onde, se estiveres lá dentro, podes dar um pequeno passo em qualquer direção e continuas dentro dessa zona. Não há uma fronteira rígida a limitar-te.
+\end{notebox}
+
+\subsubsection*{Vizinhanças}
+
+A vizinhança é a forma topológica de dizer ``perto de''.
+
+\begin{defbox}[title={Vizinhança}]
+  Uma \textbf{vizinhança} de um ponto $x$ é qualquer conjunto que contenha um conjunto aberto que, por sua vez, contém o ponto $x$.
+\end{defbox}
+
+\begin{notebox}[title={Intuição: Vizinhança}]
+  Imagina que o ponto $x$ és tu. Um conjunto aberto que te contém é a tua casa. Uma vizinhança tua pode ser a tua casa, mas também pode ser a tua casa mais o passeio da rua, ou até o teu bairro inteiro. Desde que o conjunto inclua a tua ``zona segura de conforto'' (o conjunto aberto), ele é considerado a tua vizinhança.
+\end{notebox}
+
+\subsubsection*{Continuidade}
+
+No cálculo básico, aprendemos que uma função contínua é aquela que se pode desenhar ``sem levantar a caneta do papel''. Na topologia, como não temos gráficos tradicionais nem distâncias, a definição baseia-se inteiramente em conjuntos abertos.
+
+\begin{defbox}[title={Função Contínua}]
+  Uma função $f: X \to Y$ é \textbf{contínua} se, para qualquer conjunto aberto $V \subseteq Y$, a sua pré-imagem
+  \[
+    f^{-1}(V) = \{ x \in X \mid f(x) \in V \}
+  \]
+  é um conjunto aberto em $X$.
+\end{defbox}
+
+\begin{notebox}[title={Intuição: Continuidade}]
+  Se pegares num grupo de pontos ``bem comportados'' (um conjunto aberto) no destino $Y$, e olhares para de onde eles vieram no espaço original $X$, eles também têm de formar um grupo bem comportado (um conjunto aberto). Isto garante que pontos que estavam ``próximos'' antes da transformação continuam estruturalmente coerentes depois. Não houve ``rasgões''.
+\end{notebox}
+
+\subsubsection*{O Donut e a Caneca de Café}
+
+\begin{center}
+  \textit{``Um topólogo é alguém que não consegue distinguir um donut da sua caneca de café.''}
+\end{center}
+
+A topologia exige uma mudança de mentalidade: da \emph{medição exata} para a \emph{relação e estrutura}. A \textbf{Regra de Ouro} dita que podemos moldar, amassar, esticar e encolher um objeto à vontade. As únicas ações estritamente proibidas são \textbf{fazer buracos novos} (rasgar) e \textbf{unir partes separadas} (colar).
+
+\textbf{A Transformação: De Donut a Caneca} \\
+Imagina que tens um donut feito de plasticina infinitamente elástica:
+\begin{enumerate}
+  \item \textbf{Ponto de partida:} Tens o donut, que tem exatamente \emph{um buraco} no meio.
+  \item \textbf{Criar o copo:} Beliscas e empurras uma das metades da massa, criando uma grande depressão. Como não atravessas a massa para o outro lado, não estás a fazer um buraco novo — apenas a esticar a superfície.
+  \item \textbf{Formar a pega:} A parte restante do donut (com o buraco original intacto) é afinada e esticada, tornando-se a pega da caneca.
+\end{enumerate}
+O buraco no meio do donut tornou-se no buraco por onde passas os dedos na pega da caneca.
+
+\begin{defbox}[title={Homeomorfismo}]
+  Dois espaços são \textbf{topologicamente equivalentes} (homeomorfos) se for possível transformar um no outro sem rasgar nem colar. Esta equivalência (uma função bijetiva e contínua com inversa contínua) chama-se \textbf{homeomorfismo}.
+\end{defbox}
+
+O que define a ``forma'' de um espaço em topologia não é o volume ou os ângulos, mas os seus \textbf{invariantes topológicos} — neste caso, o \emph{número de buracos} (chamado \textbf{género}).
+
+\begin{center}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{tabular}{lcl}
+    \toprule
+    \textbf{Objeto} & \textbf{Género (n.º de buracos)} & \textbf{Equivalente a} \\
+    \midrule
+    Donut (toro) & 1 & Caneca de café \\
+    Caneca de café & 1 & Donut (toro) \\
+    Bola de bilhar & 0 & Esfera, cubo, prato \ldots \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+\begin{notebox}[title={Intuição sobre Buracos}]
+  O espaço interior da caneca onde entra o líquido \emph{não} é um buraco topológico — é apenas uma reentrância cega (uma ``mossa''). O único buraco topológico da caneca é o da pega.
+\end{notebox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Topologia Finita}
+  Imagina um conjunto com três pessoas: $X = \{\text{Ana, Bruno, Carlos}\}$. Define-se a coleção:
+  \[
+    \mathcal{T} = \bigl\{\, \emptyset,\; \{\text{Ana, Bruno, Carlos}\},\; \{\text{Ana}\} \,\bigr\}
+  \]
+  Verifique se $\mathcal{T}$ é uma topologia e se $\{\text{Ana, Bruno}\}$ é uma vizinhança da Ana.
+\end{exbox}
+\begin{solbox}
+  \textbf{1. Verificação da Topologia:}
+  \begin{itemize}
+    \item $\emptyset$ e $X$ pertencem a $\mathcal{T}$. \checkmark
+    \item A interseção de $\{\text{Ana}\}$ com $X$ é $\{\text{Ana}\}$, que está em $\mathcal{T}$. \checkmark
+    \item A união de $\{\text{Ana}\}$ com $\emptyset$ é $\{\text{Ana}\}$, que está em $\mathcal{T}$. \checkmark
+  \end{itemize}
+  Logo, $(X, \mathcal{T})$ é um espaço topológico válido.
+  
+  \textbf{2. Vizinhança:}
+  O conjunto $\{\text{Ana, Bruno}\}$ é uma \emph{vizinhança} da Ana? \textbf{Sim}, porque contém o conjunto aberto $\{\text{Ana}\}$, e esse conjunto aberto contém a Ana.
+\end{solbox}
+
+\begin{exbox}{2 --- A Reta Real (Topologia Padrão)}
+  Na reta real $\mathbb{R}$, os conjuntos abertos são os intervalos abertos (sem as extremidades). Analise a continuidade da função $f(x) = 2x$.
+\end{exbox}
+\begin{solbox}
+  Na topologia padrão, o intervalo $(0, 1)$ — que inclui $0{,}1$, $0{,}5$, $0{,}999$, mas \textbf{não} o $0$ nem o $1$ — é um conjunto aberto. Para qualquer ponto interior (ex: $0{,}99$), existe sempre um intervalo menor em seu redor que o contém por completo e ainda está dentro de $(0,1)$.
+
+  A função $f(x) = 2x$ é contínua. Para provar topologicamente, basta ver que a pré-imagem de um conjunto aberto qualquer, como o intervalo $V = (2, 4)$ no destino $Y$, é o conjunto $f^{-1}(V) = (1, 2)$ no domínio $X$. Como $(1, 2)$ também é um intervalo aberto, a pré-imagem de um aberto é aberta. A estrutura mantém-se!
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1}
+  Seja $X = \{1, 2, 3\}$. Considere a coleção $\mathcal{T} = \{\emptyset, \{1\}, \{2\}, \{1, 2, 3\}\}$. Verifique se $\mathcal{T}$ forma uma topologia em $X$. Em caso negativo, explique qual a regra que falha.
+\end{exercisebox}
+\begin{solbox}
+  Para ser topologia, $\mathcal{T}$ tem de ser fechada para uniões arbitrárias. 
+  
+  Se unirmos o conjunto aberto $\{1\}$ com o conjunto aberto $\{2\}$, obtemos:
+  \[ \{1\} \cup \{2\} = \{1, 2\} \]
+  
+  No entanto, o conjunto $\{1, 2\}$ \textbf{não pertence} à coleção $\mathcal{T}$. Como a regra da união falha, $\mathcal{T}$ \textbf{não} é uma topologia válida em $X$.
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Explique, por palavras suas e usando a analogia da "geometria da folha de borracha", por que motivo a topologia não utiliza conceitos como "distância" ou "ângulo" e como o conceito de \emph{conjunto aberto} substitui a fita métrica para definir a proximidade.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Um prato de sopa fundo e uma bola de bowling são topologicamente equivalentes (homeomorfos)? Justifique a sua resposta com base no conceito de género (número de buracos) e nas regras de deformação topológica permitidas.
+\end{oralbox}
+
+
+% ════════════════════════════════════════════════════════════════
+% 0.5 - LIMITES E CONTINUIDADE EM ESPAÇOS MÉTRICOS E TOPOLÓGICOS
+% ════════════════════════════════════════════════════════════════
+
+\section{Limites e Continuidade de Funções}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{notebox}[title={Intuição Geral}]
+  O conceito de \textbf{limite} descreve a ideia fundamental de que, quando os pontos do domínio de uma função se aproximam cada vez mais de um certo valor, as imagens desses pontos também se aproximam de um valor determinado.
+
+  A \textbf{continuidade} não é mais do que a formalização matemática rigorosa da seguinte frase:
+  \begin{center}
+      \textit{``Pequenas variações na entrada produzem apenas pequenas variações na saída.''}
+  \end{center}
+\end{notebox}
+
+\subsubsection*{Definição de Limite em Espaços Métricos}
+
+Sejam $(X,d_X)$ e $(Y,d_Y)$ espaços métricos, com uma função $f : X \to Y$, e seja $a \in X$ um ponto de acumulação.
+
+\begin{defbox}[title={Limite de uma Função ($\varepsilon-\delta$)}]
+  Dizemos que o \textbf{limite de $f(x)$ quando $x$ tende para $a$ é $L$}, denotado por $\lim_{x \to a} f(x) = L$, se para qualquer tolerância de erro no contradomínio ($\varepsilon$), existir uma margem de aproximação no domínio ($\delta$) tal que:
+  \[
+    \forall \varepsilon > 0, \;\exists \delta > 0 : \quad 0 < d_X(x,a) < \delta \implies d_Y(f(x),L) < \varepsilon
+  \]
+\end{defbox}
+
+\begin{notebox}[title={Como Interpretar}]
+  A definição diz-nos que, controlando \emph{o quão perto} $x$ está de $a$ (através do raio $\delta$), conseguimos forçar e controlar \emph{o quão perto} $f(x)$ está do limite $L$ (dentro do erro $\varepsilon$).
+\end{notebox}
+
+\subsubsection*{Continuidade em Espaços Métricos e Topológicos}
+
+\begin{defbox}[title={Continuidade Num Ponto}]
+  Uma função $f:X\to Y$ é \textbf{contínua no ponto $a$} se o limite da função nesse ponto coincidir exatamente com o valor da função no ponto:
+  \[
+    \lim_{x\to a} f(x)=f(a)
+  \]
+  Substituindo na definição $\varepsilon$--$\delta$, temos:
+  \[
+    \forall \varepsilon>0, \;\exists \delta>0 : \quad d_X(x,a)<\delta \implies d_Y(f(x),f(a))<\varepsilon
+  \]
+\end{defbox}
+
+\begin{thmbox}[title={Critério Topológico Global}]
+  Se passarmos de espaços métricos para espaços topológicos mais abstratos $(X,\tau_X)$ e $(Y,\tau_Y)$, a métrica de distância desaparece. 
+  Neste caso, $f:X\to Y$ é contínua se, e só se, a \textbf{imagem inversa de qualquer conjunto aberto for um conjunto aberto}:
+  \[
+    f^{-1}(V) \text{ é aberto em } X, \quad \forall V \subseteq Y \text{ aberto.}
+  \]
+\end{thmbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Continuidade de uma Função Afim}
+  Considere a função $f:\mathbb{R}\to\mathbb{R}$ dada por $f(x)=3x+1$. Mostrar pela definição $\varepsilon-\delta$ que $f$ é contínua em todo o $\mathbb{R}$.
+\end{exbox}
+\begin{solbox}
+  Seja $a \in \mathbb{R}$ um ponto qualquer e $\varepsilon > 0$. Queremos encontrar $\delta > 0$ tal que $|x-a| < \delta \implies |f(x)-f(a)| < \varepsilon$.
+  
+  Analisamos a distância no contradomínio:
+  \[
+    |f(x)-f(a)| = |(3x+1) - (3a+1)| = |3x - 3a| = 3|x-a|
+  \]
+  Como queremos que $3|x-a| < \varepsilon$, basta isolar a distância do domínio, o que nos sugere que $|x-a| < \frac{\varepsilon}{3}$.
+  
+  Portanto, basta tomar \textbf{$\delta = \frac{\varepsilon}{3}$}. Assim, se $|x-a| < \delta$, temos garantidamente:
+  \[
+    |f(x)-f(a)| = 3|x-a| < 3\left(\frac{\varepsilon}{3}\right) = \varepsilon
+  \]
+  Logo, $f$ é contínua em qualquer $a \in \mathbb{R}$. \checkmark
+\end{solbox}
+
+\begin{exbox}{2 --- Limite de uma Função Raiz}
+  Mostrar formalmente que $\lim_{x\to 2} \sqrt{x} = \sqrt{2}$.
+\end{exbox}
+\begin{solbox}
+  Queremos provar que $\forall \varepsilon > 0, \exists \delta > 0 : |x-2| < \delta \implies |\sqrt{x}-\sqrt{2}| < \varepsilon$.
+  
+  Começamos por manipular algebricamente a expressão do contradomínio multiplicando pelo conjugado:
+  \[
+    |\sqrt{x}-\sqrt{2}| = \left| \frac{(\sqrt{x}-\sqrt{2})(\sqrt{x}+\sqrt{2})}{\sqrt{x}+\sqrt{2}} \right| = \frac{|x-2|}{\sqrt{x}+\sqrt{2}}
+  \]
+  Para isolar $|x-2|$, precisamos de minorar o denominador. Se restringirmos $x$ suficientemente perto de $2$, digamos impondo $|x-2| < 1$, então $x \in (1, 3)$. 
+  Isto implica que $\sqrt{x} > \sqrt{1} = 1$, logo:
+  \[
+    \sqrt{x}+\sqrt{2} > 1+\sqrt{2}
+  \]
+  Substituindo na nossa fração, obtemos:
+  \[
+    |\sqrt{x}-\sqrt{2}| = \frac{|x-2|}{\sqrt{x}+\sqrt{2}} < \frac{|x-2|}{1+\sqrt{2}}
+  \]
+  Para garantir que a expressão inteira seja menor que $\varepsilon$, basta tomar:
+  \[
+    \delta = \min\bigl\{1, \, (1+\sqrt{2})\varepsilon\bigr\}
+  \]
+  O limite está provado. \checkmark
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1 --- Verificação com $\varepsilon-\delta$ para Quadráticas}
+  Verifique usando a definição formal $\varepsilon$--$\delta$ que $\lim_{x\to 1}(2x^2+3)=5$.
+\end{exercisebox}
+\begin{solbox}
+  Queremos que $| (2x^2+3) - 5 | < \varepsilon$, o que simplifica para $2|x^2-1| < \varepsilon \iff 2|x-1||x+1| < \varepsilon$.
+  
+  Para limitar o termo $|x+1|$, impomos provisoriamente $\delta \le 1$.
+  Se $|x-1| < 1 \implies 0 < x < 2 \implies 1 < x+1 < 3 \implies |x+1| < 3$.
+  
+  Substituindo esta limitação na nossa equação inicial:
+  \[
+    2|x-1||x+1| < 2|x-1|(3) = 6|x-1|
+  \]
+  Queremos que $6|x-1| < \varepsilon$, ou seja, $|x-1| < \frac{\varepsilon}{6}$.
+  
+  Basta escolher $\delta = \min\left\{1, \frac{\varepsilon}{6}\right\}$. Assim, o limite está provado formalmente.
+\end{solbox}
+
+\begin{exercisebox}{2 --- Continuidade do Módulo}
+  Mostre que a função $f(x)=|x|$ é contínua em todo o $\mathbb{R}$.
+\end{exercisebox}
+\begin{solbox}
+  Queremos mostrar que $\forall a \in \mathbb{R}$, $\lim_{x\to a} |x| = |a|$.
+  
+  Pela propriedade da Desigualdade Triangular Inversa, sabemos que para quaisquer reais $x$ e $a$:
+  \[
+    \bigl| |x| - |a| \bigr| \le |x-a|
+  \]
+  Dado um $\varepsilon > 0$, basta escolher $\delta = \varepsilon$. 
+  Deste modo, se $|x-a| < \delta$, então:
+  \[
+    |f(x) - f(a)| = \bigl| |x| - |a| \bigr| \le |x-a| < \delta = \varepsilon
+  \]
+  Isto prova a continuidade de $f(x)=|x|$ para qualquer ponto do domínio.
+\end{solbox}
+
+\begin{exercisebox}{3 --- Continuidade de Funções por Ramos}
+  Determine se a função $f:\mathbb{R}\to\mathbb{R}$ definida por
+  \[
+    f(x)=\begin{cases}
+    x^2, & x\neq 1\\
+    3, & x=1
+    \end{cases}
+  \]
+  é contínua em $x=1$. Justifique a resposta.
+\end{exercisebox}
+\begin{solbox}
+  Para ser contínua em $x=1$, é estritamente necessário que $\lim_{x \to 1} f(x) = f(1)$.
+  
+  Calculando o limite (que analisa os valores perto de $x=1$, mas não no próprio ponto $x=1$):
+  \[
+    \lim_{x \to 1} f(x) = \lim_{x \to 1} x^2 = 1^2 = 1
+  \]
+  Contudo, a definição da função dita que:
+  \[
+    f(1) = 3
+  \]
+  Como $\lim_{x \to 1} f(x) \neq f(1)$ (uma vez que $1 \neq 3$), concluímos que a função \textbf{não é contínua} em $x=1$. Tem uma descontinuidade removível.
+\end{solbox}
+
+\begin{exercisebox}{4 --- A Curva de Seno do Topólogo}
+  Considere a função $f:\mathbb{R} \to \mathbb{R}$ dada por $f(x)=\sin(1/x)$ para $x\neq 0$, com $f(0)=0$. A função é contínua em $x=0$? Justifique.
+\end{exercisebox}
+\begin{solbox}
+  Para ser contínua em $x=0$, teria de verificar-se $\lim_{x \to 0} \sin(1/x) = 0$.
+  
+  No entanto, à medida que $x \to 0$, o argumento $1/x \to \pm \infty$. A função seno irá oscilar infinitamente entre $-1$ e $1$, cada vez mais rápido, sem nunca se fixar ou convergir para um único valor.
+  
+  Prova rápida por sucessões (Critério de Heine):
+  \begin{itemize}
+      \item Se escolhermos $x_n = \frac{1}{\pi/2 + 2n\pi} \to 0$, $f(x_n) = \sin(\pi/2 + 2n\pi) = 1 \to 1$.
+      \item Se escolhermos $y_n = \frac{1}{n\pi} \to 0$, $f(y_n) = \sin(n\pi) = 0 \to 0$.
+  \end{itemize}
+  Como trajetórias diferentes geram limites diferentes ($1 \neq 0$), o limite $\lim_{x \to 0} f(x)$ não existe. Logo, a função \textbf{não é contínua} em $x=0$.
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Explique, usando a analogia de jogo ou tolerâncias, o que significa intuitivamente a definição formal $\varepsilon-\delta$ do limite de uma função num ponto.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Em que sentido exato é que a \emph{continuidade} é apenas uma versão restrita e ``sem salto'' do conceito geral de limite?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q3.} Justifique o porquê da definição topológica de continuidade (a pré-imagem de um conjunto aberto no contradomínio ter de ser necessariamente um conjunto aberto no domínio) ser matematicamente equivalente à definição $\varepsilon$--$\delta$ clássica quando aplicada em espaços métricos.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q4.} Dê um exemplo prático ou geométrico de uma função descontínua e explique a razão lógica / topológica de ocorrência dessa quebra de continuidade.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q5.} Qual a relação entre a continuidade global de funções e a preservação do limite na convergência de sucessões (Critério de Heine / Teorema de Continuidade por Sucessões)?
+\end{oralbox}
+
+
+% ════════════════════════════════════════════════════════════════
+% SECÇÃO - PERSPETIVA ESTRUTURAL
+% ════════════════════════════════════════════════════════════════
+
+\section{Perspetiva Estrutural}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+A perspetiva estrutural da matemática, frequentemente formalizada através da Teoria das Categorias, propõe uma mudança de paradigma: em vez de olharmos para os elementos internos que compõem uma entidade matemática (como os números dentro de um conjunto), focamo-nos nas relações e nas transformações entre essas entidades.
+
+\subsubsection*{1. Objetos (Objects)}
+
+Na teoria das categorias, os objetos são os blocos de construção primários. Do ponto de vista estrutural, não nos interessa o que está ``dentro'' do objeto, mas sim como ele interage com os outros.
+
+\begin{defbox}[title={Objeto}]
+  Um \textbf{objeto} é uma entidade abstrata que pertence a uma determinada ``categoria''.
+\end{defbox}
+
+\textbf{Exemplos de Objetos em Categorias:}
+\begin{itemize}
+  \item Na categoria dos Conjuntos (\textbf{Set}), os objetos são conjuntos (ex: $\{1, 2, 3\}$, $\mathbb{N}$, $\mathbb{R}$).
+  \item Na categoria dos Espaços Vetoriais (\textbf{Vect}), os objetos são espaços vetoriais (ex: $\mathbb{R}^2$, $\mathbb{R}^3$).
+  \item Na categoria dos Espaços Topológicos (\textbf{Top}), os objetos são espaços topológicos.
+\end{itemize}
+
+\begin{notebox}[title={Interpretação Visual}]
+  Geometricamente ou num diagrama, um objeto é representado simplesmente como um ponto (ou um nó).
+\end{notebox}
+
+\subsubsection*{2. Morfismos (Mappings)}
+
+Se os objetos são as entidades, os morfismos são os ``caminhos'' ou transformações estruturais entre eles.
+
+\begin{defbox}[title={Morfismo}]
+  Um \textbf{morfismo} $f$ é uma relação direcional entre um objeto de origem $A$ (domínio) e um objeto de destino $B$ (contradomínio), denotado por $f: A \to B$. Em muitas categorias, estes morfismos são funções que preservam a estrutura matemática dos objetos.
+\end{defbox}
+
+\textbf{Exemplos de Morfismos em Categorias:}
+\begin{itemize}
+  \item Em \textbf{Set}, os morfismos são funções normais entre conjuntos.
+  \item Em \textbf{Vect}, os morfismos são transformações lineares (preservam a adição de vetores e a multiplicação por escalares).
+  \item Em \textbf{Top}, os morfismos são funções contínuas (preservam a estrutura de vizinhança/limites, fundamental em Análise Matemática).
+\end{itemize}
+
+\begin{notebox}[title={Interpretação Visual}]
+  Os morfismos são desenhados como setas direcionadas que ligam um ponto (objeto) a outro.
+\end{notebox}
+
+\subsubsection*{3. Composição}
+
+A verdadeira essência da perspetiva estrutural surge na composição: a capacidade de encadear aplicações de forma consistente.
+
+\begin{defbox}[title={Composição e Axiomas da Categoria}]
+  Dados três objetos $A$, $B$ e $C$, e dois morfismos $f: A \to B$ e $g: B \to C$, existe um morfismo composto único, denotado por $g \circ f: A \to C$ (lê-se ``$g$ após $f$''). 
+  
+  Para que uma estrutura seja uma categoria válida, a composição tem de obedecer a duas regras:
+  \begin{enumerate}
+      \item \textbf{Associatividade:} $h \circ (g \circ f) = (h \circ g) \circ f$.
+      \item \textbf{Identidade:} Para cada objeto $X$, existe um morfismo de identidade $\text{id}_X: X \to X$ tal que, para qualquer $f: A \to B$, temos $f \circ \text{id}_A = f$ e $\text{id}_B \circ f = f$.
+  \end{enumerate}
+\end{defbox}
+
+\textbf{Exemplo Prático:} \\
+Se $A, B, C$ são subconjuntos de $\mathbb{R}$, e $f(x) = x^2$ e $g(y) = y + 1$, então a composição $g(f(x))$ representa o morfismo $g \circ f$ de $A$ para $C$, dado por $(g \circ f)(x) = x^2 + 1$.
+
+\begin{notebox}[title={Interpretação Visual (Diagramas Comutativos)}]
+  A composição é frequentemente visualizada através de diagramas comutativos. Se tivermos uma seta de $A$ para $B$, e de $B$ para $C$, o diagrama ``comuta'' se a seta direta de $A$ para $C$ representar o mesmo ``resultado final'' que percorrer as duas setas anteriores. Forma-se, assim, um triângulo.
+\end{notebox}
+
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Categoria de Caminhos em $\mathbb{R}^2$}
+  Numa categoria onde os objetos são pontos em $\mathbb{R}^2$ e os morfismos são caminhos entre esses pontos:
+  \begin{itemize}
+      \item O que é a identidade $\text{id}_A$?
+      \item O que representa a composição $g \circ f$?
+  \end{itemize}
+\end{exbox}
+\begin{solbox}
+  \textbf{Identidade $\text{id}_A$:} É o caminho constante (permanecer estático no próprio ponto $A$). \\
+  \textbf{Composição $g \circ f$:} É a concatenação dos caminhos. Colocamos o início do caminho $g$ no final do caminho $f$. O resultado final é um novo caminho direto que nos leva de $A$ até $C$, passando obrigatoriamente por $B$.
+\end{solbox}
+
+\begin{exbox}{2 --- Verificação de Associatividade}
+  Verifique a propriedade da associatividade para as seguintes funções em $\mathbb{R}$:
+  \[ f(x) = 2x, \quad g(x) = x+3, \quad h(x) = x^2 \]
+\end{exbox}
+\begin{solbox}
+  Para verificar a associatividade, precisamos de provar que $[h \circ (g \circ f)](x) = [(h \circ g) \circ f](x)$.
+  
+  \textbf{Cálculo do lado esquerdo:}
+  \begin{align*}
+      (g \circ f)(x) &= g(2x) = 2x + 3 \\
+      [h \circ (g \circ f)](x) &= h(2x + 3) = \mathbf{(2x + 3)^2}
+  \end{align*}
+  
+  \textbf{Cálculo do lado direito:}
+  \begin{align*}
+      (h \circ g)(x) &= h(x + 3) = (x + 3)^2 \\
+      [(h \circ g) \circ f](x) &= (h \circ g)(2x) = \mathbf{(2x + 3)^2}
+  \end{align*}
+  
+  Como ambos os caminhos de composição resultam na mesma expressão $\mathbf{(2x + 3)^2}$, a propriedade associativa é verificada. \checkmark
+\end{solbox}
+
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1}
+  Considere a categoria \textbf{Set} (Conjuntos). Sejam os objetos $A = \{1, 2\}$ e $B = \{a, b, c\}$. Quantos morfismos (funções) diferentes existem de $A$ para $B$? E de $B$ para $A$?
+\end{exercisebox}
+\begin{solbox}
+  Em \textbf{Set}, os morfismos são funções.
+  \begin{itemize}
+      \item O número de funções de $A$ para $B$ é dado por $|B|^{|A|}$. Como $|B|=3$ e $|A|=2$, existem $3^2 = \mathbf{9}$ morfismos de $A$ para $B$.
+      \item O número de funções de $B$ para $A$ é dado por $|A|^{|B|}$. Como $|A|=2$ e $|B|=3$, existem $2^3 = \mathbf{8}$ morfismos de $B$ para $A$.
+  \end{itemize}
+\end{solbox}
+
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Explique, por palavras suas, qual é a principal vantagem da mudança de paradigma oferecida pela Teoria das Categorias (foco nos \emph{morfismos}) em comparação com a Teoria de Conjuntos tradicional (foco nos \emph{elementos} internos dos objetos).
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Num diagrama comutativo triangular com os objetos $A$, $B$ e $C$, o que significa matematicamente dizer que o diagrama "comuta"? Utilize o conceito de composição de morfismos na sua resposta.
+\end{oralbox}

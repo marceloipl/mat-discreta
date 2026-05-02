@@ -1,0 +1,132 @@
+% ════════════════════════════════════════════════════════════════
+% 0.2 - RELAÇÕES DE EQUIVALÊNCIA E CLASSES DE EQUIVALÊNCIA
+% ════════════════════════════════════════════════════════════════
+
+\section{Relações de Equivalência e Classes de Equivalência}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+Uma \textbf{relação} num conjunto $A$ dita as regras que definem quando dois elementos desse conjunto estão relacionados.
+
+\begin{defbox}[title={Relação de Equivalência}]
+  Uma \textbf{relação de equivalência} (frequentemente denotada por $\sim$) é uma relação especial que tem de satisfazer, em simultâneo, três propriedades fundamentais para quaisquer elementos $a, b, c \in A$:
+  \begin{enumerate}
+      \item \textbf{Reflexividade:} $a \sim a$. (Todo o elemento está relacionado consigo mesmo).
+      \item \textbf{Simetria:} Se $a \sim b$, então $b \sim a$. (A relação é recíproca).
+      \item \textbf{Transitividade:} Se $a \sim b$ e $b \sim c$, então $a \sim c$. (A relação transfere-se em cadeia).
+  \end{enumerate}
+\end{defbox}
+
+\begin{warnbox}[title={Nota Importante}]
+  As relações de equivalência só se definem entre elementos do mesmo conjunto. Basta que \textbf{uma} destas três propriedades falhe para que a relação deixe imediatamente de ser de equivalência.
+\end{warnbox}
+
+Quando temos uma relação de equivalência $\sim$ num conjunto $A$, esta divide o conjunto em subgrupos mais pequenos.
+
+\begin{defbox}[title={Classes de Equivalência e Conjunto Quociente}]
+  A \textbf{classe de equivalência} de um elemento $a$, denotada por $[a]$ ou $\overline{a}$, é o grupo de elementos de $A$ que se relacionam com $a$ segundo a regra definida:
+  \[
+      [a] = \{ x \in A \mid x \sim a \}
+  \]
+  A união de todas as classes de equivalência constitui o conjunto inteiro, e classes distintas não têm elementos em comum (são disjuntas). Isto significa que a relação cria uma \textbf{partição} do conjunto $A$. 
+  
+  Ao conjunto formado por todas as classes de equivalência distintas chamamos \textbf{conjunto quociente}, denotado por $A/\sim$.
+\end{defbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Relação Numérica em Conjunto Finito}
+  Considere o conjunto $A = \{2, 4, 6, 8\}$ e a relação $a \sim b$ definida por: \textit{``$a$ e $b$ estão relacionados se a diferença $a - b$ for um múltiplo de 2''}. Verifique se é uma relação de equivalência.
+\end{exbox}
+\begin{solbox}
+  Vamos verificar as propriedades para elementos arbitrários:
+  \begin{itemize}
+      \item \textbf{Reflexiva:} $2 \sim 2$, porque $2 - 2 = 0$, e $0$ é múltiplo de $2$. \checkmark
+      \item \textbf{Simétrica:} Se $2 \sim 4$, então $4 - 2 = 2$ (múltiplo de 2). Logo, $4 \sim 2$. \checkmark
+      \item \textbf{Transitiva:} Se $2 \sim 4$ (pois $2-4=-2$) e $4 \sim 6$ (pois $4-6=-2$), então $2 \sim 6$, porque $2 - 6 = -4$, que é também múltiplo de $2$. \checkmark
+  \end{itemize}
+  Como as três propriedades se verificam, trata-se de facto de uma relação de equivalência.
+\end{solbox}
+
+\begin{exbox}{2 --- O Percurso na Disciplina de PAM}
+  Considere o conjunto de alunos: \\
+  $Grupo = \{\text{David, Diana, Guilherme, Joana, Leonardo, Marcelo, Miguel}\}$. \\
+  Definimos a relação de equivalência $\sim$: \textit{``Dois alunos relacionam-se se têm o mesmo histórico face à cadeira de PAM (ambos a fizeram ou ambos não a fizeram)''}. Determine as classes de equivalência e o conjunto quociente.
+\end{exbox}
+\begin{solbox}
+  Sabendo que David, Guilherme, Joana e Marcelo vieram de PAM, enquanto Diana, Leonardo e Miguel não vieram, a relação particiona o grupo.
+
+  \textbf{Classes de Equivalência:} \\
+  Podemos representar cada classe usando um dos seus elementos (o ``representante'' da classe):
+  \begin{itemize}
+      \item $[\text{David}] = \{\text{David, Guilherme, Joana, Marcelo}\}$ (Classe dos que fizeram PAM)
+      \item $[\text{Diana}] = \{\text{Diana, Leonardo, Miguel}\}$ (Classe dos que não fizeram PAM)
+  \end{itemize}
+  Note-se que podíamos escrever $[\text{Guilherme}]$ em vez de $[\text{David}]$, pois $[\text{Guilherme}] = [\text{David}]$. 
+  
+  O \textbf{conjunto quociente} é o conjunto destas duas classes:
+  \[
+      Grupo/\sim \; = \{ [\text{David}], [\text{Diana}] \}
+  \]
+\end{solbox}
+
+\begin{exbox}{3 --- Resto da Divisão por 3 no Conjunto $\mathbb{Z}$}
+  Considere o conjunto infinito dos números inteiros ($\mathbb{Z}$) e a relação $a \sim b$ definida por: \textit{``$a$ e $b$ têm o mesmo resto quando divididos por 3''}. Matematicamente, isto equivale a dizer que a diferença $a - b$ é um múltiplo de 3 (relação conhecida como congruência módulo 3, $a \equiv b \pmod{3}$). Determine as classes de equivalência.
+\end{exbox}
+\begin{solbox}
+  Ao dividirmos qualquer número inteiro por 3, os únicos restos possíveis são 0, 1 ou 2. Por isso, esta relação gera exatamente três classes de equivalência distintas, particionando o infinito conjunto $\mathbb{Z}$:
+  \begin{itemize}
+      \item $[0] = \{\dots, -6, -3, 0, 3, 6, 9, \dots\}$ (Números com resto 0; múltiplos de 3)
+      \item $[1] = \{\dots, -5, -2, 1, 4, 7, 10, \dots\}$ (Números com resto 1)
+      \item $[2] = \{\dots, -4, -1, 2, 5, 8, 11, \dots\}$ (Números com resto 2)
+  \end{itemize}
+  Qualquer outro inteiro recairá numa destas classes. Por exemplo, o número $4$ pertence à classe do $1$, logo $[4] = [1]$. 
+  
+  O \textbf{conjunto quociente} para esta relação é formado por estas três classes:
+  \[
+      \mathbb{Z}/\sim \; = \{ [0], [1], [2] \}
+  \]
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1}
+  Considere o conjunto de alunos $A = \{\text{Ana, João, Marta, Pedro}\}$. Sabe-se que a Ana e o João nasceram no ano 2000, e a Marta e o Pedro nasceram em 2001. Defina a relação $x \sim y \iff \text{``x e y têm o mesmo ano de nascimento''}$.
+  \begin{enumerate}
+      \item Mostre, usando a definição formal, que esta é uma relação de equivalência.
+      \item Determine as classes de equivalência e o conjunto quociente $A/\sim$.
+  \end{enumerate}
+\end{exercisebox}
+\begin{solbox}
+  \textbf{1. Verificação das Propriedades:}
+  \begin{itemize}
+      \item \textbf{Reflexividade:} Qualquer pessoa $x$ nasceu no mesmo ano que si própria ($x \sim x$). \checkmark
+      \item \textbf{Simetria:} Se a pessoa $x$ nasceu no mesmo ano que $y$, então $y$ nasceu no mesmo ano que $x$ ($x \sim y \implies y \sim x$). \checkmark
+      \item \textbf{Transitividade:} Se $x$ nasceu no mesmo ano que $y$, e $y$ nasceu no mesmo ano que $z$, então $x$ nasceu no mesmo ano que $z$ ($x \sim y \land y \sim z \implies x \sim z$). \checkmark
+  \end{itemize}
+  
+  \textbf{2. Classes de Equivalência e Conjunto Quociente:} \\
+  As classes de equivalência agrupam os alunos pelo ano de nascimento:
+  \begin{itemize}
+      \item $[\text{Ana}] = \{\text{Ana, João}\}$
+      \item $[\text{Marta}] = \{\text{Marta, Pedro}\}$
+  \end{itemize}
+  O conjunto quociente é formado por estas duas classes: 
+  \[
+      A/\sim \; = \{ [\text{Ana}], [\text{Marta}] \}
+  \]
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Usando o Exemplo 2 do relatório (o percurso dos alunos em PAM), explique por que motivo a notação $[\text{David}] = [\text{Guilherme}]$ está correta e relacione isso com a propriedade de \emph{partição} de um conjunto.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} No Exemplo 3, se definíssemos a relação como "resto da divisão por 5" em vez de 3, quantos elementos teria o conjunto quociente $\mathbb{Z}/\sim$ e quais seriam os seus representantes mais simples?
+\end{oralbox}

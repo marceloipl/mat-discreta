@@ -1,0 +1,102 @@
+% ════════════════════════════════════════════════════════════════
+% CAPÍTULO 3 -- FUNÇÕES REAIS DE VÁRIAS VARIÁVEIS REAIS
+% Ficheiro para \include{} no template principal.
+% ════════════════════════════════════════════════════════════════
+
+\chapter{Funções Reais de Várias Variáveis Reais}
+
+Este capítulo abrange os tópicos do programa 3.1--3.5, incluindo domínio e
+representação gráfica, limites e continuidade, derivadas parciais,
+diferenciabilidade, regra da cadeia e extremos livres.
+
+% ────────────────────────────────────────────────────────
+\section{Definição, Domínio, Curvas de Nível e Representação Gráfica}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{defbox}[title={Função Real de Várias Variáveis}]
+  Uma \emph{função real de $n$ variáveis reais} é uma aplicação
+  $f: D \subseteq \mathbb{R}^n \to \mathbb{R}$.
+  Para $n=2$ escrevemos $f(x,y)$ e o seu \emph{gráfico} é a superfície
+  \[
+    \{(x,y,z)\in\mathbb{R}^3 \mid z = f(x,y),\, (x,y)\in D\}.
+  \]
+\end{defbox}
+
+\begin{defbox}[title={Curva de Nível (Linha de Contorno)}]
+  Para $f:D\subseteq\mathbb{R}^2\to\mathbb{R}$ e uma constante $c\in\mathbb{R}$,
+  a \emph{curva de nível} (linha de contorno) à altura $c$ é
+  \[
+    L_c = \{(x,y)\in D \mid f(x,y) = c\}.
+  \]
+\end{defbox}
+
+\subsubsection*{Representação Gráfica}
+
+O gráfico de $f(x,y)$ é uma \emph{superfície} no espaço $\mathbb{R}^3$.
+Para o representar, os métodos mais comuns são:
+
+\begin{itemize}
+  \item \textbf{Curvas de nível:} traçam-se as curvas $f(x,y)=c$ no plano
+        $Oxy$ para vários valores de $c$, obtendo uma vista ``de cima'' da
+        superfície. Curvas muito próximas indicam grande variação de $f$;
+        curvas afastadas indicam variação suave.
+  \item \textbf{Cortes verticais:} fixa-se $x=a$ ou $y=b$ e traça-se a
+        curva resultante em $\mathbb{R}^2$, obtendo uma ``fatia'' da superfície.
+\end{itemize}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Curvas de Nível de $f(x,y)=x^2+y^2$}
+  Descreva as curvas de nível de $f(x,y)=x^2+y^2$.
+\end{exbox}
+\begin{solbox}
+  A equação $f(x,y)=c$ escreve-se $x^2+y^2=c$.
+  \begin{itemize}
+    \item \textbf{Passo 1:} Se $c<0$, a equação $x^2+y^2=c$ não tem solução
+          real (soma de quadrados nunca é negativa), pelo que a curva de nível
+          é vazia.
+    \item \textbf{Passo 2:} Se $c=0$, a única solução é $x=y=0$, ou seja,
+          a curva de nível é o ponto $(0,0)$.
+    \item \textbf{Passo 3:} Se $c>0$, a equação $x^2+y^2=c$ representa
+          uma circunferência centrada na origem com raio $\sqrt{c}$.
+  \end{itemize}
+  Conclusão: as curvas de nível são circunferências concêntricas de raio
+  $\sqrt{c}$ (para $c>0$), o ponto origem ($c=0$), ou vazias ($c<0$).
+\end{solbox}
+
+\begin{exbox}{2 --- Representação Gráfica}
+  Descreva o gráfico de $f(x,y)=4-x^2-y^2$.
+\end{exbox}
+\begin{solbox}
+  \textbf{Passo 1 -- Identificar o tipo de superfície.} A equação
+  $z=4-x^2-y^2$ pode escrever-se $x^2+y^2+z=4$, ou seja,
+  $x^2+y^2=4-z$. Trata-se de um \emph{parabolóide de revolução} com
+  vértice em $(0,0,4)$, aberto para baixo.
+
+  \textbf{Passo 2 -- Curvas de nível.} Para $z=c$:
+  \[
+    x^2+y^2 = 4-c.
+  \]
+  São circunferências de raio $\sqrt{4-c}$, definidas para $c\leq 4$.
+  Quando $c=4$ obtém-se o ponto $(0,0)$; quando $c\to-\infty$ o raio
+  cresce indefinidamente.
+
+  \textbf{Passo 3 -- Cortes verticais.} Fixando $y=0$:
+  $z=4-x^2$, que é uma parábola no plano $Oxz$. Por simetria de
+  revolução, qualquer corte vertical pelo eixo $Oz$ dá a mesma parábola.
+\end{solbox}
+
+\begin{exbox}{3 --- Determinação de Domínio}
+  Determine o domínio de $f(x,y)=\dfrac{\ln(1-x^2-y^2)}{\sqrt{x+y}}$.
+\end{exbox}
+\begin{solbox}
+  É necessário que:
+  \begin{itemize}
+    \item $1-x^2-y^2>0 \Rightarrow x^2+y^2 < 1$ (disco unitário aberto).
+    \item $x+y>0$ (acima da reta $y=-x$).
+  \end{itemize}
+  Assim $D = \{(x,y)\mid x^2+y^2<1 \text{ e } x+y>0\}$.
+\end{solbox}

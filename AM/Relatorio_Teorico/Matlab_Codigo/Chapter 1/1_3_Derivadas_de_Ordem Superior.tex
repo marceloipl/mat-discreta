@@ -1,0 +1,147 @@
+% ════════════════════════════════════════════════════════════════
+% 1.3 - DERIVADAS DE ORDEM SUPERIOR E POLINÓMIO DE TAYLOR
+% ════════════════════════════════════════════════════════════════
+
+\section{Derivadas de Ordem Superior e Polinómio de Taylor}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{notebox}[title={Intuição Geral}]
+  Derivar uma função várias vezes sucessivas revela padrões profundos e comportamentos finos da curva geométrica:
+  \begin{itemize}
+      \item \textbf{1ª Derivada ($f'$):} Dá-nos a \emph{velocidade} ou taxa de variação (inclinação da reta tangente).
+      \item \textbf{2ª Derivada ($f''$):} Dá-nos a \emph{aceleração} ou a taxa de variação da velocidade. Geometricamente, mede a \emph{curvatura} ou concavidade da função.
+      \item \textbf{3ª Derivada em diante ($f'''$, $f^{(4)}$, \dots):} Refletem comportamentos de ordem superior (como o \emph{jerk} na física) e ajustes geométricos cada vez mais finos.
+  \end{itemize}
+  Juntando todas estas derivadas num único ponto, conseguimos construir o \textbf{Polinómio de Taylor}, que aproxima uma função complexa através de uma expressão polinomial simples.
+\end{notebox}
+
+\begin{defbox}[title={Derivadas Sucessivas}]
+  Se $f$ é uma função derivável e a sua derivada $f'$ também o é, podemos continuar a derivar sucessivamente. Definimos rigorosamente:
+  \[
+    f'' = (f')', \qquad f''' = (f'')', \qquad f^{(n)} = \left(f^{(n-1)}\right)'
+  \]
+  A notação $f^{(n)}$ (com o $n$ entre parêntesis) é usada para representar a derivada de ordem $n$, evitando a confusão com potências algébricas ($f^n$).
+\end{defbox}
+
+\begin{defbox}[title={Polinómio de Taylor}]
+  Seja $f$ uma função que admite derivadas até à ordem $n$ no ponto $x=a$. O \textbf{polinómio de Taylor de ordem $n$} de $f$ centrado em $a$ é dado por:
+  \[
+    T_n(x) = \sum_{k=0}^n \frac{f^{(k)}(a)}{k!}(x-a)^k
+  \]
+  Expandindo a notação de somatório, obtemos:
+  \[
+    T_n(x) = f(a) + f'(a)(x-a) + \frac{f''(a)}{2!}(x-a)^2 + \frac{f'''(a)}{3!}(x-a)^3 + \dots + \frac{f^{(n)}(a)}{n!}(x-a)^n
+  \]
+  \textit{Nota:} Quando o desenvolvimento é feito em torno da origem ($a=0$), o polinómio é frequentemente designado por \textbf{Polinómio de Maclaurin}.
+\end{defbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Derivadas Sucessivas e Taylor da Exponencial}
+  Derive a função $f(x)=e^x$ até à 4ª ordem e construa o respetivo polinómio de Taylor centrado em $a=0$.
+\end{exbox}
+\begin{solbox}
+  A função exponencial de base $e$ é única porque é a sua própria derivada. Assim, todas as derivadas sucessivas são idênticas:
+  \[
+    f(x) = f'(x) = f''(x) = f'''(x) = f^{(4)}(x) = e^x
+  \]
+  Avaliando todas estas derivadas no ponto $a=0$, obtemos:
+  \[
+    f(0) = f'(0) = f''(0) = f'''(0) = f^{(4)}(0) = e^0 = 1
+  \]
+  Aplicando a fórmula do Polinómio de Taylor para $n=4$:
+  \[
+    T_4(x) = 1 + 1\cdot(x-0) + \frac{1}{2!}(x-0)^2 + \frac{1}{3!}(x-0)^3 + \frac{1}{4!}(x-0)^4
+  \]
+  \textbf{Solução Final:} $\boxed{T_4(x) = 1 + x + \frac{x^2}{2} + \frac{x^3}{6} + \frac{x^4}{24}}$
+\end{solbox}
+
+\begin{exbox}{2 --- Aproximação de Funções com Radicais}
+  Aproximar a função $f(x) = \sqrt{1+x}$ através de um Polinómio de Taylor de ordem 3 perto da origem ($a=0$).
+\end{exbox}
+\begin{solbox}
+  Reescrevemos a função como $f(x) = (1+x)^{1/2}$ e calculamos as derivadas com a regra da potência e da cadeia:
+  \begin{align*}
+      f(x)   &= (1+x)^{1/2} & \implies f(0) &= 1 \\
+      f'(x)  &= \frac{1}{2}(1+x)^{-1/2} & \implies f'(0) &= \frac{1}{2} \\
+      f''(x) &= -\frac{1}{4}(1+x)^{-3/2} & \implies f''(0) &= -\frac{1}{4} \\
+      f'''(x)&= \frac{3}{8}(1+x)^{-5/2} & \implies f'''(0) &= \frac{3}{8}
+  \end{align*}
+  \begin{warnbox}[title={Atenção aos Fatoriais!}]
+    Um erro muito comum é esquecer de dividir as derivadas pelos fatoriais da fórmula de Taylor.
+  \end{warnbox}
+  Aplicando a fórmula correta $T_3(x) = f(0) + f'(0)x + \frac{f''(0)}{2!}x^2 + \frac{f'''(0)}{3!}x^3$:
+  \[
+    T_3(x) = 1 + \frac{1}{2}x + \frac{-1/4}{2}x^2 + \frac{3/8}{6}x^3
+  \]
+  \textbf{Solução Final:} $\boxed{T_3(x) = 1 + \frac{1}{2}x - \frac{1}{8}x^2 + \frac{1}{16}x^3}$
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1 --- Derivadas de Ordem Superior}
+  Encontre as três primeiras derivadas sucessivas da função $f(x)=\ln(1+x)$.
+\end{exercisebox}
+\begin{solbox}
+  Usando as regras de derivação (sabendo que a derivada de $\ln(u)$ é $u'/u$):
+  \begin{align*}
+      f'(x) &= \frac{1}{1+x} = (1+x)^{-1} \\[1ex]
+      f''(x) &= -1 \cdot (1+x)^{-2} \cdot (1+x)' = -(1+x)^{-2} = -\frac{1}{(1+x)^2} \\[1ex]
+      f'''(x) &= -(-2) \cdot (1+x)^{-3} \cdot 1 = 2(1+x)^{-3} = \frac{2}{(1+x)^3}
+  \end{align*}
+\end{solbox}
+
+\begin{exercisebox}{2 --- Polinómio de Taylor Fora da Origem}
+  Construa o polinómio de Taylor de ordem 2 da função $f(x) = \sin x$ centrado em $a=\pi/4$.
+\end{exercisebox}
+\begin{solbox}
+  Calculamos a função e as suas duas primeiras derivadas no ponto $a = \pi/4$:
+  \begin{align*}
+      f(x) &= \sin x & \implies f(\pi/4) &= \frac{\sqrt{2}}{2} \\
+      f'(x) &= \cos x & \implies f'(\pi/4) &= \frac{\sqrt{2}}{2} \\
+      f''(x) &= -\sin x & \implies f''(\pi/4) &= -\frac{\sqrt{2}}{2}
+  \end{align*}
+  A fórmula de Taylor para $n=2$ é $T_2(x) = f(a) + f'(a)(x-a) + \frac{f''(a)}{2!}(x-a)^2$:
+  \[
+    T_2(x) = \frac{\sqrt{2}}{2} + \frac{\sqrt{2}}{2}\left(x-\frac{\pi}{4}\right) + \frac{-\sqrt{2}/2}{2}\left(x-\frac{\pi}{4}\right)^2
+  \]
+  \textbf{Solução Final:} $\boxed{T_2(x) = \frac{\sqrt{2}}{2} + \frac{\sqrt{2}}{2}\left(x-\frac{\pi}{4}\right) - \frac{\sqrt{2}}{4}\left(x-\frac{\pi}{4}\right)^2}$
+\end{solbox}
+
+\begin{exercisebox}{3 --- Série Geométrica via Taylor}
+  Determine o Polinómio de Taylor $T_3(x)$ centrado em $a=0$ para a função $f(x)=\frac{1}{1-x}$.
+\end{exercisebox}
+\begin{solbox}
+  Reescrevemos $f(x) = (1-x)^{-1}$ e derivamos usando a regra da cadeia (com $u' = -1$):
+  \begin{align*}
+      f(x) &= (1-x)^{-1} & \implies f(0) &= 1 \\
+      f'(x) &= -(1-x)^{-2}(-1) = (1-x)^{-2} & \implies f'(0) &= 1 \\
+      f''(x) &= -2(1-x)^{-3}(-1) = 2(1-x)^{-3} & \implies f''(0) &= 2 \\
+      f'''(x) &= -6(1-x)^{-4}(-1) = 6(1-x)^{-4} & \implies f'''(0) &= 6
+  \end{align*}
+  Construindo o polinómio:
+  \[
+    T_3(x) = 1 + 1\cdot x + \frac{2}{2!}x^2 + \frac{6}{3!}x^3
+  \]
+  Simplificando os fatoriais ($2!=2$ e $3!=6$):
+  \textbf{Solução Final:} $\boxed{T_3(x) = 1 + x + x^2 + x^3}$
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Explique, intuitivamente, o que significa a segunda derivada ser positiva ou negativa num determinado ponto de uma curva geométrica. Qual é a relação disto com o comportamento das retas tangentes?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Em que situações prático-científicas ou computacionais é que a utilização do Polinómio de Taylor é extremamente útil face ao cálculo direto da função original? Dê um exemplo.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q3.} Por que motivo é que a função exponencial $e^x$ é muitas vezes considerada a função "mais simples" para derivar repetidamente e para construir as séries de Taylor?
+\end{oralbox}

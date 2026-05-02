@@ -1,0 +1,32 @@
+
+% ────────────────────────────────────────────────────────
+\section{O Teorema Fundamental do Cálculo Integral}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{thmbox}[title={Teorema Fundamental do Cálculo Integral}]
+  Seja $f:[a,b]\to\mathbb{R}$ contínua.
+  \begin{enumerate}
+    \item \textbf{(Parte 1)} A função $G(x)=\displaystyle\int_a^x f(t)\,\dd t$
+          é diferenciável em $(a,b)$ e $G'(x)=f(x)$.
+    \item \textbf{(Parte 2)} Se $F$ for qualquer primitiva de $f$, então
+          \[
+            \int_a^b f(x)\,\dd x = F(b)-F(a) =: \Big[F(x)\Big]_a^b.
+          \]
+  \end{enumerate}
+\end{thmbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{5 --- Aplicação do Teorema Fundamental}
+  Calcule $\displaystyle\int_0^{\pi} \sin x\,\dd x$.
+\end{exbox}
+\begin{solbox}
+  Uma primitiva de $\sin x$ é $-\cos x$.
+  \[
+    \int_0^{\pi}\sin x\,\dd x = \Big[-\cos x\Big]_0^{\pi}
+      = (-\cos\pi)-(-\cos 0) = 1+1 = 2.
+  \]
+\end{solbox}

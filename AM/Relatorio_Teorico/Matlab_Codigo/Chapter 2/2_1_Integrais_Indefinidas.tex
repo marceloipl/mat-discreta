@@ -1,0 +1,139 @@
+% ════════════════════════════════════════════════════════════════
+% CAPÍTULO 2 -- CÁLCULO INTEGRAL EM R
+% Ficheiro para \include{} no template principal.
+% ════════════════════════════════════════════════════════════════
+
+\chapter{Cálculo Integral em \texorpdfstring{$\mathbb{R}$}{R}}
+
+Este capítulo segue os tópicos do programa 2.1--2.5 especificados para os
+cursos de EI/EE e EM. Abrange primitivas e as suas técnicas de cálculo,
+o integral definido, o Teorema Fundamental do Cálculo Integral e
+aplicações ao cálculo de áreas, volumes e comprimentos de arco.
+
+% ────────────────────────────────────────────────────────
+\section{Primitivas e Técnicas de Primitivação}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{defbox}[title={Primitiva (Antiderivada)}]
+  Uma função $F : I \to \mathbb{R}$ diz-se uma \emph{primitiva} (ou
+  \emph{antiderivada}) de $f : I \to \mathbb{R}$ num intervalo aberto $I$ se
+  \[
+    F'(x) = f(x) \quad \forall\, x \in I.
+  \]
+  A família de todas as primitivas escreve-se $\displaystyle\int f(x)\,dx = F(x)+C$,
+  onde $C \in \mathbb{R}$ é uma constante arbitrária.
+\end{defbox}
+
+\begin{notebox}
+  Duas primitivas da mesma função diferem por uma constante, pelo que o
+  integral indefinido é único a menos de $C$.
+\end{notebox}
+
+\subsubsection*{Tabela de Primitivas Imediatas}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{cc}
+  \toprule
+  $f(x)$ & $\displaystyle\int f(x)\,dx$ \\
+  \midrule
+  $x^n\ (n\neq-1)$ & $\dfrac{x^{n+1}}{n+1}+C$ \\[6pt]
+  $\dfrac{1}{x}$ & $\ln|x|+C$ \\[6pt]
+  $e^x$ & $e^x+C$ \\[6pt]
+  $\sin x$ & $-\cos x+C$ \\[6pt]
+  $\cos x$ & $\sin x+C$ \\[6pt]
+  $\sec^2 x$ & $\tan x+C$ \\[6pt]
+  $\dfrac{1}{1+x^2}$ & $\arctan x + C$ \\[6pt]
+  $\dfrac{1}{\sqrt{1-x^2}}$ & $\arcsin x + C$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection*{Primitivação por Partes}
+
+\begin{thmbox}[title={Fórmula de Primitivação por Partes}]
+\[
+  \int u\,dv = uv - \int v\,du.
+\]
+Escolhe-se $u$ e $dv$ de modo que $\int v\,du$ seja mais simples. O
+mnemónico \textbf{LIATE} (Logarítmica, Inversa trigonométrica, Algébrica,
+Trigonométrica, Exponencial) sugere a prioridade na escolha de $u$.
+\end{thmbox}
+
+\subsubsection*{Primitivação por Substituição}
+
+\begin{thmbox}[title={Fórmula de Substituição}]
+Se $x = g(t)$, então
+\[
+  \int f(x)\,dx = \int f(g(t))\,g'(t)\,dt.
+\]
+\end{thmbox}
+
+\subsubsection*{Potências de Funções Trigonométricas}
+
+Para integrar $\sin^m x\cos^n x$:
+\begin{itemize}
+  \item Se $m$ for ímpar: substitua $u=\cos x$.
+  \item Se $n$ for ímpar: substitua $u=\sin x$.
+  \item Se ambos forem pares: use as identidades do ângulo duplo
+        $\sin^2 x = \tfrac{1-\cos 2x}{2}$,
+        $\cos^2 x = \tfrac{1+\cos 2x}{2}$.
+\end{itemize}
+
+\subsubsection*{Frações Racionais (Decomposição em Frações Parciais)}
+
+Toda a função racional própria $\dfrac{P(x)}{Q(x)}$ pode ser decomposta em
+frações parciais. Para uma raíz real simples $r$ de $Q$:
+\[
+  \frac{A}{x-r}.
+\]
+Para um fator quadrático irredutível $x^2+px+q$:
+\[
+  \frac{Bx+C}{x^2+px+q}.
+\]
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Primitivação por Partes}
+  Calcule $\displaystyle\int x e^x\,dx$.
+\end{exbox}
+\begin{solbox}
+  Tome-se $u=x$, $dv=e^x\,dx$. Então $du=dx$, $v=e^x$.
+  \[
+    \int x e^x\,dx = xe^x - \int e^x\,dx = xe^x - e^x + C = e^x(x-1)+C.
+  \]
+\end{solbox}
+
+\begin{exbox}{2 --- Substituição}
+  Calcule $\displaystyle\int \frac{2x}{x^2+1}\,dx$.
+\end{exbox}
+\begin{solbox}
+  Seja $u = x^2+1$, logo $du = 2x\,dx$.
+  \[
+    \int \frac{2x}{x^2+1}\,dx = \int \frac{du}{u} = \ln|u|+C = \ln(x^2+1)+C.
+  \]
+\end{solbox}
+
+\begin{exbox}{3 --- Potências de Funções Trigonométricas}
+  Calcule $\displaystyle\int \sin^3 x\,dx$.
+\end{exbox}
+\begin{solbox}
+  Escreva $\sin^3 x = \sin x(1-\cos^2 x)$; seja $u=\cos x$:
+  \[
+    \int \sin^3 x\,dx = -\int (1-u^2)\,du = -u + \tfrac{u^3}{3}+C
+      = -\cos x + \tfrac{\cos^3 x}{3}+C.
+  \]
+\end{solbox}
+
+\begin{exbox}{4 --- Frações Racionais}
+  Calcule $\displaystyle\int \frac{1}{x^2-1}\,dx$.
+\end{exbox}
+\begin{solbox}
+  Decomposição: $\dfrac{1}{x^2-1}=\dfrac{1}{2}\!\left(\dfrac{1}{x-1}-\dfrac{1}{x+1}\right)$.
+  \[
+    \int \frac{dx}{x^2-1} = \frac{1}{2}\ln\left|\frac{x-1}{x+1}\right|+C.
+  \]
+\end{solbox}

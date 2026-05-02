@@ -1,0 +1,190 @@
+\documentclass[12pt, a4paper]{report}
+
+% --- Pacotes Essenciais ---
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{amsmath, amssymb, amsfonts, amsthm}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{multicol}   % para listas a duas colunas
+
+% --- Pacotes para Estilização Avançada ---
+\usepackage[dvipsnames]{xcolor}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable, skins}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% Configuração das Margens
+\geometry{left=2.5cm, right=2.5cm, top=3cm, bottom=3cm}
+
+% Definição de Cores Profissionais
+\definecolor{primary}{RGB}{0,72,144}
+\definecolor{accent}{RGB}{220,50,47}
+\definecolor{soft}{RGB}{240,246,255}
+\definecolor{softgray}{RGB}{245,245,245}
+\definecolor{warnyellow}{RGB}{255,248,220}
+\definecolor{greenbg}{RGB}{235,255,235}
+\definecolor{redbg}{RGB}{255,235,235}
+
+% Configuração do Hyperref
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    urlcolor=primary,
+    citecolor=primary
+}
+
+% Formatação Elegante dos Capítulos e Secções
+\titleformat{\chapter}[display]
+  {\normalfont\Huge\bfseries\color{primary}}{\chaptertitlename\ \thechapter}{10pt}{\Huge}[\vspace{1ex}\color{primary}\titlerule]
+\titleformat{\section}
+  {\Large\bfseries\color{primary}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}
+  {\large\bfseries\color{primary!80!black}}{\thesubsection.}{0.5em}{}
+
+% Estilos Customizados de Caixas (tcolorbox)
+\tcbset{
+  basestyle/.style={
+    breakable, enhanced, fonttitle=\bfseries, coltitle=white,
+    attach boxed title to top left={yshift=-2mm, xshift=4mm},
+    boxed title style={rounded corners, size=small},
+  }
+}
+\newtcolorbox{defbox}[1][]{basestyle, colback=soft, colframe=primary, title={Definição}, boxed title style={colback=primary}, #1}
+\newtcolorbox{thmbox}[1][]{basestyle, colback=greenbg, colframe=green!60!black, title={Teorema}, boxed title style={colback=green!60!black}, #1}
+\newtcolorbox{exbox}[2][]{basestyle, colback=softgray, colframe=gray!60, title={Exemplo~#2}, boxed title style={colback=gray!60}, #1}
+\newtcolorbox{solbox}[1][]{breakable, enhanced, colback=white, colframe=primary!40, title={\textbf{Resolução}}, fonttitle=\bfseries\color{primary}, borderline west={3pt}{0pt}{primary}, #1}
+\newtcolorbox{warnbox}[1][]{breakable, enhanced, colback=warnyellow, colframe=orange!80!black, title={\textbf{Erro Comum / Aviso}}, fonttitle=\bfseries\color{orange!80!black}, borderline west={4pt}{0pt}{orange!80!black}, #1}
+\newtcolorbox{notebox}[1][]{breakable, enhanced, colback=softgray, colframe=gray!60, title={\textbf{Nota}}, fonttitle=\bfseries, borderline west={4pt}{0pt}{gray!60}, #1}
+\newtcolorbox{exercisebox}[2][]{basestyle, colback=redbg!40!white, colframe=accent, title={Exercício Prático~#2}, boxed title style={colback=accent}, #1}
+\newtcolorbox{oralbox}[1][]{basestyle, colback=primary!8, colframe=primary!70, title={Questão de Defesa Oral}, boxed title style={colback=primary!70}, #1}
+\newtcolorbox{tipbox}[1][]{basestyle, colback=yellow!10!white, colframe=orange!80!black, title={Dica / Sugestão}, boxed title style={colback=orange!80!black}, #1}
+
+\lstset{
+    language=Matlab,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{teal},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!5},
+    captionpos=b,
+    showstringspaces=false
+}
+
+% Macros úteis
+\newcommand{\dd}{\mathrm{d}}
+
+% --- Informações da Capa ---
+\title{
+    \vspace{-2cm}
+    \textbf{Análise Matemática}\\
+    \large Relatório Teórico
+}
+\author{
+    David Domingues (2022125309) \\
+    Diana Gomes (2019101181) \\
+    Guilherme Baltazar (2025209893) \\
+    Joana Venâncio (2016123347) \\
+    Leonardo Costa (2023137263) \\
+    Marcelo Marques (2022102560) \\
+    Miguel Reis (2024164633) \\
+}
+\date{Politécnico de Leiria \\ 2026}
+
+% =========================================================
+% O FILTRO: Aqui dizes ao Overleaf o que queres compilar HOJE
+% =========================================================
+\includeonly{
+    %AM - Report/Chapter 0/0_1 Teoria dos Conjuntos,
+    %AM - Report/Chapter 0/0_2 Equivalence Relations,
+    %AM - Report/Chapter 0/0_3 Espacos Metricos
+    %AM - Report/Chapter 0/0_4 Espacos Topologicos,
+    %AM - Report/Chapter 0/0_5_Limites_Continuidade,
+    %AM - Report/Chapter 0/0_6 Perspetiva Estrutural
+    %AM - Report/Chapter 1/1_1_Conceitos_de_Derivada,
+    %AM - Report/Chapter 1/1_2_Derivadas_Especiais
+    %AM - Report/Chapter 1/1_3_Derivadas_de_Ordem Superior,
+    %AM - Report/Chapter 1/1_4_Curvas_Parametricas
+    %AM - Report/Chapter 2/2_1_Integrais_Indefinidas
+    %AM - Report/Chapter 2/2_2_Integrais_Definidas,
+    %AM - Report/Chapter 2/2_3_Teorema_Fundamental
+    %AM - Report/Chapter 2/2_4_Aplicacoes_E_2_5_Comprimento_Arco
+    %AM - Report/Chapter 3/3_1_Definicoes_Basicas
+    %AM - Report/Chapter 3/3_2_Limites_e_Continuidade
+    %AM - Report/Chapter 3/3_3_Derivadas_Parciais_Diferenciabilidade
+    %AM - Report/Chapter 3/3_4_ Extremos_Livres
+    %AM - Report/Chapter 4/4_ Integrais_Duplas
+    AM - Report/Chapter 5/5_ODEs
+}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+% ---------------------------------------------------------
+% LISTA COMPLETA: Não comentar estas linhas! 
+% O \includeonly lá em cima é que decide quais aparecem no PDF.
+% ---------------------------------------------------------
+
+% ---------------------------------------------------------
+% CAPÍTULO 0
+% ---------------------------------------------------------
+\include{AM - Report/Chapter 0/0_1 Teoria dos Conjuntos}
+\include{AM - Report/Chapter 0/0_2 Equivalence Relations}
+\include{AM - Report/Chapter 0/0_3 Espacos Metricos}
+\include{AM - Report/Chapter 0/0_4 Espacos Topologicos}
+\include{AM - Report/Chapter 0/0_5_Limites_Continuidade}
+\include{AM - Report/Chapter 0/0_6 Perspetiva Estrutural}
+
+% ---------------------------------------------------------
+% CAPÍTULO 1
+% ---------------------------------------------------------
+\include{AM - Report/Chapter 1/1_1_Conceitos_de_Derivada}
+\include{AM - Report/Chapter 1/1_2_Derivadas_Especiais}
+\include{AM - Report/Chapter 1/1_3_Derivadas_de_Ordem Superior}
+\include{AM - Report/Chapter 1/1_4_Curvas_Parametricas}
+
+% ---------------------------------------------------------
+% CAPÍTULO 2
+% ---------------------------------------------------------
+\include{AM - Report/Chapter 2/2_1_Integrais_Indefinidas}
+\include{AM - Report/Chapter 2/2_2_Integrais_Definidas}
+\include{AM - Report/Chapter 2/2_3_Teorema_Fundamental}
+\include{AM - Report/Chapter 2/2_4_Aplicacoes_E_2_5_Comprimento_Arco}
+
+% ---------------------------------------------------------
+% CAPÍTULO 3
+% ---------------------------------------------------------
+\include{AM - Report/Chapter 3/3_1_Definicoes_Basicas}
+\include{AM - Report/Chapter 3/3_2_Limites_e_Continuidade}
+\include{AM - Report/Chapter 3/3_3_Derivadas_Parciais_Diferenciabilidade}
+\include{AM - Report/Chapter 3/3_4_ Extremos_Livres}
+
+% ---------------------------------------------------------
+% CAPÍTULO 4
+% ---------------------------------------------------------
+\include{AM - Report/Chapter 4/4_ Integrais_Duplas}
+
+% ---------------------------------------------------------
+% CAPÍTULO 5
+% ---------------------------------------------------------
+\include{AM - Report/Chapter 5/5_ODEs}
+
+\end{document}

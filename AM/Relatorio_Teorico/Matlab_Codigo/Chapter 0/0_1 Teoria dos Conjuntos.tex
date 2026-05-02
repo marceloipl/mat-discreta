@@ -1,0 +1,82 @@
+% ════════════════════════════════════════════════════════════════
+% 0.1 - TEORIA DE CONJUNTOS
+% ════════════════════════════════════════════════════════════════
+
+\chapter{Conceitos Matemáticos Fundamentais}
+
+% ────────────────────────────────────────────────────────
+\section{Teoria de Conjuntos}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+A teoria de conjuntos de Neumann--Bernays--Gödel (NBG) é uma formalização axiomática que resolve paradoxos clássicos como o de Russell, distinguindo \emph{classes} de \emph{conjuntos}. 
+
+\begin{notebox}[title={Contexto Histórico e Comparação NBG vs.\ ZFC}]
+  \begin{itemize}
+    \item \textbf{ZFC} (Zermelo--Fraenkel + Axioma da Escolha): trabalha só com conjuntos e restringe a formação de conjuntos através de axiomas.
+    \item \textbf{NBG} (von Neumann--Bernays--Gödel): introduz \emph{conjuntos} e \emph{classes}; é conservativo sobre ZFC, mas permite falar de classes próprias (como a classe de todos os conjuntos) sem inconsistência.
+  \end{itemize}
+\end{notebox}
+
+\begin{defbox}[title={Classes e Conjuntos}]
+  \begin{itemize}
+      \item \textbf{Classe:} Coleção de objetos que partilham uma propriedade lógica específica $C = \{ x \mid \varphi(x) \}$.
+      \item \textbf{Conjunto:} É uma classe $X$ tal que existe uma classe $Y$ com $X \in Y$.
+      \item \textbf{Classe própria:} É uma classe que \emph{não} é um conjunto (não pertence a nenhuma outra classe). Ex: Classe universal $V$, Classe de todos os ordinais $\mathrm{Ord}$.
+  \end{itemize}
+\end{defbox}
+
+\begin{thmbox}[title={O Paradoxo de Russell}]
+  A coleção $R = \{x \mid x \notin x\}$ não pode ser um conjunto. Se $R$ fosse um conjunto, teríamos a contradição: $R \in R \iff R \notin R$. Portanto, $R$ é uma classe própria.
+\end{thmbox}
+
+\begin{defbox}[title={Subconjuntos e Operações}]
+  \begin{itemize}
+    \item \textbf{Conjunto das partes:} $\mathcal{P}(A) = \{X \mid X \subseteq A\}$.
+    \item \textbf{União:} $A \cup B = \{x \mid x \in A \lor x \in B\}$
+    \item \textbf{Interseção:} $A \cap B = \{x \mid x \in A \land x \in B\}$
+    \item \textbf{Diferença:} $A \setminus B = \{x \mid x \in A \land x \notin B\}$
+    \item \textbf{Leis de De Morgan:} $(A \cup B)^c = A^c \cap B^c$ e $(A \cap B)^c = A^c \cup B^c$.
+  \end{itemize}
+\end{defbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Identificação e Natureza das Classes}
+  Determine se a classe $B = \{x \mid x \text{ é um número primo}\}$ é um conjunto ou classe própria.
+\end{exbox}
+\begin{solbox}
+  É um \textbf{conjunto}. Como é um subconjunto de $\mathbb{N}$ (garantido pelo Axioma da Separação) e $\mathbb{N}$ é um conjunto pelo Axioma do Infinito, $B$ é suficientemente pequeno para ser um conjunto.
+\end{solbox}
+
+\begin{exbox}{2 --- Operações e De Morgan}
+  Seja $U = \{1,2,3,4,5,6\}$, $A = \{1,2,3\}$ e $B = \{3,4,5\}$. Calcule $(A \cup B)^c$ e verifique De Morgan.
+\end{exbox}
+\begin{solbox}
+  $A \cup B = \{1,2,3,4,5\} \implies (A \cup B)^c = \{6\}$. \\
+  Por outro lado, $A^c = \{4,5,6\}$ e $B^c = \{1,2,6\}$. A interseção $A^c \cap B^c = \{6\}$. A lei verifica-se. \checkmark
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1}
+  Dados $U=\{1,2,\ldots,10\}$, $A=\{1,3,5,7,9\}$ e $B=\{1,2,3,5\}$, determine a diferença simétrica $A \triangle B$.
+\end{exercisebox}
+\begin{solbox}
+  $A \setminus B = \{7,9\}$ e $B \setminus A = \{2\}$. \\
+  A diferença simétrica é $(A \setminus B) \cup (B \setminus A) = \{2,7,9\}$.
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Na teoria NBG, explique a diferença entre \emph{Conjunto} e \emph{Classe}. Dê um exemplo de uma classe própria e justifique por que razão não pode ser um conjunto.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Enuncie o Paradoxo de Russell. Qual é a contradição que ele revela na teoria ingénua de conjuntos e como é que a teoria NBG o resolve?
+\end{oralbox}

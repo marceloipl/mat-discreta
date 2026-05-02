@@ -1,0 +1,130 @@
+% ════════════════════════════════════════════════════════════════
+% 1.2 - DERIVADAS DE FUNÇÕES TRIGONOMÉTRICAS INVERSAS
+% ════════════════════════════════════════════════════════════════
+
+\section{Derivadas de Funções Trigonométricas Inversas}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{notebox}[title={Intuição Essencial}]
+  As funções trigonométricas inversas ($\arcsin$, $\arccos$, $\arctan$) permitem recuperar o \textbf{ângulo} a partir da sua respetiva razão trigonométrica. As derivadas destas funções são ferramentas analíticas essenciais quando lidamos com expressões que envolvem ângulos e queremos simplificá-las para formas puramente algébricas.
+\end{notebox}
+
+\begin{defbox}[title={Derivadas Fundamentais}]
+  As derivadas das principais funções trigonométricas inversas para a variável simples $x$ são dadas por:
+  \begin{align*}
+      \frac{\dd}{\dd x} (\arcsin x) &= \frac{1}{\sqrt{1-x^2}}, \qquad |x| < 1 \\[1ex]
+      \frac{\dd}{\dd x} (\arccos x) &= -\frac{1}{\sqrt{1-x^2}}, \qquad |x| < 1 \\[1ex]
+      \frac{\dd}{\dd x} (\arctan x) &= \frac{1}{1+x^2}, \qquad x \in \mathbb{R}
+  \end{align*}
+\end{defbox}
+
+\begin{defbox}[title={Generalização com a Regra da Cadeia}]
+  Na prática, raramente derivamos apenas $x$. Se $u(x)$ for uma função derivável em ordem a $x$, as fórmulas acima generalizam-se multiplicando pela derivada do argumento $u'(x)$:
+  \begin{align*}
+      (\arcsin u)' &= \frac{u'}{\sqrt{1-u^2}} \\[1ex]
+      (\arccos u)' &= -\frac{u'}{\sqrt{1-u^2}} \\[1ex]
+      (\arctan u)' &= \frac{u'}{1+u^2}
+  \end{align*}
+\end{defbox}
+
+\begin{notebox}[title={Dicas de Memorização e Origem Geométrica}]
+  \begin{itemize}
+      \item $\arcsin$ e $\arccos$ partilham a \textbf{exata mesma fórmula}, mudando apenas o sinal (o $\arccos$ é negativo).
+      \item O $\arctan$ é o mais simples de memorizar, pois não tem raízes quadradas: \(\frac{1}{1+x^2}\).
+      \item As raízes quadradas em $\arcsin$ e $\arccos$ aparecem naturalmente devido à sua relação com triângulos retângulos e a aplicação direta do \textbf{Teorema de Pitágoras} durante a dedução trigonométrica destas derivadas.
+  \end{itemize}
+\end{notebox}
+
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Derivada com Argumento Linear}
+  Calcular a derivada da função $f(x) = \arcsin(3x)$.
+\end{exbox}
+\begin{solbox}
+  Neste caso, o nosso argumento é $u(x) = 3x$. A sua derivada é $u'(x) = 3$.
+  Aplicando a regra da cadeia para o arco-seno:
+  \[
+    \frac{\dd}{\dd x}\arcsin(3x) = \frac{(3x)'}{\sqrt{1-(3x)^2}} = \frac{3}{\sqrt{1-9x^2}}
+  \]
+  \textbf{Solução Final:} $\boxed{\frac{3}{\sqrt{1-9x^2}}}$
+\end{solbox}
+
+\begin{exbox}{2 --- Derivada com Argumento Quadrático}
+  Calcular a derivada da função $f(x) = \arctan(x^2)$.
+\end{exbox}
+\begin{solbox}
+  O argumento é $u(x) = x^2$, cuja derivada é $u'(x) = 2x$.
+  Aplicando a regra da cadeia para o arco-tangente:
+  \[
+    \frac{\dd}{\dd x}\arctan(x^2) = \frac{(x^2)'}{1+(x^2)^2} = \frac{2x}{1+x^4}
+  \]
+  \textbf{Solução Final:} $\boxed{\frac{2x}{1+x^4}}$
+\end{solbox}
+
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1 --- Aplicação Direta da Regra da Cadeia}
+  Calcule $\displaystyle \frac{\dd}{\dd x}\arccos(2x)$ usando a regra da cadeia.
+\end{exercisebox}
+\begin{solbox}
+  Seja $u(x) = 2x$. A derivada de $u(x)$ é $2$.
+  A fórmula da derivada do arco-cosseno é análoga à do arco-seno, mas com sinal negativo:
+  \[
+    \frac{\dd}{\dd x}\arccos(2x) = -\frac{(2x)'}{\sqrt{1-(2x)^2}} = -\frac{2}{\sqrt{1-4x^2}}
+  \]
+  \textbf{Solução Final:} $\boxed{-\frac{2}{\sqrt{1-4x^2}}}$
+\end{solbox}
+
+\begin{exercisebox}{2 --- Arco-tangente com Argumento Racional}
+  Determine $\displaystyle \frac{\dd}{\dd x}\arctan\left(\frac{1}{x}\right)$.
+\end{exercisebox}
+\begin{solbox}
+  Temos o argumento $u(x) = \frac{1}{x} = x^{-1}$. A sua derivada é $u'(x) = -x^{-2} = -\frac{1}{x^2}$.
+  Substituindo na fórmula do $\arctan u$:
+  \[
+    \frac{\dd}{\dd x}\arctan\left(\frac{1}{x}\right) = \frac{-\frac{1}{x^2}}{1+\left(\frac{1}{x}\right)^2}
+  \]
+  Para simplificar a expressão algébrica, multiplicamos o numerador e o denominador por $x^2$:
+  \[
+    = \frac{-\frac{1}{x^2} \cdot x^2}{\left(1+\frac{1}{x^2}\right) \cdot x^2} = \frac{-1}{x^2+1} = -\frac{1}{1+x^2}
+  \]
+  \textbf{Nota curiosa:} O resultado é o oposto da derivada de $\arctan(x)$, o que se deve à identidade trigonométrica $\arctan(1/x) = \frac{\pi}{2} - \arctan(x)$ para $x>0$.
+\end{solbox}
+
+\begin{exercisebox}{3 --- Arco-seno com Argumento Cúbico}
+  Calcule $\displaystyle \frac{\dd}{\dd x}\arcsin(x^3)$.
+\end{exercisebox}
+\begin{solbox}
+  Identificamos o argumento como $u(x) = x^3$. A sua derivada é $u'(x) = 3x^2$.
+  Aplicando a regra da cadeia para a derivada do $\arcsin$:
+  \[
+    \frac{\dd}{\dd x}\arcsin(x^3) = \frac{(x^3)'}{\sqrt{1-(x^3)^2}} = \frac{3x^2}{\sqrt{1-x^6}}
+  \]
+  \textbf{Solução Final:} $\boxed{\frac{3x^2}{\sqrt{1-x^6}}}$
+\end{solbox}
+
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Explique geometricamente porque é que a derivada de $\arcsin x$ envolve a existência de uma raiz quadrada no denominador. Que relação tem isto com o Teorema de Pitágoras?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} O que distingue analiticamente o $\arcsin(x)$ do $\arccos(x)$ em termos da sua derivada? E geometricamente, como se comportam as retas tangentes a estas duas curvas?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q3.} Explique, por palavras suas, o papel fundamental da Regra da Cadeia na derivação de funções trigonométricas inversas compostas. O que falharia se derivássemos $\arctan(x^2)$ apenas como $\frac{1}{1+x^4}$?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q4.} A função $\arctan x$ é derivável em todos os números reais, enquanto o $\arcsin x$ e $\arccos x$ apenas são deriváveis no intervalo aberto $]-1, 1[$. Justifique matematicamente esta diferença observando os denominadores das suas derivadas.
+\end{oralbox}

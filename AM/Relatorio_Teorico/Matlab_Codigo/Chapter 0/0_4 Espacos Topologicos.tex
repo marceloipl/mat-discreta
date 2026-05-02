@@ -1,0 +1,161 @@
+% ════════════════════════════════════════════════════════════════
+% 1.4 - INTRODUÇÃO À TOPOLOGIA
+% ════════════════════════════════════════════════════════════════
+
+\section{Introdução à Topologia: Espaços, Vizinhanças e Continuidade}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+É perfeitamente normal achar a topologia um pouco abstrata no início. Na matemática escolar, estamos muito habituados à geometria tradicional, onde medimos distâncias exatas, ângulos e comprimentos. A topologia, por outro lado, é frequentemente chamada de \textbf{``geometria da folha de borracha''}.
+
+Ela não se importa com a distância exata entre dois pontos, mas sim com a forma como o espaço está \emph{conectado}. Num espaço topológico, podemos esticar, encolher ou torcer o espaço à vontade. A única coisa que não podemos fazer é \textbf{rasgar} ou \textbf{colar}.
+
+\subsubsection*{Espaços Topológicos e Conjuntos Abertos}
+
+Para falar de proximidade sem usar uma ``fita métrica'', os matemáticos inventaram o conceito de \textbf{conjunto aberto}.
+
+\begin{defbox}[title={Espaço Topológico}]
+  Um \textbf{espaço topológico} é um par $(X, \mathcal{T})$, onde:
+  \begin{itemize}
+    \item $X$ é um conjunto de ``coisas'' (podem ser números, pontos, pessoas, etc.).
+    \item $\mathcal{T}$ (tau) é uma coleção de subconjuntos de $X$ a que chamamos \textbf{conjuntos abertos}.
+  \end{itemize}
+\end{defbox}
+
+Para que $\mathcal{T}$ seja uma topologia válida, tem de obedecer a três regras fundamentais:
+\begin{enumerate}
+  \item \textbf{O todo e o nada estão incluídos:} O conjunto vazio $\emptyset$ e o conjunto total $X$ têm de ser considerados abertos (pertencem a $\mathcal{T}$).
+  \item \textbf{Interseções finitas:} A interseção de um número \emph{finito} de conjuntos abertos é um conjunto aberto.
+  \item \textbf{Uniões arbitrárias:} A união de \emph{qualquer quantidade} de conjuntos abertos é um conjunto aberto.
+\end{enumerate}
+
+\begin{notebox}[title={Intuição: Conjunto Aberto}]
+  Pensa num ``conjunto aberto'' como uma zona onde, se estiveres lá dentro, podes dar um pequeno passo em qualquer direção e continuas dentro dessa zona. Não há uma fronteira rígida a limitar-te.
+\end{notebox}
+
+\subsubsection*{Vizinhanças}
+
+A vizinhança é a forma topológica de dizer ``perto de''.
+
+\begin{defbox}[title={Vizinhança}]
+  Uma \textbf{vizinhança} de um ponto $x$ é qualquer conjunto que contenha um conjunto aberto que, por sua vez, contém o ponto $x$.
+\end{defbox}
+
+\begin{notebox}[title={Intuição: Vizinhança}]
+  Imagina que o ponto $x$ és tu. Um conjunto aberto que te contém é a tua casa. Uma vizinhança tua pode ser a tua casa, mas também pode ser a tua casa mais o passeio da rua, ou até o teu bairro inteiro. Desde que o conjunto inclua a tua ``zona segura de conforto'' (o conjunto aberto), ele é considerado a tua vizinhança.
+\end{notebox}
+
+\subsubsection*{Continuidade}
+
+No cálculo básico, aprendemos que uma função contínua é aquela que se pode desenhar ``sem levantar a caneta do papel''. Na topologia, como não temos gráficos tradicionais nem distâncias, a definição baseia-se inteiramente em conjuntos abertos.
+
+\begin{defbox}[title={Função Contínua}]
+  Uma função $f: X \to Y$ é \textbf{contínua} se, para qualquer conjunto aberto $V \subseteq Y$, a sua pré-imagem
+  \[
+    f^{-1}(V) = \{ x \in X \mid f(x) \in V \}
+  \]
+  é um conjunto aberto em $X$.
+\end{defbox}
+
+\begin{notebox}[title={Intuição: Continuidade}]
+  Se pegares num grupo de pontos ``bem comportados'' (um conjunto aberto) no destino $Y$, e olhares para de onde eles vieram no espaço original $X$, eles também têm de formar um grupo bem comportado (um conjunto aberto). Isto garante que pontos que estavam ``próximos'' antes da transformação continuam estruturalmente coerentes depois. Não houve ``rasgões''.
+\end{notebox}
+
+\subsubsection*{O Donut e a Caneca de Café}
+
+\begin{center}
+  \textit{``Um topólogo é alguém que não consegue distinguir um donut da sua caneca de café.''}
+\end{center}
+
+A topologia exige uma mudança de mentalidade: da \emph{medição exata} para a \emph{relação e estrutura}. A \textbf{Regra de Ouro} dita que podemos moldar, amassar, esticar e encolher um objeto à vontade. As únicas ações estritamente proibidas são \textbf{fazer buracos novos} (rasgar) e \textbf{unir partes separadas} (colar).
+
+\textbf{A Transformação: De Donut a Caneca} \\
+Imagina que tens um donut feito de plasticina infinitamente elástica:
+\begin{enumerate}
+  \item \textbf{Ponto de partida:} Tens o donut, que tem exatamente \emph{um buraco} no meio.
+  \item \textbf{Criar o copo:} Beliscas e empurras uma das metades da massa, criando uma grande depressão. Como não atravessas a massa para o outro lado, não estás a fazer um buraco novo — apenas a esticar a superfície.
+  \item \textbf{Formar a pega:} A parte restante do donut (com o buraco original intacto) é afinada e esticada, tornando-se a pega da caneca.
+\end{enumerate}
+O buraco no meio do donut tornou-se no buraco por onde passas os dedos na pega da caneca.
+
+\begin{defbox}[title={Homeomorfismo}]
+  Dois espaços são \textbf{topologicamente equivalentes} (homeomorfos) se for possível transformar um no outro sem rasgar nem colar. Esta equivalência (uma função bijetiva e contínua com inversa contínua) chama-se \textbf{homeomorfismo}.
+\end{defbox}
+
+O que define a ``forma'' de um espaço em topologia não é o volume ou os ângulos, mas os seus \textbf{invariantes topológicos} — neste caso, o \emph{número de buracos} (chamado \textbf{género}).
+
+\begin{center}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{tabular}{lcl}
+    \toprule
+    \textbf{Objeto} & \textbf{Género (n.º de buracos)} & \textbf{Equivalente a} \\
+    \midrule
+    Donut (toro) & 1 & Caneca de café \\
+    Caneca de café & 1 & Donut (toro) \\
+    Bola de bilhar & 0 & Esfera, cubo, prato \ldots \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+\begin{notebox}[title={Intuição sobre Buracos}]
+  O espaço interior da caneca onde entra o líquido \emph{não} é um buraco topológico — é apenas uma reentrância cega (uma ``mossa''). O único buraco topológico da caneca é o da pega.
+\end{notebox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Topologia Finita}
+  Imagina um conjunto com três pessoas: $X = \{\text{Ana, Bruno, Carlos}\}$. Define-se a coleção:
+  \[
+    \mathcal{T} = \bigl\{\, \emptyset,\; \{\text{Ana, Bruno, Carlos}\},\; \{\text{Ana}\} \,\bigr\}
+  \]
+  Verifique se $\mathcal{T}$ é uma topologia e se $\{\text{Ana, Bruno}\}$ é uma vizinhança da Ana.
+\end{exbox}
+\begin{solbox}
+  \textbf{1. Verificação da Topologia:}
+  \begin{itemize}
+    \item $\emptyset$ e $X$ pertencem a $\mathcal{T}$. \checkmark
+    \item A interseção de $\{\text{Ana}\}$ com $X$ é $\{\text{Ana}\}$, que está em $\mathcal{T}$. \checkmark
+    \item A união de $\{\text{Ana}\}$ com $\emptyset$ é $\{\text{Ana}\}$, que está em $\mathcal{T}$. \checkmark
+  \end{itemize}
+  Logo, $(X, \mathcal{T})$ é um espaço topológico válido.
+  
+  \textbf{2. Vizinhança:}
+  O conjunto $\{\text{Ana, Bruno}\}$ é uma \emph{vizinhança} da Ana? \textbf{Sim}, porque contém o conjunto aberto $\{\text{Ana}\}$, e esse conjunto aberto contém a Ana.
+\end{solbox}
+
+\begin{exbox}{2 --- A Reta Real (Topologia Padrão)}
+  Na reta real $\mathbb{R}$, os conjuntos abertos são os intervalos abertos (sem as extremidades). Analise a continuidade da função $f(x) = 2x$.
+\end{exbox}
+\begin{solbox}
+  Na topologia padrão, o intervalo $(0, 1)$ — que inclui $0{,}1$, $0{,}5$, $0{,}999$, mas \textbf{não} o $0$ nem o $1$ — é um conjunto aberto. Para qualquer ponto interior (ex: $0{,}99$), existe sempre um intervalo menor em seu redor que o contém por completo e ainda está dentro de $(0,1)$.
+
+  A função $f(x) = 2x$ é contínua. Para provar topologicamente, basta ver que a pré-imagem de um conjunto aberto qualquer, como o intervalo $V = (2, 4)$ no destino $Y$, é o conjunto $f^{-1}(V) = (1, 2)$ no domínio $X$. Como $(1, 2)$ também é um intervalo aberto, a pré-imagem de um aberto é aberta. A estrutura mantém-se!
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1}
+  Seja $X = \{1, 2, 3\}$. Considere a coleção $\mathcal{T} = \{\emptyset, \{1\}, \{2\}, \{1, 2, 3\}\}$. Verifique se $\mathcal{T}$ forma uma topologia em $X$. Em caso negativo, explique qual a regra que falha.
+\end{exercisebox}
+\begin{solbox}
+  Para ser topologia, $\mathcal{T}$ tem de ser fechada para uniões arbitrárias. 
+  
+  Se unirmos o conjunto aberto $\{1\}$ com o conjunto aberto $\{2\}$, obtemos:
+  \[ \{1\} \cup \{2\} = \{1, 2\} \]
+  
+  No entanto, o conjunto $\{1, 2\}$ \textbf{não pertence} à coleção $\mathcal{T}$. Como a regra da união falha, $\mathcal{T}$ \textbf{não} é uma topologia válida em $X$.
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Explique, por palavras suas e usando a analogia da "geometria da folha de borracha", por que motivo a topologia não utiliza conceitos como "distância" ou "ângulo" e como o conceito de \emph{conjunto aberto} substitui a fita métrica para definir a proximidade.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Um prato de sopa fundo e uma bola de bowling são topologicamente equivalentes (homeomorfos)? Justifique a sua resposta com base no conceito de género (número de buracos) e nas regras de deformação topológica permitidas.
+\end{oralbox}

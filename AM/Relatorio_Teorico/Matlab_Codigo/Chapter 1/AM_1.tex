@@ -1,0 +1,600 @@
+% ════════════════════════════════════════════════════════════════
+% 1.1 - CONCEITOS DE DERIVADA
+% ════════════════════════════════════════════════════════════════
+
+\chapter{Cálculo Diferencial em R}
+
+\section{Conceitos de Derivada}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{notebox}[title={Intuição Essencial}]
+  A derivada mede a \textbf{velocidade instantânea de mudança}. Se uma função descreve uma quantidade que varia (como a posição, a temperatura ou o custo financeiro), a derivada indica-nos quão rápido essa quantidade está a mudar num exato instante.
+\end{notebox}
+
+\begin{defbox}[title={Derivada de uma Função num Ponto}]
+  Seja $f:\mathbb{R}\to\mathbb{R}$. Diz-se que $f$ é \textbf{derivável} (ou diferenciável) num ponto $x_0$ se o seguinte limite existir e for um número finito:
+  \[
+    f'(x_0) = \lim_{h\to 0} \frac{f(x_0+h)-f(x_0)}{h}
+  \]
+  Geometricamente, este valor representa a \textbf{inclinação (ou declive) da reta tangente} à curva representativa de $f$ no ponto de abcissa $x_0$. O termo interno $\frac{f(x_0+h)-f(x_0)}{h}$ é a \emph{taxa média de variação} (ou quociente incremental).
+\end{defbox}
+
+\begin{defbox}[title={Regras Fundamentais de Derivação}]
+  Sejam $f$ e $g$ funções deriváveis e $c, n \in \mathbb{R}$. As operações com derivadas respeitam as seguintes regras operatórias:
+  \begin{itemize}
+      \item \textbf{Constante:} $(c)' = 0$
+      \item \textbf{Potência:} $(x^n)' = n x^{n-1}$
+      \item \textbf{Soma e Diferença:} $(f \pm g)' = f' \pm g'$
+      \item \textbf{Multiplicação por Escalar:} $(cf)' = c f'$
+      \item \textbf{Produto:} $(f \cdot g)' = f'g + f g'$
+      \item \textbf{Quociente:} $\displaystyle \left(\frac{f}{g}\right)' = \frac{f'g - f g'}{g^2}$ \quad (para $g \neq 0$)
+      \item \textbf{Regra da Cadeia (Funções Compostas):} $(f \circ g)'(x) = f'(g(x)) \cdot g'(x)$
+  \end{itemize}
+\end{defbox}
+
+\begin{warnbox}[title={Erros Comuns na Derivação}]
+  \begin{itemize}
+      \item \textbf{Confundir o quociente incremental com a derivada:} A expressão $\frac{f(x+h)-f(x)}{h}$ dá-nos apenas a velocidade \emph{média} entre dois pontos. A derivada (velocidade \emph{instantânea}) exige a aplicação obrigatória do limite $h \to 0$.
+      \item \textbf{Achar que "Contínua $\implies$ Derivável":} Esta implicação é \textbf{falsa}. Toda a função derivável é garantidamente contínua, mas \emph{nem toda} função contínua é derivável. O contraexemplo clássico é $f(x) = |x|$, que não tem derivada na origem devido a uma "quebra" abrupta na geometria.
+  \end{itemize}
+\end{warnbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Derivada de uma Função Potência}
+  Calcular a derivada da função $f(x)=x^3$ e interpretar o resultado.
+\end{exbox}
+\begin{solbox}
+  Aplicando diretamente a regra da potência $(x^n)' = n x^{n-1}$ com $n=3$:
+  \[
+    f'(x) = 3x^{3-1} = \mathbf{3x^2}
+  \]
+  \textbf{Interpretação:} A inclinação da reta tangente à curva num dado ponto $x$ é dada por $3x^2$. Como $x^2 \ge 0$, a função está sempre a crescer (ou com inclinação nula na origem, onde $x=0$). À medida que o valor de $x$ se afasta do centro, a inclinação aumenta exponencialmente, tornando a curva cada vez mais íngreme.
+\end{solbox}
+
+\begin{exbox}{2 --- Falha na Derivabilidade (O "Bico")}
+  A função $f(x)=|x|$ não é derivável em $x=0$. Explique o porquê de forma intuitiva.
+\end{exbox}
+\begin{solbox}
+  A função módulo forma um "bico" (ponto anguloso) exatamente em $x=0$.
+  Se analisarmos as inclinações das semirretas laterais:
+  \begin{itemize}
+      \item O lado esquerdo da curva tem inclinação constante de $-1$.
+      \item O lado direito da curva tem inclinação constante de $+1$.
+  \end{itemize}
+  Como as inclinações laterais não coincidem ($-1 \neq 1$), o limite que define a derivada não existe nesse ponto. Na prática, não conseguimos equilibrar uma \emph{única} reta tangente na ponta daquele bico.
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1 --- Aplicação Múltipla de Regras}
+  Calcule a função derivada $f'(x)$ para o polinómio $f(x)=5x^4 - 3x + 7$.
+\end{exercisebox}
+\begin{solbox}
+  Utilizando linearmente as regras da soma, da multiplicação por escalar, da potência e da constante:
+  \begin{align*}
+      f'(x) &= (5x^4)' - (3x)' + (7)' \\
+            &= 5(4x^3) - 3(1) + 0 \\
+            &= 20x^3 - 3
+  \end{align*}
+  \textbf{Solução Final:} $\boxed{f'(x) = 20x^3 - 3}$.
+\end{solbox}
+
+\begin{exercisebox}{2 --- Análise Analítica de Derivabilidade}
+  Determine se a função $f(x)=|x-2|$ é derivável em $x=2$. Justifique o seu raciocínio.
+\end{exercisebox}
+\begin{solbox}
+  Vamos calcular os limites laterais do quociente incremental no ponto $x_0 = 2$.
+  Sabemos que $f(2) = |2-2| = 0$.
+  
+  \textbf{Limite à direita ($h \to 0^+$):}
+  \[
+    \lim_{h \to 0^+} \frac{f(2+h) - f(2)}{h} = \lim_{h \to 0^+} \frac{|2+h-2|}{h} = \lim_{h \to 0^+} \frac{|h|}{h} = \lim_{h \to 0^+} \frac{h}{h} = \mathbf{1}
+  \]
+  
+  \textbf{Limite à esquerda ($h \to 0^-$):}
+  \[
+    \lim_{h \to 0^-} \frac{f(2+h) - f(2)}{h} = \lim_{h \to 0^-} \frac{|h|}{h} = \lim_{h \to 0^-} \frac{-h}{h} = \mathbf{-1}
+  \]
+  
+  Como os limites laterais devolvem valores distintos ($1 \neq -1$), o limite global em $x=2$ não existe. \\
+  \textbf{Conclusão:} A função \textbf{não é derivável} em $x=2$.
+\end{solbox}
+
+\begin{exercisebox}{3 --- Prova pela Definição Formal}
+  Mostre, recorrendo estritamente à definição formal de limite, que para $f(x) = x^2$, a derivada é efetivamente $(x^2)' = 2x$.
+\end{exercisebox}
+\begin{solbox}
+  Pela definição, a derivada é dada por:
+  \[
+    f'(x) = \lim_{h\to 0} \frac{f(x+h)-f(x)}{h}
+  \]
+  Substituindo a função pela expressão $f(x) = x^2$:
+  \begin{align*}
+      f'(x) &= \lim_{h\to 0} \frac{(x+h)^2 - x^2}{h} \\
+            &= \lim_{h\to 0} \frac{x^2 + 2xh + h^2 - x^2}{h} \\
+            &= \lim_{h\to 0} \frac{2xh + h^2}{h}
+  \end{align*}
+  Fatorizando o $h$ no numerador (visto que $h \neq 0$ durante a aproximação no limite):
+  \[
+    f'(x) = \lim_{h\to 0} \frac{h(2x + h)}{h} = \lim_{h\to 0} (2x + h)
+  \]
+  Aplicando a substituição direta do limite quando $h \to 0$, obtemos finalmente:
+  \[
+    f'(x) = 2x + 0 = \mathbf{2x} \quad \text{\checkmark}
+  \]
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Como explicaria o conceito prático de derivada a alguém do ensino básico? (Sugestão: recorra à analogia de um carro em viagem a medir a velocidade no conta-quilómetros).
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Qual a diferença rigorosa entre \emph{taxa média de variação} e \emph{taxa instantânea de variação}? Relacione ambos os conceitos geométricos (reta secante \textit{vs.} reta tangente).
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q3.} Em que pontos exatos a função modular típica, como $|x|$, falha a derivabilidade e porquê? Explique porque é que a \emph{continuidade} não é suficiente para garantir a derivação.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q4.} Explique geometricamente ou através de taxas de variação interdependentes a intuição por trás da Regra da Cadeia. Como se comportam os declives numa função composta?
+\end{oralbox}
+
+
+% ════════════════════════════════════════════════════════════════
+% 1.2 - DERIVADAS DE FUNÇÕES TRIGONOMÉTRICAS INVERSAS
+% ════════════════════════════════════════════════════════════════
+
+\section{Derivadas de Funções Trigonométricas Inversas}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{notebox}[title={Intuição Essencial}]
+  As funções trigonométricas inversas ($\arcsin$, $\arccos$, $\arctan$) permitem recuperar o \textbf{ângulo} a partir da sua respetiva razão trigonométrica. As derivadas destas funções são ferramentas analíticas essenciais quando lidamos com expressões que envolvem ângulos e queremos simplificá-las para formas puramente algébricas.
+\end{notebox}
+
+\begin{defbox}[title={Derivadas Fundamentais}]
+  As derivadas das principais funções trigonométricas inversas para a variável simples $x$ são dadas por:
+  \begin{align*}
+      \frac{\dd}{\dd x} (\arcsin x) &= \frac{1}{\sqrt{1-x^2}}, \qquad |x| < 1 \\[1ex]
+      \frac{\dd}{\dd x} (\arccos x) &= -\frac{1}{\sqrt{1-x^2}}, \qquad |x| < 1 \\[1ex]
+      \frac{\dd}{\dd x} (\arctan x) &= \frac{1}{1+x^2}, \qquad x \in \mathbb{R}
+  \end{align*}
+\end{defbox}
+
+\begin{defbox}[title={Generalização com a Regra da Cadeia}]
+  Na prática, raramente derivamos apenas $x$. Se $u(x)$ for uma função derivável em ordem a $x$, as fórmulas acima generalizam-se multiplicando pela derivada do argumento $u'(x)$:
+  \begin{align*}
+      (\arcsin u)' &= \frac{u'}{\sqrt{1-u^2}} \\[1ex]
+      (\arccos u)' &= -\frac{u'}{\sqrt{1-u^2}} \\[1ex]
+      (\arctan u)' &= \frac{u'}{1+u^2}
+  \end{align*}
+\end{defbox}
+
+\begin{notebox}[title={Dicas de Memorização e Origem Geométrica}]
+  \begin{itemize}
+      \item $\arcsin$ e $\arccos$ partilham a \textbf{exata mesma fórmula}, mudando apenas o sinal (o $\arccos$ é negativo).
+      \item O $\arctan$ é o mais simples de memorizar, pois não tem raízes quadradas: \(\frac{1}{1+x^2}\).
+      \item As raízes quadradas em $\arcsin$ e $\arccos$ aparecem naturalmente devido à sua relação com triângulos retângulos e a aplicação direta do \textbf{Teorema de Pitágoras} durante a dedução trigonométrica destas derivadas.
+  \end{itemize}
+\end{notebox}
+
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Derivada com Argumento Linear}
+  Calcular a derivada da função $f(x) = \arcsin(3x)$.
+\end{exbox}
+\begin{solbox}
+  Neste caso, o nosso argumento é $u(x) = 3x$. A sua derivada é $u'(x) = 3$.
+  Aplicando a regra da cadeia para o arco-seno:
+  \[
+    \frac{\dd}{\dd x}\arcsin(3x) = \frac{(3x)'}{\sqrt{1-(3x)^2}} = \frac{3}{\sqrt{1-9x^2}}
+  \]
+  \textbf{Solução Final:} $\boxed{\frac{3}{\sqrt{1-9x^2}}}$
+\end{solbox}
+
+\begin{exbox}{2 --- Derivada com Argumento Quadrático}
+  Calcular a derivada da função $f(x) = \arctan(x^2)$.
+\end{exbox}
+\begin{solbox}
+  O argumento é $u(x) = x^2$, cuja derivada é $u'(x) = 2x$.
+  Aplicando a regra da cadeia para o arco-tangente:
+  \[
+    \frac{\dd}{\dd x}\arctan(x^2) = \frac{(x^2)'}{1+(x^2)^2} = \frac{2x}{1+x^4}
+  \]
+  \textbf{Solução Final:} $\boxed{\frac{2x}{1+x^4}}$
+\end{solbox}
+
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1 --- Aplicação Direta da Regra da Cadeia}
+  Calcule $\displaystyle \frac{\dd}{\dd x}\arccos(2x)$ usando a regra da cadeia.
+\end{exercisebox}
+\begin{solbox}
+  Seja $u(x) = 2x$. A derivada de $u(x)$ é $2$.
+  A fórmula da derivada do arco-cosseno é análoga à do arco-seno, mas com sinal negativo:
+  \[
+    \frac{\dd}{\dd x}\arccos(2x) = -\frac{(2x)'}{\sqrt{1-(2x)^2}} = -\frac{2}{\sqrt{1-4x^2}}
+  \]
+  \textbf{Solução Final:} $\boxed{-\frac{2}{\sqrt{1-4x^2}}}$
+\end{solbox}
+
+\begin{exercisebox}{2 --- Arco-tangente com Argumento Racional}
+  Determine $\displaystyle \frac{\dd}{\dd x}\arctan\left(\frac{1}{x}\right)$.
+\end{exercisebox}
+\begin{solbox}
+  Temos o argumento $u(x) = \frac{1}{x} = x^{-1}$. A sua derivada é $u'(x) = -x^{-2} = -\frac{1}{x^2}$.
+  Substituindo na fórmula do $\arctan u$:
+  \[
+    \frac{\dd}{\dd x}\arctan\left(\frac{1}{x}\right) = \frac{-\frac{1}{x^2}}{1+\left(\frac{1}{x}\right)^2}
+  \]
+  Para simplificar a expressão algébrica, multiplicamos o numerador e o denominador por $x^2$:
+  \[
+    = \frac{-\frac{1}{x^2} \cdot x^2}{\left(1+\frac{1}{x^2}\right) \cdot x^2} = \frac{-1}{x^2+1} = -\frac{1}{1+x^2}
+  \]
+  \textbf{Nota curiosa:} O resultado é o oposto da derivada de $\arctan(x)$, o que se deve à identidade trigonométrica $\arctan(1/x) = \frac{\pi}{2} - \arctan(x)$ para $x>0$.
+\end{solbox}
+
+\begin{exercisebox}{3 --- Arco-seno com Argumento Cúbico}
+  Calcule $\displaystyle \frac{\dd}{\dd x}\arcsin(x^3)$.
+\end{exercisebox}
+\begin{solbox}
+  Identificamos o argumento como $u(x) = x^3$. A sua derivada é $u'(x) = 3x^2$.
+  Aplicando a regra da cadeia para a derivada do $\arcsin$:
+  \[
+    \frac{\dd}{\dd x}\arcsin(x^3) = \frac{(x^3)'}{\sqrt{1-(x^3)^2}} = \frac{3x^2}{\sqrt{1-x^6}}
+  \]
+  \textbf{Solução Final:} $\boxed{\frac{3x^2}{\sqrt{1-x^6}}}$
+\end{solbox}
+
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Explique geometricamente porque é que a derivada de $\arcsin x$ envolve a existência de uma raiz quadrada no denominador. Que relação tem isto com o Teorema de Pitágoras?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} O que distingue analiticamente o $\arcsin(x)$ do $\arccos(x)$ em termos da sua derivada? E geometricamente, como se comportam as retas tangentes a estas duas curvas?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q3.} Explique, por palavras suas, o papel fundamental da Regra da Cadeia na derivação de funções trigonométricas inversas compostas. O que falharia se derivássemos $\arctan(x^2)$ apenas como $\frac{1}{1+x^4}$?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q4.} A função $\arctan x$ é derivável em todos os números reais, enquanto o $\arcsin x$ e $\arccos x$ apenas são deriváveis no intervalo aberto $]-1, 1[$. Justifique matematicamente esta diferença observando os denominadores das suas derivadas.
+\end{oralbox}
+
+
+% ════════════════════════════════════════════════════════════════
+% 1.3 - DERIVADAS DE ORDEM SUPERIOR E POLINÓMIO DE TAYLOR
+% ════════════════════════════════════════════════════════════════
+
+\section{Derivadas de Ordem Superior e Polinómio de Taylor}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{notebox}[title={Intuição Geral}]
+  Derivar uma função várias vezes sucessivas revela padrões profundos e comportamentos finos da curva geométrica:
+  \begin{itemize}
+      \item \textbf{1ª Derivada ($f'$):} Dá-nos a \emph{velocidade} ou taxa de variação (inclinação da reta tangente).
+      \item \textbf{2ª Derivada ($f''$):} Dá-nos a \emph{aceleração} ou a taxa de variação da velocidade. Geometricamente, mede a \emph{curvatura} ou concavidade da função.
+      \item \textbf{3ª Derivada em diante ($f'''$, $f^{(4)}$, \dots):} Refletem comportamentos de ordem superior (como o \emph{jerk} na física) e ajustes geométricos cada vez mais finos.
+  \end{itemize}
+  Juntando todas estas derivadas num único ponto, conseguimos construir o \textbf{Polinómio de Taylor}, que aproxima uma função complexa através de uma expressão polinomial simples.
+\end{notebox}
+
+\begin{defbox}[title={Derivadas Sucessivas}]
+  Se $f$ é uma função derivável e a sua derivada $f'$ também o é, podemos continuar a derivar sucessivamente. Definimos rigorosamente:
+  \[
+    f'' = (f')', \qquad f''' = (f'')', \qquad f^{(n)} = \left(f^{(n-1)}\right)'
+  \]
+  A notação $f^{(n)}$ (com o $n$ entre parêntesis) é usada para representar a derivada de ordem $n$, evitando a confusão com potências algébricas ($f^n$).
+\end{defbox}
+
+\begin{defbox}[title={Polinómio de Taylor}]
+  Seja $f$ uma função que admite derivadas até à ordem $n$ no ponto $x=a$. O \textbf{polinómio de Taylor de ordem $n$} de $f$ centrado em $a$ é dado por:
+  \[
+    T_n(x) = \sum_{k=0}^n \frac{f^{(k)}(a)}{k!}(x-a)^k
+  \]
+  Expandindo a notação de somatório, obtemos:
+  \[
+    T_n(x) = f(a) + f'(a)(x-a) + \frac{f''(a)}{2!}(x-a)^2 + \frac{f'''(a)}{3!}(x-a)^3 + \dots + \frac{f^{(n)}(a)}{n!}(x-a)^n
+  \]
+  \textit{Nota:} Quando o desenvolvimento é feito em torno da origem ($a=0$), o polinómio é frequentemente designado por \textbf{Polinómio de Maclaurin}.
+\end{defbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- Derivadas Sucessivas e Taylor da Exponencial}
+  Derive a função $f(x)=e^x$ até à 4ª ordem e construa o respetivo polinómio de Taylor centrado em $a=0$.
+\end{exbox}
+\begin{solbox}
+  A função exponencial de base $e$ é única porque é a sua própria derivada. Assim, todas as derivadas sucessivas são idênticas:
+  \[
+    f(x) = f'(x) = f''(x) = f'''(x) = f^{(4)}(x) = e^x
+  \]
+  Avaliando todas estas derivadas no ponto $a=0$, obtemos:
+  \[
+    f(0) = f'(0) = f''(0) = f'''(0) = f^{(4)}(0) = e^0 = 1
+  \]
+  Aplicando a fórmula do Polinómio de Taylor para $n=4$:
+  \[
+    T_4(x) = 1 + 1\cdot(x-0) + \frac{1}{2!}(x-0)^2 + \frac{1}{3!}(x-0)^3 + \frac{1}{4!}(x-0)^4
+  \]
+  \textbf{Solução Final:} $\boxed{T_4(x) = 1 + x + \frac{x^2}{2} + \frac{x^3}{6} + \frac{x^4}{24}}$
+\end{solbox}
+
+\begin{exbox}{2 --- Aproximação de Funções com Radicais}
+  Aproximar a função $f(x) = \sqrt{1+x}$ através de um Polinómio de Taylor de ordem 3 perto da origem ($a=0$).
+\end{exbox}
+\begin{solbox}
+  Reescrevemos a função como $f(x) = (1+x)^{1/2}$ e calculamos as derivadas com a regra da potência e da cadeia:
+  \begin{align*}
+      f(x)   &= (1+x)^{1/2} & \implies f(0) &= 1 \\
+      f'(x)  &= \frac{1}{2}(1+x)^{-1/2} & \implies f'(0) &= \frac{1}{2} \\
+      f''(x) &= -\frac{1}{4}(1+x)^{-3/2} & \implies f''(0) &= -\frac{1}{4} \\
+      f'''(x)&= \frac{3}{8}(1+x)^{-5/2} & \implies f'''(0) &= \frac{3}{8}
+  \end{align*}
+  \begin{warnbox}[title={Atenção aos Fatoriais!}]
+    Um erro muito comum é esquecer de dividir as derivadas pelos fatoriais da fórmula de Taylor.
+  \end{warnbox}
+  Aplicando a fórmula correta $T_3(x) = f(0) + f'(0)x + \frac{f''(0)}{2!}x^2 + \frac{f'''(0)}{3!}x^3$:
+  \[
+    T_3(x) = 1 + \frac{1}{2}x + \frac{-1/4}{2}x^2 + \frac{3/8}{6}x^3
+  \]
+  \textbf{Solução Final:} $\boxed{T_3(x) = 1 + \frac{1}{2}x - \frac{1}{8}x^2 + \frac{1}{16}x^3}$
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1 --- Derivadas de Ordem Superior}
+  Encontre as três primeiras derivadas sucessivas da função $f(x)=\ln(1+x)$.
+\end{exercisebox}
+\begin{solbox}
+  Usando as regras de derivação (sabendo que a derivada de $\ln(u)$ é $u'/u$):
+  \begin{align*}
+      f'(x) &= \frac{1}{1+x} = (1+x)^{-1} \\[1ex]
+      f''(x) &= -1 \cdot (1+x)^{-2} \cdot (1+x)' = -(1+x)^{-2} = -\frac{1}{(1+x)^2} \\[1ex]
+      f'''(x) &= -(-2) \cdot (1+x)^{-3} \cdot 1 = 2(1+x)^{-3} = \frac{2}{(1+x)^3}
+  \end{align*}
+\end{solbox}
+
+\begin{exercisebox}{2 --- Polinómio de Taylor Fora da Origem}
+  Construa o polinómio de Taylor de ordem 2 da função $f(x) = \sin x$ centrado em $a=\pi/4$.
+\end{exercisebox}
+\begin{solbox}
+  Calculamos a função e as suas duas primeiras derivadas no ponto $a = \pi/4$:
+  \begin{align*}
+      f(x) &= \sin x & \implies f(\pi/4) &= \frac{\sqrt{2}}{2} \\
+      f'(x) &= \cos x & \implies f'(\pi/4) &= \frac{\sqrt{2}}{2} \\
+      f''(x) &= -\sin x & \implies f''(\pi/4) &= -\frac{\sqrt{2}}{2}
+  \end{align*}
+  A fórmula de Taylor para $n=2$ é $T_2(x) = f(a) + f'(a)(x-a) + \frac{f''(a)}{2!}(x-a)^2$:
+  \[
+    T_2(x) = \frac{\sqrt{2}}{2} + \frac{\sqrt{2}}{2}\left(x-\frac{\pi}{4}\right) + \frac{-\sqrt{2}/2}{2}\left(x-\frac{\pi}{4}\right)^2
+  \]
+  \textbf{Solução Final:} $\boxed{T_2(x) = \frac{\sqrt{2}}{2} + \frac{\sqrt{2}}{2}\left(x-\frac{\pi}{4}\right) - \frac{\sqrt{2}}{4}\left(x-\frac{\pi}{4}\right)^2}$
+\end{solbox}
+
+\begin{exercisebox}{3 --- Série Geométrica via Taylor}
+  Determine o Polinómio de Taylor $T_3(x)$ centrado em $a=0$ para a função $f(x)=\frac{1}{1-x}$.
+\end{exercisebox}
+\begin{solbox}
+  Reescrevemos $f(x) = (1-x)^{-1}$ e derivamos usando a regra da cadeia (com $u' = -1$):
+  \begin{align*}
+      f(x) &= (1-x)^{-1} & \implies f(0) &= 1 \\
+      f'(x) &= -(1-x)^{-2}(-1) = (1-x)^{-2} & \implies f'(0) &= 1 \\
+      f''(x) &= -2(1-x)^{-3}(-1) = 2(1-x)^{-3} & \implies f''(0) &= 2 \\
+      f'''(x) &= -6(1-x)^{-4}(-1) = 6(1-x)^{-4} & \implies f'''(0) &= 6
+  \end{align*}
+  Construindo o polinómio:
+  \[
+    T_3(x) = 1 + 1\cdot x + \frac{2}{2!}x^2 + \frac{6}{3!}x^3
+  \]
+  Simplificando os fatoriais ($2!=2$ e $3!=6$):
+  \textbf{Solução Final:} $\boxed{T_3(x) = 1 + x + x^2 + x^3}$
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Explique, intuitivamente, o que significa a segunda derivada ser positiva ou negativa num determinado ponto de uma curva geométrica. Qual é a relação disto com o comportamento das retas tangentes?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Em que situações prático-científicas ou computacionais é que a utilização do Polinómio de Taylor é extremamente útil face ao cálculo direto da função original? Dê um exemplo.
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q3.} Por que motivo é que a função exponencial $e^x$ é muitas vezes considerada a função "mais simples" para derivar repetidamente e para construir as séries de Taylor?
+\end{oralbox}
+
+
+% ════════════════════════════════════════════════════════════════
+% 1.4 - CURVAS PARAMÉTRICAS E DERIVAÇÃO
+% ════════════════════════════════════════════════════════════════
+
+\section{Curvas Paramétricas e Derivação}
+
+% ────────────────────────────────────────────────────────
+\subsection{Enquadramento Teórico}
+
+\begin{notebox}[title={Intuição Geral}]
+  As curvas paramétricas são a ferramenta ideal para descrever \textbf{movimentos} contínuos. Em vez de forçarmos uma variável a depender da outra (como em $y = f(x)$), expressamos ambas as coordenadas como funções de uma terceira variável independente: o parâmetro $t$, que é frequentemente interpretado como o ``tempo''.
+  Assim, a posição de um objeto a cada instante é dada pelo ponto $(x(t), y(t))$. A \emph{derivada} destas funções indica-nos exatamente como a posição está a mudar, ou seja, dá-nos a \textbf{velocidade} do objeto nesse instante.
+\end{notebox}
+
+\begin{defbox}[title={Curva Paramétrica e Vetor Velocidade}]
+  Uma \textbf{curva paramétrica} no plano bidimensional é definida por um par de funções contínuas:
+  \[
+    \gamma(t) = (x(t), y(t)), \quad t \in I
+  \]
+  onde $I$ é um intervalo de números reais.
+  
+  Se as funções $x(t)$ e $y(t)$ forem deriváveis, a \textbf{derivada da curva} (ou vetor velocidade) é obtida derivando cada componente individualmente em ordem a $t$:
+  \[
+    \gamma'(t) = (x'(t), y'(t))
+  \]
+  Este vetor $\gamma'(t)$ é geometricamente \textbf{tangente} à curva geométrica no ponto $\gamma(t)$.
+\end{defbox}
+
+\begin{defbox}[title={Comprimento de uma Curva (Arco)}]
+  Se o vetor velocidade for contínuo e a curva não se cruzar a si própria, o \textbf{comprimento total} $L$ do percurso percorrido entre o instante $t=a$ e $t=b$ é dado pelo integral da norma (tamanho) do vetor velocidade:
+  \[
+    L = \int_a^b \|\gamma'(t)\| \,dt = \int_a^b \sqrt{(x'(t))^2 + (y'(t))^2} \,dt
+  \]
+\end{defbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exemplos Resolvidos}
+
+\begin{exbox}{1 --- A Circunferência Padrão}
+  Considere a curva paramétrica geométrica que descreve uma circunferência de raio 1:
+  \[
+    \gamma(t) = (\cos t, \sin t)
+  \]
+  Calcule a sua derivada e interprete o resultado geometricamente.
+\end{exbox}
+\begin{solbox}
+  Derivando componente a componente:
+  \[
+    \gamma'(t) = (-\sin t, \cos t)
+  \]
+  \textbf{Interpretação:} O vetor velocidade $\gamma'(t)$ é sempre ortogonal ao vetor posição $\gamma(t)$ (o produto interno entre eles é $-\sin t \cos t + \cos t \sin t = 0$), o que confirma que a velocidade é sempre \textbf{tangente} ao círculo. Além disso, a norma do vetor velocidade é:
+  \[
+    \|\gamma'(t)\| = \sqrt{(-\sin t)^2 + (\cos t)^2} = \sqrt{\sin^2 t + \cos^2 t} = \sqrt{1} = 1
+  \]
+  Como a norma é constante e igual a 1, trata-se de um \textbf{movimento circular uniforme}.
+\end{solbox}
+
+\begin{exbox}{2 --- Comprimento de uma Espiral Simples}
+  Determine a expressão integral para o comprimento da espiral definida por $\gamma(t)=(t\cos t, t\sin t)$ entre $t=0$ e $t=a$.
+\end{exbox}
+\begin{solbox}
+  Primeiro, determinamos o vetor velocidade usando a regra do produto em cada componente:
+  \begin{align*}
+      x'(t) &= (\cos t - t\sin t) \\
+      y'(t) &= (\sin t + t\cos t)
+  \end{align*}
+  O comprimento entre $0$ e $a$ é dado por:
+  \[
+    L = \int_0^a \sqrt{(\cos t - t\sin t)^2 + (\sin t + t\cos t)^2} \,dt
+  \]
+  \textbf{Simplificação do interior da raiz:}
+  Expandindo os quadrados perfeitos:
+  \begin{align*}
+      (x')^2 &= \cos^2 t - 2t\cos t\sin t + t^2\sin^2 t \\
+      (y')^2 &= \sin^2 t + 2t\sin t\cos t + t^2\cos^2 t
+  \end{align*}
+  Somando as duas expressões, o termo cruzado anula-se:
+  \[
+    (x')^2 + (y')^2 = (\cos^2 t + \sin^2 t) + t^2(\sin^2 t + \cos^2 t) = 1 + t^2
+  \]
+  \textbf{Resultado final:}
+  A expressão integral simplificada para o comprimento da espiral é:
+  \[
+    \boxed{ L = \int_0^a \sqrt{1+t^2} \,dt }
+  \]
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Exercícios Práticos}
+
+\begin{exercisebox}{1 --- Derivação Paramétrica Simples}
+  Derive a curva polinomial $\gamma(t)=(t^2, t^3)$.
+\end{exercisebox}
+\begin{solbox}
+  Basta derivar cada uma das coordenadas em ordem à variável independente $t$:
+  \begin{itemize}
+      \item $x(t) = t^2 \implies x'(t) = 2t$
+      \item $y(t) = t^3 \implies y'(t) = 3t^2$
+  \end{itemize}
+  \textbf{Solução Final:} O vetor velocidade é $\boxed{\gamma'(t) = (2t, 3t^2)}$.
+\end{solbox}
+
+\begin{exercisebox}{2 --- Cálculo Efetivo do Comprimento de Arco}
+  Calcule o comprimento da curva linear $\gamma(t)=(3t, 4t)$ entre $t=0$ e $t=1$.
+\end{exercisebox}
+\begin{solbox}
+  Primeiro, calculamos o vetor velocidade:
+  \[
+    \gamma'(t) = (3, 4)
+  \]
+  A norma deste vetor (a velocidade escalar) é:
+  \[
+    \|\gamma'(t)\| = \sqrt{3^2 + 4^2} = \sqrt{9 + 16} = \sqrt{25} = 5
+  \]
+  O comprimento total é o integral desta norma entre os instantes fornecidos:
+  \[
+    L = \int_0^1 5 \,dt = \Big[ 5t \Big]_0^1 = 5(1) - 5(0) = \mathbf{5}
+  \]
+  \textit{Nota geométrica:} Esta curva descreve um segmento de reta que vai do ponto $(0,0)$ ao ponto $(3,4)$. A distância direta é precisamente 5 (conforme o Teorema de Pitágoras).
+\end{solbox}
+
+\begin{exercisebox}{3 --- Ortogonalidade do Movimento}
+  Mostre que a curva $\gamma(t)=(e^t, e^{-t})$ tem um vetor velocidade perpendicular ao seu \emph{vetor posição} no instante $t=0$.
+\end{exercisebox}
+\begin{solbox}
+  Para provar a perpendicularidade (ortogonalidade), o produto interno (produto escalar) entre o vetor posição e o vetor velocidade em $t=0$ tem de ser igual a zero.
+  
+  \textbf{1. Vetor Posição em $t=0$:}
+  \[
+    \gamma(0) = (e^0, e^{-0}) = (1, 1)
+  \]
+  
+  \textbf{2. Vetor Velocidade em $t=0$:}
+  Derivamos a curva original:
+  \[
+    \gamma'(t) = (e^t, -e^{-t})
+  \]
+  Avaliando no instante $t=0$:
+  \[
+    \gamma'(0) = (e^0, -e^{-0}) = (1, -1)
+  \]
+  
+  \textbf{3. Produto Interno:}
+  Fazendo o produto escalar entre $\gamma(0)$ e $\gamma'(0)$:
+  \[
+    \gamma(0) \cdot \gamma'(0) = (1)(1) + (1)(-1) = 1 - 1 = \mathbf{0}
+  \]
+  Como o produto escalar é zero, os vetores formam um ângulo de $90^\circ$. A afirmação está provada. \checkmark
+\end{solbox}
+
+% ────────────────────────────────────────────────────────
+\subsection{Questões Propostas para Defesa Oral}
+
+\begin{oralbox}
+  \textbf{Q1.} Se tivesse de explicar o conceito de "curva paramétrica" a alguém sem formação matemática avançada, que analogia do quotidiano usaria? Como explicaria o papel do parâmetro $t$?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q2.} Num movimento parametrizado, o que representa geometricamente e fisicamente o \emph{vetor velocidade}? Como é que ele se relaciona com a curva principal?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q3.} Justifique a fórmula do comprimento de uma curva. Por que razão esta fórmula envolve especificamente a raiz quadrada da soma dos quadrados das derivadas? A que teorema célebre isto remete?
+\end{oralbox}
+
+\begin{oralbox}
+  \textbf{Q4.} Qual é a grande vantagem (ou diferença estrutural) de parametrizar uma curva com $t$, em vez de desenhá-la estaticamente através de uma função comum $y = f(x)$? Dê um exemplo de uma forma geométrica que a parametrização resolve facilmente, mas que $y=f(x)$ não consegue.
+\end{oralbox}
