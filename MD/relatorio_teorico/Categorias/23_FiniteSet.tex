@@ -3,10 +3,10 @@
 % =========================================================================
 
 \section{Categoria FinSet: Conjuntos Finitos e Funções}
-A categoria \textbf{FinSet} é fundamental na teoria das categorias, onde os objetos são conjuntos finitos e os morfismos são funções entre eles. Computacionalmente, modelar esta categoria exige a definição de invariantes de representação rigorosos e algoritmos que respeitem as suas propriedades estruturais.
+A categoria \textbf{FinSet} clássica é fundamental na teoria das categorias, onde os objetos são conjuntos finitos e os morfismos são funções entre eles. Computacionalmente, modelar esta categoria exige a definição de invariantes de representação rigorosos e algoritmos que respeitem as suas propriedades estruturais.
 
 \subsection{Objetos e Invariantes de Representação}
-Em MATLAB, um objeto da categoria FinSet é representado como uma matriz plana. Para garantir a definição matemática de um conjunto (elementos únicos e sem ordem intrínseca relevante para a igualdade), define-se o seguinte invariante de representação: uma matriz $A$ é um objeto de FinSet se e só se as suas linhas forem únicas e estiverem ordenadas lexicograficamente.
+Em MATLAB, um objeto da categoria FinSet computacional é representado como uma matriz plana. Para garantir a definição matemática de um conjunto (elementos únicos e sem ordem intrínseca relevante para a igualdade), define-se o seguinte invariante de representação: uma matriz $A$ é um objeto de FinSet computacional se e só se as suas linhas forem únicas e estiverem ordenadas lexicograficamente.
 
 \begin{lstlisting}[language=Matlab, caption={Definição do invariante de objetos em FinSet}]
 % Um objeto de FinSet é uma matriz MATLAB A tal que:
@@ -22,7 +22,7 @@ Esta abordagem permite modelar diversos tipos de conjuntos:
 \end{itemize}
 
 \subsection{Morfismos}
-Um morfismo $f: A \to B$ em FinSet é uma função total. No nosso modelo, um morfismo é implementado como um vetor coluna de índices, onde a $i$-ésima posição contém o índice do elemento em $B$ para o qual o $i$-ésimo elemento de $A$ é mapeado.
+Um morfismo $f: A \to B$ em FinSet clássica é uma função total. No nosso modelo, um morfismo é implementado como um vetor coluna de índices, onde a $i$-ésima posição contém o índice do elemento em $B$ para o qual o $i$-ésimo elemento de $A$ é mapeado.
 
 \begin{lstlisting}[language=Matlab, caption={Validação de um morfismo em FinSet}]
 function ok = is_FinSet_morphism(B, f, A)
